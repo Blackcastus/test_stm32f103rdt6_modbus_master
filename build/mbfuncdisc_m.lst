@@ -1,0 +1,541 @@
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mbfuncdisc_m.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.eMBMasterReqReadDiscreteInputs,"ax",%progbits
+  18              		.align	1
+  19              		.global	eMBMasterReqReadDiscreteInputs
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	eMBMasterReqReadDiscreteInputs:
+  25              	.LVL0:
+  26              	.LFB65:
+  27              		.file 1 "FreeModbus/functions/mbfuncdisc_m.c"
+   1:FreeModbus/functions/mbfuncdisc_m.c **** /*
+   2:FreeModbus/functions/mbfuncdisc_m.c ****  * FreeModbus Libary: A portable Modbus implementation for Modbus ASCII/RTU.
+   3:FreeModbus/functions/mbfuncdisc_m.c ****  * Copyright (C) 2013 Armink <armink.ztl@gmail.com>
+   4:FreeModbus/functions/mbfuncdisc_m.c ****  * All rights reserved.
+   5:FreeModbus/functions/mbfuncdisc_m.c ****  *
+   6:FreeModbus/functions/mbfuncdisc_m.c ****  * Redistribution and use in source and binary forms, with or without
+   7:FreeModbus/functions/mbfuncdisc_m.c ****  * modification, are permitted provided that the following conditions
+   8:FreeModbus/functions/mbfuncdisc_m.c ****  * are met:
+   9:FreeModbus/functions/mbfuncdisc_m.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:FreeModbus/functions/mbfuncdisc_m.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:FreeModbus/functions/mbfuncdisc_m.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:FreeModbus/functions/mbfuncdisc_m.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:FreeModbus/functions/mbfuncdisc_m.c ****  *    documentation and/or other materials provided with the distribution.
+  14:FreeModbus/functions/mbfuncdisc_m.c ****  * 3. The name of the author may not be used to endorse or promote products
+  15:FreeModbus/functions/mbfuncdisc_m.c ****  *    derived from this software without specific prior written permission.
+  16:FreeModbus/functions/mbfuncdisc_m.c ****  *
+  17:FreeModbus/functions/mbfuncdisc_m.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+  18:FreeModbus/functions/mbfuncdisc_m.c ****  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  19:FreeModbus/functions/mbfuncdisc_m.c ****  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  20:FreeModbus/functions/mbfuncdisc_m.c ****  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+  21:FreeModbus/functions/mbfuncdisc_m.c ****  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  22:FreeModbus/functions/mbfuncdisc_m.c ****  * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  23:FreeModbus/functions/mbfuncdisc_m.c ****  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  24:FreeModbus/functions/mbfuncdisc_m.c ****  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  25:FreeModbus/functions/mbfuncdisc_m.c ****  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+  26:FreeModbus/functions/mbfuncdisc_m.c ****  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  27:FreeModbus/functions/mbfuncdisc_m.c ****  *
+  28:FreeModbus/functions/mbfuncdisc_m.c ****  * File: $Id: mbfuncdisc_m.c,v 1.60 2013/10/15 8:48:20 Armink Add Master Functions  Exp $
+  29:FreeModbus/functions/mbfuncdisc_m.c ****  */
+  30:FreeModbus/functions/mbfuncdisc_m.c **** 
+  31:FreeModbus/functions/mbfuncdisc_m.c **** 
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 2
+
+
+  32:FreeModbus/functions/mbfuncdisc_m.c **** 
+  33:FreeModbus/functions/mbfuncdisc_m.c **** /* ----------------------- System includes ----------------------------------*/
+  34:FreeModbus/functions/mbfuncdisc_m.c **** #include "stdlib.h"
+  35:FreeModbus/functions/mbfuncdisc_m.c **** #include "string.h"
+  36:FreeModbus/functions/mbfuncdisc_m.c **** 
+  37:FreeModbus/functions/mbfuncdisc_m.c **** /* ----------------------- Platform includes --------------------------------*/
+  38:FreeModbus/functions/mbfuncdisc_m.c **** #include "port.h"
+  39:FreeModbus/functions/mbfuncdisc_m.c **** 
+  40:FreeModbus/functions/mbfuncdisc_m.c **** /* ----------------------- Modbus includes ----------------------------------*/
+  41:FreeModbus/functions/mbfuncdisc_m.c **** #include "mb.h"
+  42:FreeModbus/functions/mbfuncdisc_m.c **** #include "mb_m.h"
+  43:FreeModbus/functions/mbfuncdisc_m.c **** #include "mbframe.h"
+  44:FreeModbus/functions/mbfuncdisc_m.c **** #include "mbproto.h"
+  45:FreeModbus/functions/mbfuncdisc_m.c **** #include "mbconfig.h"
+  46:FreeModbus/functions/mbfuncdisc_m.c **** 
+  47:FreeModbus/functions/mbfuncdisc_m.c **** /* ----------------------- Defines ------------------------------------------*/
+  48:FreeModbus/functions/mbfuncdisc_m.c **** #define MB_PDU_REQ_READ_ADDR_OFF            ( MB_PDU_DATA_OFF + 0 )
+  49:FreeModbus/functions/mbfuncdisc_m.c **** #define MB_PDU_REQ_READ_DISCCNT_OFF         ( MB_PDU_DATA_OFF + 2 )
+  50:FreeModbus/functions/mbfuncdisc_m.c **** #define MB_PDU_REQ_READ_SIZE                ( 4 )
+  51:FreeModbus/functions/mbfuncdisc_m.c **** #define MB_PDU_FUNC_READ_DISCCNT_OFF        ( MB_PDU_DATA_OFF + 0 )
+  52:FreeModbus/functions/mbfuncdisc_m.c **** #define MB_PDU_FUNC_READ_VALUES_OFF         ( MB_PDU_DATA_OFF + 1 )
+  53:FreeModbus/functions/mbfuncdisc_m.c **** #define MB_PDU_FUNC_READ_SIZE_MIN           ( 1 )
+  54:FreeModbus/functions/mbfuncdisc_m.c **** 
+  55:FreeModbus/functions/mbfuncdisc_m.c **** /* ----------------------- Static functions ---------------------------------*/
+  56:FreeModbus/functions/mbfuncdisc_m.c **** eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
+  57:FreeModbus/functions/mbfuncdisc_m.c **** 
+  58:FreeModbus/functions/mbfuncdisc_m.c **** /* ----------------------- Start implementation -----------------------------*/
+  59:FreeModbus/functions/mbfuncdisc_m.c **** #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
+  60:FreeModbus/functions/mbfuncdisc_m.c **** #if MB_FUNC_READ_DISCRETE_INPUTS_ENABLED > 0
+  61:FreeModbus/functions/mbfuncdisc_m.c **** 
+  62:FreeModbus/functions/mbfuncdisc_m.c **** /**
+  63:FreeModbus/functions/mbfuncdisc_m.c ****  * This function will request read discrete inputs.
+  64:FreeModbus/functions/mbfuncdisc_m.c ****  *
+  65:FreeModbus/functions/mbfuncdisc_m.c ****  * @param ucSndAddr salve address
+  66:FreeModbus/functions/mbfuncdisc_m.c ****  * @param usDiscreteAddr discrete start address
+  67:FreeModbus/functions/mbfuncdisc_m.c ****  * @param usNDiscreteIn discrete total number
+  68:FreeModbus/functions/mbfuncdisc_m.c ****  * @param lTimeOut timeout (-1 will waiting forever)
+  69:FreeModbus/functions/mbfuncdisc_m.c ****  *
+  70:FreeModbus/functions/mbfuncdisc_m.c ****  * @return error code
+  71:FreeModbus/functions/mbfuncdisc_m.c ****  */
+  72:FreeModbus/functions/mbfuncdisc_m.c **** eMBMasterReqErrCode
+  73:FreeModbus/functions/mbfuncdisc_m.c **** eMBMasterReqReadDiscreteInputs( UCHAR ucSndAddr, USHORT usDiscreteAddr, USHORT usNDiscreteIn, LONG 
+  74:FreeModbus/functions/mbfuncdisc_m.c **** {
+  28              		.loc 1 74 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  75:FreeModbus/functions/mbfuncdisc_m.c ****     UCHAR                 *ucMBFrame;
+  32              		.loc 1 75 5 view .LVU1
+  76:FreeModbus/functions/mbfuncdisc_m.c ****     eMBMasterReqErrCode    eErrStatus = MB_MRE_NO_ERR;
+  33              		.loc 1 76 5 view .LVU2
+  77:FreeModbus/functions/mbfuncdisc_m.c **** 
+  78:FreeModbus/functions/mbfuncdisc_m.c ****     if ( ucSndAddr > MB_MASTER_TOTAL_SLAVE_NUM ) eErrStatus = MB_MRE_ILL_ARG;
+  34              		.loc 1 78 5 view .LVU3
+  35              		.loc 1 78 8 is_stmt 0 view .LVU4
+  36 0000 1028     		cmp	r0, #16
+  37 0002 01D9     		bls	.L9
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 3
+
+
+  38              		.loc 1 78 61 view .LVU5
+  39 0004 0220     		movs	r0, #2
+  40              	.LVL1:
+  79:FreeModbus/functions/mbfuncdisc_m.c ****     else if ( xMBMasterRunResTake( lTimeOut ) == FALSE ) eErrStatus = MB_MRE_MASTER_BUSY;
+  80:FreeModbus/functions/mbfuncdisc_m.c ****     else
+  81:FreeModbus/functions/mbfuncdisc_m.c ****     {
+  82:FreeModbus/functions/mbfuncdisc_m.c **** 		vMBMasterGetPDUSndBuf(&ucMBFrame);
+  83:FreeModbus/functions/mbfuncdisc_m.c **** 		vMBMasterSetDestAddress(ucSndAddr);
+  84:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_FUNC_OFF]                 = MB_FUNC_READ_DISCRETE_INPUTS;
+  85:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF]        = usDiscreteAddr >> 8;
+  86:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF + 1]    = usDiscreteAddr;
+  87:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF ]    = usNDiscreteIn >> 8;
+  88:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF + 1] = usNDiscreteIn;
+  89:FreeModbus/functions/mbfuncdisc_m.c **** 		vMBMasterSetPDUSndLength( MB_PDU_SIZE_MIN + MB_PDU_REQ_READ_SIZE );
+  90:FreeModbus/functions/mbfuncdisc_m.c **** 		( void ) xMBMasterPortEventPost( EV_MASTER_FRAME_SENT );
+  91:FreeModbus/functions/mbfuncdisc_m.c **** 		eErrStatus = eMBMasterWaitRequestFinish(lTimeOut);
+  92:FreeModbus/functions/mbfuncdisc_m.c ****     }
+  93:FreeModbus/functions/mbfuncdisc_m.c ****     return eErrStatus;
+  41              		.loc 1 93 5 is_stmt 1 view .LVU6
+  94:FreeModbus/functions/mbfuncdisc_m.c **** }
+  42              		.loc 1 94 1 is_stmt 0 view .LVU7
+  43 0006 7047     		bx	lr
+  44              	.LVL2:
+  45              	.L9:
+  74:FreeModbus/functions/mbfuncdisc_m.c ****     UCHAR                 *ucMBFrame;
+  46              		.loc 1 74 1 view .LVU8
+  47 0008 F0B5     		push	{r4, r5, r6, r7, lr}
+  48              	.LCFI0:
+  49              		.cfi_def_cfa_offset 20
+  50              		.cfi_offset 4, -20
+  51              		.cfi_offset 5, -16
+  52              		.cfi_offset 6, -12
+  53              		.cfi_offset 7, -8
+  54              		.cfi_offset 14, -4
+  55 000a 83B0     		sub	sp, sp, #12
+  56              	.LCFI1:
+  57              		.cfi_def_cfa_offset 32
+  58 000c 0446     		mov	r4, r0
+  59 000e 0F46     		mov	r7, r1
+  60 0010 1646     		mov	r6, r2
+  61 0012 1D46     		mov	r5, r3
+  79:FreeModbus/functions/mbfuncdisc_m.c ****     else if ( xMBMasterRunResTake( lTimeOut ) == FALSE ) eErrStatus = MB_MRE_MASTER_BUSY;
+  62              		.loc 1 79 10 is_stmt 1 view .LVU9
+  79:FreeModbus/functions/mbfuncdisc_m.c ****     else if ( xMBMasterRunResTake( lTimeOut ) == FALSE ) eErrStatus = MB_MRE_MASTER_BUSY;
+  63              		.loc 1 79 15 is_stmt 0 view .LVU10
+  64 0014 1846     		mov	r0, r3
+  65              	.LVL3:
+  79:FreeModbus/functions/mbfuncdisc_m.c ****     else if ( xMBMasterRunResTake( lTimeOut ) == FALSE ) eErrStatus = MB_MRE_MASTER_BUSY;
+  66              		.loc 1 79 15 view .LVU11
+  67 0016 FFF7FEFF 		bl	xMBMasterRunResTake
+  68              	.LVL4:
+  79:FreeModbus/functions/mbfuncdisc_m.c ****     else if ( xMBMasterRunResTake( lTimeOut ) == FALSE ) eErrStatus = MB_MRE_MASTER_BUSY;
+  69              		.loc 1 79 13 view .LVU12
+  70 001a 10B9     		cbnz	r0, .L10
+  79:FreeModbus/functions/mbfuncdisc_m.c ****     else if ( xMBMasterRunResTake( lTimeOut ) == FALSE ) eErrStatus = MB_MRE_MASTER_BUSY;
+  71              		.loc 1 79 69 view .LVU13
+  72 001c 0520     		movs	r0, #5
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 4
+
+
+  73              	.LVL5:
+  74              	.L2:
+  93:FreeModbus/functions/mbfuncdisc_m.c **** }
+  75              		.loc 1 93 5 is_stmt 1 view .LVU14
+  76              		.loc 1 94 1 is_stmt 0 view .LVU15
+  77 001e 03B0     		add	sp, sp, #12
+  78              	.LCFI2:
+  79              		.cfi_remember_state
+  80              		.cfi_def_cfa_offset 20
+  81              		@ sp needed
+  82 0020 F0BD     		pop	{r4, r5, r6, r7, pc}
+  83              	.LVL6:
+  84              	.L10:
+  85              	.LCFI3:
+  86              		.cfi_restore_state
+  82:FreeModbus/functions/mbfuncdisc_m.c **** 		vMBMasterSetDestAddress(ucSndAddr);
+  87              		.loc 1 82 3 is_stmt 1 view .LVU16
+  88 0022 01A8     		add	r0, sp, #4
+  89 0024 FFF7FEFF 		bl	vMBMasterGetPDUSndBuf
+  90              	.LVL7:
+  83:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_FUNC_OFF]                 = MB_FUNC_READ_DISCRETE_INPUTS;
+  91              		.loc 1 83 3 view .LVU17
+  92 0028 2046     		mov	r0, r4
+  93 002a FFF7FEFF 		bl	vMBMasterSetDestAddress
+  94              	.LVL8:
+  84:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF]        = usDiscreteAddr >> 8;
+  95              		.loc 1 84 3 view .LVU18
+  84:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF]        = usDiscreteAddr >> 8;
+  96              		.loc 1 84 46 is_stmt 0 view .LVU19
+  97 002e 019B     		ldr	r3, [sp, #4]
+  98 0030 0222     		movs	r2, #2
+  99 0032 1A70     		strb	r2, [r3]
+  85:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF + 1]    = usDiscreteAddr;
+ 100              		.loc 1 85 3 is_stmt 1 view .LVU20
+  85:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF + 1]    = usDiscreteAddr;
+ 101              		.loc 1 85 46 is_stmt 0 view .LVU21
+ 102 0034 3A0A     		lsrs	r2, r7, #8
+ 103 0036 019B     		ldr	r3, [sp, #4]
+ 104 0038 5A70     		strb	r2, [r3, #1]
+  86:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF ]    = usNDiscreteIn >> 8;
+ 105              		.loc 1 86 3 is_stmt 1 view .LVU22
+  86:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF ]    = usNDiscreteIn >> 8;
+ 106              		.loc 1 86 12 is_stmt 0 view .LVU23
+ 107 003a 019B     		ldr	r3, [sp, #4]
+  86:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF ]    = usNDiscreteIn >> 8;
+ 108              		.loc 1 86 46 view .LVU24
+ 109 003c 9F70     		strb	r7, [r3, #2]
+  87:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF + 1] = usNDiscreteIn;
+ 110              		.loc 1 87 3 is_stmt 1 view .LVU25
+  87:FreeModbus/functions/mbfuncdisc_m.c **** 		ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF + 1] = usNDiscreteIn;
+ 111              		.loc 1 87 46 is_stmt 0 view .LVU26
+ 112 003e 320A     		lsrs	r2, r6, #8
+ 113 0040 019B     		ldr	r3, [sp, #4]
+ 114 0042 DA70     		strb	r2, [r3, #3]
+  88:FreeModbus/functions/mbfuncdisc_m.c **** 		vMBMasterSetPDUSndLength( MB_PDU_SIZE_MIN + MB_PDU_REQ_READ_SIZE );
+ 115              		.loc 1 88 3 is_stmt 1 view .LVU27
+  88:FreeModbus/functions/mbfuncdisc_m.c **** 		vMBMasterSetPDUSndLength( MB_PDU_SIZE_MIN + MB_PDU_REQ_READ_SIZE );
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 5
+
+
+ 116              		.loc 1 88 12 is_stmt 0 view .LVU28
+ 117 0044 019B     		ldr	r3, [sp, #4]
+  88:FreeModbus/functions/mbfuncdisc_m.c **** 		vMBMasterSetPDUSndLength( MB_PDU_SIZE_MIN + MB_PDU_REQ_READ_SIZE );
+ 118              		.loc 1 88 46 view .LVU29
+ 119 0046 1E71     		strb	r6, [r3, #4]
+  89:FreeModbus/functions/mbfuncdisc_m.c **** 		( void ) xMBMasterPortEventPost( EV_MASTER_FRAME_SENT );
+ 120              		.loc 1 89 3 is_stmt 1 view .LVU30
+ 121 0048 0520     		movs	r0, #5
+ 122 004a FFF7FEFF 		bl	vMBMasterSetPDUSndLength
+ 123              	.LVL9:
+  90:FreeModbus/functions/mbfuncdisc_m.c **** 		eErrStatus = eMBMasterWaitRequestFinish(lTimeOut);
+ 124              		.loc 1 90 3 view .LVU31
+  90:FreeModbus/functions/mbfuncdisc_m.c **** 		eErrStatus = eMBMasterWaitRequestFinish(lTimeOut);
+ 125              		.loc 1 90 12 is_stmt 0 view .LVU32
+ 126 004e 0820     		movs	r0, #8
+ 127 0050 FFF7FEFF 		bl	xMBMasterPortEventPost
+ 128              	.LVL10:
+  91:FreeModbus/functions/mbfuncdisc_m.c ****     }
+ 129              		.loc 1 91 3 is_stmt 1 view .LVU33
+  91:FreeModbus/functions/mbfuncdisc_m.c ****     }
+ 130              		.loc 1 91 16 is_stmt 0 view .LVU34
+ 131 0054 2846     		mov	r0, r5
+ 132 0056 FFF7FEFF 		bl	eMBMasterWaitRequestFinish
+ 133              	.LVL11:
+  91:FreeModbus/functions/mbfuncdisc_m.c ****     }
+ 134              		.loc 1 91 16 view .LVU35
+ 135 005a E0E7     		b	.L2
+ 136              		.cfi_endproc
+ 137              	.LFE65:
+ 139              		.section	.text.eMBMasterFuncReadDiscreteInputs,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	eMBMasterFuncReadDiscreteInputs
+ 142              		.syntax unified
+ 143              		.thumb
+ 144              		.thumb_func
+ 146              	eMBMasterFuncReadDiscreteInputs:
+ 147              	.LVL12:
+ 148              	.LFB66:
+  95:FreeModbus/functions/mbfuncdisc_m.c **** 
+  96:FreeModbus/functions/mbfuncdisc_m.c **** eMBException
+  97:FreeModbus/functions/mbfuncdisc_m.c **** eMBMasterFuncReadDiscreteInputs( UCHAR * pucFrame, USHORT * usLen )
+  98:FreeModbus/functions/mbfuncdisc_m.c **** {
+ 149              		.loc 1 98 1 is_stmt 1 view -0
+ 150              		.cfi_startproc
+ 151              		@ args = 0, pretend = 0, frame = 8
+ 152              		@ frame_needed = 0, uses_anonymous_args = 0
+ 153              		.loc 1 98 1 is_stmt 0 view .LVU37
+ 154 0000 30B5     		push	{r4, r5, lr}
+ 155              	.LCFI4:
+ 156              		.cfi_def_cfa_offset 12
+ 157              		.cfi_offset 4, -12
+ 158              		.cfi_offset 5, -8
+ 159              		.cfi_offset 14, -4
+ 160 0002 83B0     		sub	sp, sp, #12
+ 161              	.LCFI5:
+ 162              		.cfi_def_cfa_offset 24
+ 163 0004 0546     		mov	r5, r0
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 6
+
+
+ 164 0006 0C46     		mov	r4, r1
+  99:FreeModbus/functions/mbfuncdisc_m.c ****     USHORT          usRegAddress;
+ 165              		.loc 1 99 5 is_stmt 1 view .LVU38
+ 100:FreeModbus/functions/mbfuncdisc_m.c ****     USHORT          usDiscreteCnt;
+ 166              		.loc 1 100 5 view .LVU39
+ 101:FreeModbus/functions/mbfuncdisc_m.c ****     UCHAR           ucNBytes;
+ 167              		.loc 1 101 5 view .LVU40
+ 102:FreeModbus/functions/mbfuncdisc_m.c ****     UCHAR          *ucMBFrame;
+ 168              		.loc 1 102 5 view .LVU41
+ 103:FreeModbus/functions/mbfuncdisc_m.c **** 
+ 104:FreeModbus/functions/mbfuncdisc_m.c ****     eMBException    eStatus = MB_EX_NONE;
+ 169              		.loc 1 104 5 view .LVU42
+ 170              	.LVL13:
+ 105:FreeModbus/functions/mbfuncdisc_m.c ****     eMBErrorCode    eRegStatus;
+ 171              		.loc 1 105 5 view .LVU43
+ 106:FreeModbus/functions/mbfuncdisc_m.c **** 
+ 107:FreeModbus/functions/mbfuncdisc_m.c ****     /* If this request is broadcast, and it's read mode. This request don't need execute. */
+ 108:FreeModbus/functions/mbfuncdisc_m.c ****     if ( xMBMasterRequestIsBroadcast() )
+ 172              		.loc 1 108 5 view .LVU44
+ 173              		.loc 1 108 10 is_stmt 0 view .LVU45
+ 174 0008 FFF7FEFF 		bl	xMBMasterRequestIsBroadcast
+ 175              	.LVL14:
+ 176              		.loc 1 108 8 view .LVU46
+ 177 000c 38BB     		cbnz	r0, .L15
+ 109:FreeModbus/functions/mbfuncdisc_m.c ****     {
+ 110:FreeModbus/functions/mbfuncdisc_m.c ****     	eStatus = MB_EX_NONE;
+ 111:FreeModbus/functions/mbfuncdisc_m.c ****     }
+ 112:FreeModbus/functions/mbfuncdisc_m.c ****     else if( *usLen >= MB_PDU_SIZE_MIN + MB_PDU_FUNC_READ_SIZE_MIN )
+ 178              		.loc 1 112 10 is_stmt 1 view .LVU47
+ 179              		.loc 1 112 14 is_stmt 0 view .LVU48
+ 180 000e 2388     		ldrh	r3, [r4]
+ 181              		.loc 1 112 12 view .LVU49
+ 182 0010 012B     		cmp	r3, #1
+ 183 0012 27D9     		bls	.L16
+ 113:FreeModbus/functions/mbfuncdisc_m.c ****     {
+ 114:FreeModbus/functions/mbfuncdisc_m.c ****     	vMBMasterGetPDUSndBuf(&ucMBFrame);
+ 184              		.loc 1 114 6 is_stmt 1 view .LVU50
+ 185 0014 01A8     		add	r0, sp, #4
+ 186 0016 FFF7FEFF 		bl	vMBMasterGetPDUSndBuf
+ 187              	.LVL15:
+ 115:FreeModbus/functions/mbfuncdisc_m.c ****         usRegAddress = ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF] << 8 );
+ 188              		.loc 1 115 9 view .LVU51
+ 189              		.loc 1 115 45 is_stmt 0 view .LVU52
+ 190 001a 019B     		ldr	r3, [sp, #4]
+ 191 001c 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 192              	.LVL16:
+ 116:FreeModbus/functions/mbfuncdisc_m.c ****         usRegAddress |= ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF + 1] );
+ 193              		.loc 1 116 9 is_stmt 1 view .LVU53
+ 194              		.loc 1 116 46 is_stmt 0 view .LVU54
+ 195 001e 9978     		ldrb	r1, [r3, #2]	@ zero_extendqisi2
+ 196              		.loc 1 116 22 view .LVU55
+ 197 0020 41EA0221 		orr	r1, r1, r2, lsl #8
+ 198              	.LVL17:
+ 117:FreeModbus/functions/mbfuncdisc_m.c ****         usRegAddress++;
+ 199              		.loc 1 117 9 is_stmt 1 view .LVU56
+ 200              		.loc 1 117 21 is_stmt 0 view .LVU57
+ 201 0024 0131     		adds	r1, r1, #1
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 7
+
+
+ 202              	.LVL18:
+ 203              		.loc 1 117 21 view .LVU58
+ 204 0026 89B2     		uxth	r1, r1
+ 205              	.LVL19:
+ 118:FreeModbus/functions/mbfuncdisc_m.c **** 
+ 119:FreeModbus/functions/mbfuncdisc_m.c ****         usDiscreteCnt = ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF] << 8 );
+ 206              		.loc 1 119 9 is_stmt 1 view .LVU59
+ 207              		.loc 1 119 46 is_stmt 0 view .LVU60
+ 208 0028 DA78     		ldrb	r2, [r3, #3]	@ zero_extendqisi2
+ 209              	.LVL20:
+ 120:FreeModbus/functions/mbfuncdisc_m.c ****         usDiscreteCnt |= ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF + 1] );
+ 210              		.loc 1 120 9 is_stmt 1 view .LVU61
+ 211              		.loc 1 120 47 is_stmt 0 view .LVU62
+ 212 002a 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 213              		.loc 1 120 23 view .LVU63
+ 214 002c 43EA0222 		orr	r2, r3, r2, lsl #8
+ 215              	.LVL21:
+ 121:FreeModbus/functions/mbfuncdisc_m.c **** 
+ 122:FreeModbus/functions/mbfuncdisc_m.c ****         /* Test if the quantity of coils is a multiple of 8. If not last
+ 123:FreeModbus/functions/mbfuncdisc_m.c ****          * byte is only partially field with unused coils set to zero. */
+ 124:FreeModbus/functions/mbfuncdisc_m.c ****         if( ( usDiscreteCnt & 0x0007 ) != 0 )
+ 216              		.loc 1 124 9 is_stmt 1 view .LVU64
+ 217              		.loc 1 124 11 is_stmt 0 view .LVU65
+ 218 0030 13F0070F 		tst	r3, #7
+ 219 0034 09D0     		beq	.L13
+ 125:FreeModbus/functions/mbfuncdisc_m.c ****         {
+ 126:FreeModbus/functions/mbfuncdisc_m.c ****         	ucNBytes = ( UCHAR )( usDiscreteCnt / 8 + 1 );
+ 220              		.loc 1 126 10 is_stmt 1 view .LVU66
+ 221              		.loc 1 126 21 is_stmt 0 view .LVU67
+ 222 0036 C2F3C703 		ubfx	r3, r2, #3, #8
+ 223              		.loc 1 126 19 view .LVU68
+ 224 003a 0133     		adds	r3, r3, #1
+ 225 003c DBB2     		uxtb	r3, r3
+ 226              	.LVL22:
+ 227              	.L14:
+ 127:FreeModbus/functions/mbfuncdisc_m.c ****         }
+ 128:FreeModbus/functions/mbfuncdisc_m.c ****         else
+ 129:FreeModbus/functions/mbfuncdisc_m.c ****         {
+ 130:FreeModbus/functions/mbfuncdisc_m.c ****         	ucNBytes = ( UCHAR )( usDiscreteCnt / 8 );
+ 131:FreeModbus/functions/mbfuncdisc_m.c ****         }
+ 132:FreeModbus/functions/mbfuncdisc_m.c **** 
+ 133:FreeModbus/functions/mbfuncdisc_m.c ****         /* Check if the number of registers to read is valid. If not
+ 134:FreeModbus/functions/mbfuncdisc_m.c ****          * return Modbus illegal data value exception. 
+ 135:FreeModbus/functions/mbfuncdisc_m.c ****          */
+ 136:FreeModbus/functions/mbfuncdisc_m.c **** 		if ((usDiscreteCnt >= 1) && ucNBytes == pucFrame[MB_PDU_FUNC_READ_DISCCNT_OFF])
+ 228              		.loc 1 136 3 is_stmt 1 view .LVU69
+ 229              		.loc 1 136 6 is_stmt 0 view .LVU70
+ 230 003e 9AB1     		cbz	r2, .L17
+ 231              		.loc 1 136 51 discriminator 1 view .LVU71
+ 232 0040 6878     		ldrb	r0, [r5, #1]	@ zero_extendqisi2
+ 233              		.loc 1 136 28 discriminator 1 view .LVU72
+ 234 0042 9842     		cmp	r0, r3
+ 235 0044 04D0     		beq	.L20
+ 137:FreeModbus/functions/mbfuncdisc_m.c ****         {
+ 138:FreeModbus/functions/mbfuncdisc_m.c **** 	       	/* Make callback to fill the buffer. */
+ 139:FreeModbus/functions/mbfuncdisc_m.c **** 			eRegStatus = eMBMasterRegDiscreteCB( &pucFrame[MB_PDU_FUNC_READ_VALUES_OFF], usRegAddress, usDis
+ 140:FreeModbus/functions/mbfuncdisc_m.c **** 
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 8
+
+
+ 141:FreeModbus/functions/mbfuncdisc_m.c **** 			/* If an error occured convert it into a Modbus exception. */
+ 142:FreeModbus/functions/mbfuncdisc_m.c **** 			if( eRegStatus != MB_ENOERR )
+ 143:FreeModbus/functions/mbfuncdisc_m.c **** 			{
+ 144:FreeModbus/functions/mbfuncdisc_m.c **** 				eStatus = prveMBError2Exception( eRegStatus );
+ 145:FreeModbus/functions/mbfuncdisc_m.c **** 			}
+ 146:FreeModbus/functions/mbfuncdisc_m.c ****         }
+ 147:FreeModbus/functions/mbfuncdisc_m.c ****         else
+ 148:FreeModbus/functions/mbfuncdisc_m.c ****         {
+ 149:FreeModbus/functions/mbfuncdisc_m.c ****             eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+ 236              		.loc 1 149 21 view .LVU73
+ 237 0046 0320     		movs	r0, #3
+ 238 0048 0AE0     		b	.L12
+ 239              	.LVL23:
+ 240              	.L13:
+ 130:FreeModbus/functions/mbfuncdisc_m.c ****         }
+ 241              		.loc 1 130 10 is_stmt 1 view .LVU74
+ 130:FreeModbus/functions/mbfuncdisc_m.c ****         }
+ 242              		.loc 1 130 19 is_stmt 0 view .LVU75
+ 243 004a C2F3C703 		ubfx	r3, r2, #3, #8
+ 244              	.LVL24:
+ 130:FreeModbus/functions/mbfuncdisc_m.c ****         }
+ 245              		.loc 1 130 19 view .LVU76
+ 246 004e F6E7     		b	.L14
+ 247              	.L20:
+ 139:FreeModbus/functions/mbfuncdisc_m.c **** 
+ 248              		.loc 1 139 4 is_stmt 1 view .LVU77
+ 139:FreeModbus/functions/mbfuncdisc_m.c **** 
+ 249              		.loc 1 139 17 is_stmt 0 view .LVU78
+ 250 0050 A81C     		adds	r0, r5, #2
+ 251 0052 FFF7FEFF 		bl	eMBMasterRegDiscreteCB
+ 252              	.LVL25:
+ 142:FreeModbus/functions/mbfuncdisc_m.c **** 			{
+ 253              		.loc 1 142 4 is_stmt 1 view .LVU79
+ 142:FreeModbus/functions/mbfuncdisc_m.c **** 			{
+ 254              		.loc 1 142 6 is_stmt 0 view .LVU80
+ 255 0056 18B1     		cbz	r0, .L12
+ 144:FreeModbus/functions/mbfuncdisc_m.c **** 			}
+ 256              		.loc 1 144 5 is_stmt 1 view .LVU81
+ 144:FreeModbus/functions/mbfuncdisc_m.c **** 			}
+ 257              		.loc 1 144 15 is_stmt 0 view .LVU82
+ 258 0058 FFF7FEFF 		bl	prveMBError2Exception
+ 259              	.LVL26:
+ 144:FreeModbus/functions/mbfuncdisc_m.c **** 			}
+ 260              		.loc 1 144 15 view .LVU83
+ 261 005c 00E0     		b	.L12
+ 262              	.LVL27:
+ 263              	.L15:
+ 110:FreeModbus/functions/mbfuncdisc_m.c ****     }
+ 264              		.loc 1 110 14 view .LVU84
+ 265 005e 0020     		movs	r0, #0
+ 266              	.LVL28:
+ 267              	.L12:
+ 150:FreeModbus/functions/mbfuncdisc_m.c ****         }
+ 151:FreeModbus/functions/mbfuncdisc_m.c ****     }
+ 152:FreeModbus/functions/mbfuncdisc_m.c ****     else
+ 153:FreeModbus/functions/mbfuncdisc_m.c ****     {
+ 154:FreeModbus/functions/mbfuncdisc_m.c ****         /* Can't be a valid read coil register request because the length
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 9
+
+
+ 155:FreeModbus/functions/mbfuncdisc_m.c ****          * is incorrect. */
+ 156:FreeModbus/functions/mbfuncdisc_m.c ****         eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+ 157:FreeModbus/functions/mbfuncdisc_m.c ****     }
+ 158:FreeModbus/functions/mbfuncdisc_m.c ****     return eStatus;
+ 268              		.loc 1 158 5 is_stmt 1 view .LVU85
+ 159:FreeModbus/functions/mbfuncdisc_m.c **** }
+ 269              		.loc 1 159 1 is_stmt 0 view .LVU86
+ 270 0060 03B0     		add	sp, sp, #12
+ 271              	.LCFI6:
+ 272              		.cfi_remember_state
+ 273              		.cfi_def_cfa_offset 12
+ 274              		@ sp needed
+ 275 0062 30BD     		pop	{r4, r5, pc}
+ 276              	.LVL29:
+ 277              	.L16:
+ 278              	.LCFI7:
+ 279              		.cfi_restore_state
+ 156:FreeModbus/functions/mbfuncdisc_m.c ****     }
+ 280              		.loc 1 156 17 view .LVU87
+ 281 0064 0320     		movs	r0, #3
+ 282 0066 FBE7     		b	.L12
+ 283              	.LVL30:
+ 284              	.L17:
+ 149:FreeModbus/functions/mbfuncdisc_m.c ****         }
+ 285              		.loc 1 149 21 view .LVU88
+ 286 0068 0320     		movs	r0, #3
+ 287 006a F9E7     		b	.L12
+ 288              		.cfi_endproc
+ 289              	.LFE66:
+ 291              		.text
+ 292              	.Letext0:
+ 293              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 294              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 295              		.file 4 "FreeModbus/port/port.h"
+ 296              		.file 5 "FreeModbus/include/mbport.h"
+ 297              		.file 6 "FreeModbus/include/mbproto.h"
+ 298              		.file 7 "FreeModbus/include/mb.h"
+ 299              		.file 8 "FreeModbus/include/mb_m.h"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mbfuncdisc_m.c
+C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s:18     .text.eMBMasterReqReadDiscreteInputs:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s:24     .text.eMBMasterReqReadDiscreteInputs:00000000 eMBMasterReqReadDiscreteInputs
+C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s:140    .text.eMBMasterFuncReadDiscreteInputs:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccKC8YMB.s:146    .text.eMBMasterFuncReadDiscreteInputs:00000000 eMBMasterFuncReadDiscreteInputs
+
+UNDEFINED SYMBOLS
+xMBMasterRunResTake
+vMBMasterGetPDUSndBuf
+vMBMasterSetDestAddress
+vMBMasterSetPDUSndLength
+xMBMasterPortEventPost
+eMBMasterWaitRequestFinish
+xMBMasterRequestIsBroadcast
+eMBMasterRegDiscreteCB
+prveMBError2Exception

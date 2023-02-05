@@ -1,0 +1,356 @@
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mbfuncinput.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.eMBFuncReadInputRegister,"ax",%progbits
+  18              		.align	1
+  19              		.global	eMBFuncReadInputRegister
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	eMBFuncReadInputRegister:
+  25              	.LVL0:
+  26              	.LFB65:
+  27              		.file 1 "FreeModbus/functions/mbfuncinput.c"
+   1:FreeModbus/functions/mbfuncinput.c **** /* 
+   2:FreeModbus/functions/mbfuncinput.c ****  * FreeModbus Libary: A portable Modbus implementation for Modbus ASCII/RTU.
+   3:FreeModbus/functions/mbfuncinput.c ****  * Copyright (c) 2006-2018 Christian Walter <cwalter@embedded-solutions.at>
+   4:FreeModbus/functions/mbfuncinput.c ****  * All rights reserved.
+   5:FreeModbus/functions/mbfuncinput.c ****  *
+   6:FreeModbus/functions/mbfuncinput.c ****  * Redistribution and use in source and binary forms, with or without
+   7:FreeModbus/functions/mbfuncinput.c ****  * modification, are permitted provided that the following conditions
+   8:FreeModbus/functions/mbfuncinput.c ****  * are met:
+   9:FreeModbus/functions/mbfuncinput.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:FreeModbus/functions/mbfuncinput.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:FreeModbus/functions/mbfuncinput.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:FreeModbus/functions/mbfuncinput.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:FreeModbus/functions/mbfuncinput.c ****  *    documentation and/or other materials provided with the distribution.
+  14:FreeModbus/functions/mbfuncinput.c ****  * 3. The name of the author may not be used to endorse or promote products
+  15:FreeModbus/functions/mbfuncinput.c ****  *    derived from this software without specific prior written permission.
+  16:FreeModbus/functions/mbfuncinput.c ****  *
+  17:FreeModbus/functions/mbfuncinput.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+  18:FreeModbus/functions/mbfuncinput.c ****  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  19:FreeModbus/functions/mbfuncinput.c ****  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  20:FreeModbus/functions/mbfuncinput.c ****  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+  21:FreeModbus/functions/mbfuncinput.c ****  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  22:FreeModbus/functions/mbfuncinput.c ****  * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  23:FreeModbus/functions/mbfuncinput.c ****  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  24:FreeModbus/functions/mbfuncinput.c ****  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  25:FreeModbus/functions/mbfuncinput.c ****  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+  26:FreeModbus/functions/mbfuncinput.c ****  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  27:FreeModbus/functions/mbfuncinput.c ****  *
+  28:FreeModbus/functions/mbfuncinput.c ****  * File: $Id: mbfuncinput.c,v 1.10 2007/09/12 10:15:56 wolti Exp $
+  29:FreeModbus/functions/mbfuncinput.c ****  */
+  30:FreeModbus/functions/mbfuncinput.c **** 
+  31:FreeModbus/functions/mbfuncinput.c **** /* ----------------------- System includes ----------------------------------*/
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s 			page 2
+
+
+  32:FreeModbus/functions/mbfuncinput.c **** #include "stdlib.h"
+  33:FreeModbus/functions/mbfuncinput.c **** #include "string.h"
+  34:FreeModbus/functions/mbfuncinput.c **** 
+  35:FreeModbus/functions/mbfuncinput.c **** /* ----------------------- Platform includes --------------------------------*/
+  36:FreeModbus/functions/mbfuncinput.c **** #include "port.h"
+  37:FreeModbus/functions/mbfuncinput.c **** 
+  38:FreeModbus/functions/mbfuncinput.c **** /* ----------------------- Modbus includes ----------------------------------*/
+  39:FreeModbus/functions/mbfuncinput.c **** #include "mb.h"
+  40:FreeModbus/functions/mbfuncinput.c **** #include "mbframe.h"
+  41:FreeModbus/functions/mbfuncinput.c **** #include "mbproto.h"
+  42:FreeModbus/functions/mbfuncinput.c **** #include "mbconfig.h"
+  43:FreeModbus/functions/mbfuncinput.c **** 
+  44:FreeModbus/functions/mbfuncinput.c **** /* ----------------------- Defines ------------------------------------------*/
+  45:FreeModbus/functions/mbfuncinput.c **** #define MB_PDU_FUNC_READ_ADDR_OFF           ( MB_PDU_DATA_OFF )
+  46:FreeModbus/functions/mbfuncinput.c **** #define MB_PDU_FUNC_READ_REGCNT_OFF         ( MB_PDU_DATA_OFF + 2 )
+  47:FreeModbus/functions/mbfuncinput.c **** #define MB_PDU_FUNC_READ_SIZE               ( 4 )
+  48:FreeModbus/functions/mbfuncinput.c **** #define MB_PDU_FUNC_READ_REGCNT_MAX         ( 0x007D )
+  49:FreeModbus/functions/mbfuncinput.c **** 
+  50:FreeModbus/functions/mbfuncinput.c **** #define MB_PDU_FUNC_READ_RSP_BYTECNT_OFF    ( MB_PDU_DATA_OFF )
+  51:FreeModbus/functions/mbfuncinput.c **** 
+  52:FreeModbus/functions/mbfuncinput.c **** /* ----------------------- Static functions ---------------------------------*/
+  53:FreeModbus/functions/mbfuncinput.c **** eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
+  54:FreeModbus/functions/mbfuncinput.c **** 
+  55:FreeModbus/functions/mbfuncinput.c **** /* ----------------------- Start implementation -----------------------------*/
+  56:FreeModbus/functions/mbfuncinput.c **** #if MB_FUNC_READ_INPUT_ENABLED > 0
+  57:FreeModbus/functions/mbfuncinput.c **** 
+  58:FreeModbus/functions/mbfuncinput.c **** eMBException
+  59:FreeModbus/functions/mbfuncinput.c **** eMBFuncReadInputRegister( UCHAR * pucFrame, USHORT * usLen )
+  60:FreeModbus/functions/mbfuncinput.c **** {
+  28              		.loc 1 60 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 60 1 is_stmt 0 view .LVU1
+  33 0000 38B5     		push	{r3, r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 3, -16
+  37              		.cfi_offset 4, -12
+  38              		.cfi_offset 5, -8
+  39              		.cfi_offset 14, -4
+  61:FreeModbus/functions/mbfuncinput.c ****     USHORT          usRegAddress;
+  40              		.loc 1 61 5 is_stmt 1 view .LVU2
+  62:FreeModbus/functions/mbfuncinput.c ****     USHORT          usRegCount;
+  41              		.loc 1 62 5 view .LVU3
+  63:FreeModbus/functions/mbfuncinput.c ****     UCHAR          *pucFrameCur;
+  42              		.loc 1 63 5 view .LVU4
+  64:FreeModbus/functions/mbfuncinput.c **** 
+  65:FreeModbus/functions/mbfuncinput.c ****     eMBException    eStatus = MB_EX_NONE;
+  43              		.loc 1 65 5 view .LVU5
+  44              	.LVL1:
+  66:FreeModbus/functions/mbfuncinput.c ****     eMBErrorCode    eRegStatus;
+  45              		.loc 1 66 5 view .LVU6
+  67:FreeModbus/functions/mbfuncinput.c **** 
+  68:FreeModbus/functions/mbfuncinput.c ****     if( *usLen == ( MB_PDU_FUNC_READ_SIZE + MB_PDU_SIZE_MIN ) )
+  46              		.loc 1 68 5 view .LVU7
+  47              		.loc 1 68 9 is_stmt 0 view .LVU8
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s 			page 3
+
+
+  48 0002 0B88     		ldrh	r3, [r1]
+  49              		.loc 1 68 7 view .LVU9
+  50 0004 052B     		cmp	r3, #5
+  51 0006 01D0     		beq	.L7
+  69:FreeModbus/functions/mbfuncinput.c ****     {
+  70:FreeModbus/functions/mbfuncinput.c ****         usRegAddress = ( USHORT )( pucFrame[MB_PDU_FUNC_READ_ADDR_OFF] << 8 );
+  71:FreeModbus/functions/mbfuncinput.c ****         usRegAddress |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_ADDR_OFF + 1] );
+  72:FreeModbus/functions/mbfuncinput.c ****         usRegAddress++;
+  73:FreeModbus/functions/mbfuncinput.c **** 
+  74:FreeModbus/functions/mbfuncinput.c ****         usRegCount = ( USHORT )( pucFrame[MB_PDU_FUNC_READ_REGCNT_OFF] << 8 );
+  75:FreeModbus/functions/mbfuncinput.c ****         usRegCount |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_REGCNT_OFF + 1] );
+  76:FreeModbus/functions/mbfuncinput.c **** 
+  77:FreeModbus/functions/mbfuncinput.c ****         /* Check if the number of registers to read is valid. If not
+  78:FreeModbus/functions/mbfuncinput.c ****          * return Modbus illegal data value exception. 
+  79:FreeModbus/functions/mbfuncinput.c ****          */
+  80:FreeModbus/functions/mbfuncinput.c ****         if( ( usRegCount >= 1 )
+  81:FreeModbus/functions/mbfuncinput.c ****             && ( usRegCount < MB_PDU_FUNC_READ_REGCNT_MAX ) )
+  82:FreeModbus/functions/mbfuncinput.c ****         {
+  83:FreeModbus/functions/mbfuncinput.c ****             /* Set the current PDU data pointer to the beginning. */
+  84:FreeModbus/functions/mbfuncinput.c ****             pucFrameCur = &pucFrame[MB_PDU_FUNC_OFF];
+  85:FreeModbus/functions/mbfuncinput.c ****             *usLen = MB_PDU_FUNC_OFF;
+  86:FreeModbus/functions/mbfuncinput.c **** 
+  87:FreeModbus/functions/mbfuncinput.c ****             /* First byte contains the function code. */
+  88:FreeModbus/functions/mbfuncinput.c ****             *pucFrameCur++ = MB_FUNC_READ_INPUT_REGISTER;
+  89:FreeModbus/functions/mbfuncinput.c ****             *usLen += 1;
+  90:FreeModbus/functions/mbfuncinput.c **** 
+  91:FreeModbus/functions/mbfuncinput.c ****             /* Second byte in the response contain the number of bytes. */
+  92:FreeModbus/functions/mbfuncinput.c ****             *pucFrameCur++ = ( UCHAR )( usRegCount * 2 );
+  93:FreeModbus/functions/mbfuncinput.c ****             *usLen += 1;
+  94:FreeModbus/functions/mbfuncinput.c **** 
+  95:FreeModbus/functions/mbfuncinput.c ****             eRegStatus =
+  96:FreeModbus/functions/mbfuncinput.c ****                 eMBRegInputCB( pucFrameCur, usRegAddress, usRegCount );
+  97:FreeModbus/functions/mbfuncinput.c **** 
+  98:FreeModbus/functions/mbfuncinput.c ****             /* If an error occured convert it into a Modbus exception. */
+  99:FreeModbus/functions/mbfuncinput.c ****             if( eRegStatus != MB_ENOERR )
+ 100:FreeModbus/functions/mbfuncinput.c ****             {
+ 101:FreeModbus/functions/mbfuncinput.c ****                 eStatus = prveMBError2Exception( eRegStatus );
+ 102:FreeModbus/functions/mbfuncinput.c ****             }
+ 103:FreeModbus/functions/mbfuncinput.c ****             else
+ 104:FreeModbus/functions/mbfuncinput.c ****             {
+ 105:FreeModbus/functions/mbfuncinput.c ****                 *usLen += usRegCount * 2;
+ 106:FreeModbus/functions/mbfuncinput.c ****             }
+ 107:FreeModbus/functions/mbfuncinput.c ****         }
+ 108:FreeModbus/functions/mbfuncinput.c ****         else
+ 109:FreeModbus/functions/mbfuncinput.c ****         {
+ 110:FreeModbus/functions/mbfuncinput.c ****             eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+ 111:FreeModbus/functions/mbfuncinput.c ****         }
+ 112:FreeModbus/functions/mbfuncinput.c ****     }
+ 113:FreeModbus/functions/mbfuncinput.c ****     else
+ 114:FreeModbus/functions/mbfuncinput.c ****     {
+ 115:FreeModbus/functions/mbfuncinput.c ****         /* Can't be a valid read input register request because the length
+ 116:FreeModbus/functions/mbfuncinput.c ****          * is incorrect. */
+ 117:FreeModbus/functions/mbfuncinput.c ****         eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+  52              		.loc 1 117 17 view .LVU10
+  53 0008 0320     		movs	r0, #3
+  54              	.LVL2:
+  55              	.L2:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s 			page 4
+
+
+ 118:FreeModbus/functions/mbfuncinput.c ****     }
+ 119:FreeModbus/functions/mbfuncinput.c ****     return eStatus;
+  56              		.loc 1 119 5 is_stmt 1 view .LVU11
+ 120:FreeModbus/functions/mbfuncinput.c **** }
+  57              		.loc 1 120 1 is_stmt 0 view .LVU12
+  58 000a 38BD     		pop	{r3, r4, r5, pc}
+  59              	.LVL3:
+  60              	.L7:
+  61              		.loc 1 120 1 view .LVU13
+  62 000c 0C46     		mov	r4, r1
+  70:FreeModbus/functions/mbfuncinput.c ****         usRegAddress |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_ADDR_OFF + 1] );
+  63              		.loc 1 70 9 is_stmt 1 view .LVU14
+  70:FreeModbus/functions/mbfuncinput.c ****         usRegAddress |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_ADDR_OFF + 1] );
+  64              		.loc 1 70 44 is_stmt 0 view .LVU15
+  65 000e 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
+  66              	.LVL4:
+  71:FreeModbus/functions/mbfuncinput.c ****         usRegAddress++;
+  67              		.loc 1 71 9 is_stmt 1 view .LVU16
+  71:FreeModbus/functions/mbfuncinput.c ****         usRegAddress++;
+  68              		.loc 1 71 45 is_stmt 0 view .LVU17
+  69 0010 8178     		ldrb	r1, [r0, #2]	@ zero_extendqisi2
+  70              	.LVL5:
+  71:FreeModbus/functions/mbfuncinput.c ****         usRegAddress++;
+  71              		.loc 1 71 22 view .LVU18
+  72 0012 41EA0321 		orr	r1, r1, r3, lsl #8
+  73              	.LVL6:
+  72:FreeModbus/functions/mbfuncinput.c **** 
+  74              		.loc 1 72 9 is_stmt 1 view .LVU19
+  72:FreeModbus/functions/mbfuncinput.c **** 
+  75              		.loc 1 72 21 is_stmt 0 view .LVU20
+  76 0016 0131     		adds	r1, r1, #1
+  77              	.LVL7:
+  72:FreeModbus/functions/mbfuncinput.c **** 
+  78              		.loc 1 72 21 view .LVU21
+  79 0018 89B2     		uxth	r1, r1
+  80              	.LVL8:
+  74:FreeModbus/functions/mbfuncinput.c ****         usRegCount |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_REGCNT_OFF + 1] );
+  81              		.loc 1 74 9 is_stmt 1 view .LVU22
+  74:FreeModbus/functions/mbfuncinput.c ****         usRegCount |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_REGCNT_OFF + 1] );
+  82              		.loc 1 74 42 is_stmt 0 view .LVU23
+  83 001a C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
+  84              	.LVL9:
+  75:FreeModbus/functions/mbfuncinput.c **** 
+  85              		.loc 1 75 9 is_stmt 1 view .LVU24
+  75:FreeModbus/functions/mbfuncinput.c **** 
+  86              		.loc 1 75 43 is_stmt 0 view .LVU25
+  87 001c 0579     		ldrb	r5, [r0, #4]	@ zero_extendqisi2
+  75:FreeModbus/functions/mbfuncinput.c **** 
+  88              		.loc 1 75 20 view .LVU26
+  89 001e 45EA0325 		orr	r5, r5, r3, lsl #8
+  90              	.LVL10:
+  80:FreeModbus/functions/mbfuncinput.c ****             && ( usRegCount < MB_PDU_FUNC_READ_REGCNT_MAX ) )
+  91              		.loc 1 80 9 is_stmt 1 view .LVU27
+  81:FreeModbus/functions/mbfuncinput.c ****         {
+  92              		.loc 1 81 13 is_stmt 0 view .LVU28
+  93 0022 6B1E     		subs	r3, r5, #1
+  94 0024 9BB2     		uxth	r3, r3
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s 			page 5
+
+
+  80:FreeModbus/functions/mbfuncinput.c ****             && ( usRegCount < MB_PDU_FUNC_READ_REGCNT_MAX ) )
+  95              		.loc 1 80 11 view .LVU29
+  96 0026 7B2B     		cmp	r3, #123
+  97 0028 01D9     		bls	.L8
+ 110:FreeModbus/functions/mbfuncinput.c ****         }
+  98              		.loc 1 110 21 view .LVU30
+  99 002a 0320     		movs	r0, #3
+ 100              	.LVL11:
+ 110:FreeModbus/functions/mbfuncinput.c ****         }
+ 101              		.loc 1 110 21 view .LVU31
+ 102 002c EDE7     		b	.L2
+ 103              	.LVL12:
+ 104              	.L8:
+  84:FreeModbus/functions/mbfuncinput.c ****             *usLen = MB_PDU_FUNC_OFF;
+ 105              		.loc 1 84 13 is_stmt 1 view .LVU32
+  85:FreeModbus/functions/mbfuncinput.c **** 
+ 106              		.loc 1 85 13 view .LVU33
+  85:FreeModbus/functions/mbfuncinput.c **** 
+ 107              		.loc 1 85 20 is_stmt 0 view .LVU34
+ 108 002e 0023     		movs	r3, #0
+ 109 0030 2380     		strh	r3, [r4]	@ movhi
+  88:FreeModbus/functions/mbfuncinput.c ****             *usLen += 1;
+ 110              		.loc 1 88 13 is_stmt 1 view .LVU35
+ 111              	.LVL13:
+  88:FreeModbus/functions/mbfuncinput.c ****             *usLen += 1;
+ 112              		.loc 1 88 28 is_stmt 0 view .LVU36
+ 113 0032 0346     		mov	r3, r0
+ 114 0034 0422     		movs	r2, #4
+ 115 0036 03F8022B 		strb	r2, [r3], #2
+  89:FreeModbus/functions/mbfuncinput.c **** 
+ 116              		.loc 1 89 13 is_stmt 1 view .LVU37
+  89:FreeModbus/functions/mbfuncinput.c **** 
+ 117              		.loc 1 89 20 is_stmt 0 view .LVU38
+ 118 003a 2288     		ldrh	r2, [r4]
+ 119 003c 0132     		adds	r2, r2, #1
+ 120 003e 2280     		strh	r2, [r4]	@ movhi
+  92:FreeModbus/functions/mbfuncinput.c ****             *usLen += 1;
+ 121              		.loc 1 92 13 is_stmt 1 view .LVU39
+ 122              	.LVL14:
+  92:FreeModbus/functions/mbfuncinput.c ****             *usLen += 1;
+ 123              		.loc 1 92 30 is_stmt 0 view .LVU40
+ 124 0040 6A00     		lsls	r2, r5, #1
+  92:FreeModbus/functions/mbfuncinput.c ****             *usLen += 1;
+ 125              		.loc 1 92 28 view .LVU41
+ 126 0042 4270     		strb	r2, [r0, #1]
+  93:FreeModbus/functions/mbfuncinput.c **** 
+ 127              		.loc 1 93 13 is_stmt 1 view .LVU42
+  93:FreeModbus/functions/mbfuncinput.c **** 
+ 128              		.loc 1 93 20 is_stmt 0 view .LVU43
+ 129 0044 2288     		ldrh	r2, [r4]
+ 130 0046 0132     		adds	r2, r2, #1
+ 131 0048 2280     		strh	r2, [r4]	@ movhi
+  95:FreeModbus/functions/mbfuncinput.c ****                 eMBRegInputCB( pucFrameCur, usRegAddress, usRegCount );
+ 132              		.loc 1 95 13 is_stmt 1 view .LVU44
+  96:FreeModbus/functions/mbfuncinput.c **** 
+ 133              		.loc 1 96 17 is_stmt 0 view .LVU45
+ 134 004a 2A46     		mov	r2, r5
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s 			page 6
+
+
+ 135 004c 1846     		mov	r0, r3
+ 136              	.LVL15:
+  96:FreeModbus/functions/mbfuncinput.c **** 
+ 137              		.loc 1 96 17 view .LVU46
+ 138 004e FFF7FEFF 		bl	eMBRegInputCB
+ 139              	.LVL16:
+  99:FreeModbus/functions/mbfuncinput.c ****             {
+ 140              		.loc 1 99 13 is_stmt 1 view .LVU47
+  99:FreeModbus/functions/mbfuncinput.c ****             {
+ 141              		.loc 1 99 15 is_stmt 0 view .LVU48
+ 142 0052 20B9     		cbnz	r0, .L9
+ 105:FreeModbus/functions/mbfuncinput.c ****             }
+ 143              		.loc 1 105 17 is_stmt 1 view .LVU49
+ 105:FreeModbus/functions/mbfuncinput.c ****             }
+ 144              		.loc 1 105 24 is_stmt 0 view .LVU50
+ 145 0054 2388     		ldrh	r3, [r4]
+ 146 0056 03EB4505 		add	r5, r3, r5, lsl #1
+ 147              	.LVL17:
+ 105:FreeModbus/functions/mbfuncinput.c ****             }
+ 148              		.loc 1 105 24 view .LVU51
+ 149 005a 2580     		strh	r5, [r4]	@ movhi
+ 150 005c D5E7     		b	.L2
+ 151              	.LVL18:
+ 152              	.L9:
+ 101:FreeModbus/functions/mbfuncinput.c ****             }
+ 153              		.loc 1 101 17 is_stmt 1 view .LVU52
+ 101:FreeModbus/functions/mbfuncinput.c ****             }
+ 154              		.loc 1 101 27 is_stmt 0 view .LVU53
+ 155 005e FFF7FEFF 		bl	prveMBError2Exception
+ 156              	.LVL19:
+ 101:FreeModbus/functions/mbfuncinput.c ****             }
+ 157              		.loc 1 101 27 view .LVU54
+ 158 0062 D2E7     		b	.L2
+ 159              		.cfi_endproc
+ 160              	.LFE65:
+ 162              		.text
+ 163              	.Letext0:
+ 164              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 165              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 166              		.file 4 "FreeModbus/port/port.h"
+ 167              		.file 5 "FreeModbus/include/mbproto.h"
+ 168              		.file 6 "FreeModbus/include/mb.h"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mbfuncinput.c
+C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s:18     .text.eMBFuncReadInputRegister:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccqTmw2q.s:24     .text.eMBFuncReadInputRegister:00000000 eMBFuncReadInputRegister
+
+UNDEFINED SYMBOLS
+eMBRegInputCB
+prveMBError2Exception

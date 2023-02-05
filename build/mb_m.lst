@@ -1,0 +1,1886 @@
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mb_m.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.eMBMasterInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	eMBMasterInit
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	eMBMasterInit:
+  25              	.LVL0:
+  26              	.LFB65:
+  27              		.file 1 "FreeModbus/mb_m.c"
+   1:FreeModbus/mb_m.c **** /* 
+   2:FreeModbus/mb_m.c ****  * FreeModbus Libary: A portable Modbus implementation for Modbus ASCII/RTU.
+   3:FreeModbus/mb_m.c ****  * Copyright (C) 2013 Armink <armink.ztl@gmail.com>
+   4:FreeModbus/mb_m.c ****  * All rights reserved.
+   5:FreeModbus/mb_m.c ****  *
+   6:FreeModbus/mb_m.c ****  * Redistribution and use in source and binary forms, with or without
+   7:FreeModbus/mb_m.c ****  * modification, are permitted provided that the following conditions
+   8:FreeModbus/mb_m.c ****  * are met:
+   9:FreeModbus/mb_m.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:FreeModbus/mb_m.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:FreeModbus/mb_m.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:FreeModbus/mb_m.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:FreeModbus/mb_m.c ****  *    documentation and/or other materials provided with the distribution.
+  14:FreeModbus/mb_m.c ****  * 3. The name of the author may not be used to endorse or promote products
+  15:FreeModbus/mb_m.c ****  *    derived from this software without specific prior written permission.
+  16:FreeModbus/mb_m.c ****  *
+  17:FreeModbus/mb_m.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+  18:FreeModbus/mb_m.c ****  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  19:FreeModbus/mb_m.c ****  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  20:FreeModbus/mb_m.c ****  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+  21:FreeModbus/mb_m.c ****  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  22:FreeModbus/mb_m.c ****  * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  23:FreeModbus/mb_m.c ****  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  24:FreeModbus/mb_m.c ****  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  25:FreeModbus/mb_m.c ****  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+  26:FreeModbus/mb_m.c ****  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  27:FreeModbus/mb_m.c ****  *
+  28:FreeModbus/mb_m.c ****  * File: $Id: mbrtu_m.c,v 1.60 2013/08/20 11:18:10 Armink Add Master Functions $
+  29:FreeModbus/mb_m.c ****  */
+  30:FreeModbus/mb_m.c **** 
+  31:FreeModbus/mb_m.c **** /* ----------------------- System includes ----------------------------------*/
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 2
+
+
+  32:FreeModbus/mb_m.c **** #include "stdlib.h"
+  33:FreeModbus/mb_m.c **** #include "string.h"
+  34:FreeModbus/mb_m.c **** 
+  35:FreeModbus/mb_m.c **** /* ----------------------- Platform includes --------------------------------*/
+  36:FreeModbus/mb_m.c **** #include "port.h"
+  37:FreeModbus/mb_m.c **** 
+  38:FreeModbus/mb_m.c **** /* ----------------------- Modbus includes ----------------------------------*/
+  39:FreeModbus/mb_m.c **** 
+  40:FreeModbus/mb_m.c **** #include "mb.h"
+  41:FreeModbus/mb_m.c **** #include "mb_m.h"
+  42:FreeModbus/mb_m.c **** #include "mbconfig.h"
+  43:FreeModbus/mb_m.c **** #include "mbframe.h"
+  44:FreeModbus/mb_m.c **** #include "mbproto.h"
+  45:FreeModbus/mb_m.c **** #include "mbfunc.h"
+  46:FreeModbus/mb_m.c **** 
+  47:FreeModbus/mb_m.c **** #include "mbport.h"
+  48:FreeModbus/mb_m.c **** #if MB_MASTER_RTU_ENABLED == 1
+  49:FreeModbus/mb_m.c **** #include "mbrtu.h"
+  50:FreeModbus/mb_m.c **** #endif
+  51:FreeModbus/mb_m.c **** #if MB_MASTER_ASCII_ENABLED == 1
+  52:FreeModbus/mb_m.c **** #include "mbascii.h"
+  53:FreeModbus/mb_m.c **** #endif
+  54:FreeModbus/mb_m.c **** #if MB_MASTER_TCP_ENABLED == 1
+  55:FreeModbus/mb_m.c **** #include "mbtcp.h"
+  56:FreeModbus/mb_m.c **** #endif
+  57:FreeModbus/mb_m.c **** 
+  58:FreeModbus/mb_m.c **** #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
+  59:FreeModbus/mb_m.c **** 
+  60:FreeModbus/mb_m.c **** #ifndef MB_PORT_HAS_CLOSE
+  61:FreeModbus/mb_m.c **** #define MB_PORT_HAS_CLOSE 0
+  62:FreeModbus/mb_m.c **** #endif
+  63:FreeModbus/mb_m.c **** 
+  64:FreeModbus/mb_m.c **** /* ----------------------- Static variables ---------------------------------*/
+  65:FreeModbus/mb_m.c **** 
+  66:FreeModbus/mb_m.c **** static UCHAR    ucMBMasterDestAddress;
+  67:FreeModbus/mb_m.c **** static BOOL     xMBRunInMasterMode = FALSE;
+  68:FreeModbus/mb_m.c **** static eMBMasterErrorEventType eMBMasterCurErrorType;
+  69:FreeModbus/mb_m.c **** 
+  70:FreeModbus/mb_m.c **** static enum
+  71:FreeModbus/mb_m.c **** {
+  72:FreeModbus/mb_m.c ****     STATE_ENABLED,
+  73:FreeModbus/mb_m.c ****     STATE_DISABLED,
+  74:FreeModbus/mb_m.c ****     STATE_NOT_INITIALIZED,
+  75:FreeModbus/mb_m.c ****     STATE_ESTABLISHED,
+  76:FreeModbus/mb_m.c **** } eMBState = STATE_NOT_INITIALIZED;
+  77:FreeModbus/mb_m.c **** 
+  78:FreeModbus/mb_m.c **** /* Functions pointer which are initialized in eMBInit( ). Depending on the
+  79:FreeModbus/mb_m.c ****  * mode (RTU or ASCII) the are set to the correct implementations.
+  80:FreeModbus/mb_m.c ****  * Using for Modbus Master,Add by Armink 20130813
+  81:FreeModbus/mb_m.c ****  */
+  82:FreeModbus/mb_m.c **** static peMBFrameSend peMBMasterFrameSendCur;
+  83:FreeModbus/mb_m.c **** static pvMBFrameStart pvMBMasterFrameStartCur;
+  84:FreeModbus/mb_m.c **** static pvMBFrameStop pvMBMasterFrameStopCur;
+  85:FreeModbus/mb_m.c **** static peMBFrameReceive peMBMasterFrameReceiveCur;
+  86:FreeModbus/mb_m.c **** static pvMBFrameClose pvMBMasterFrameCloseCur;
+  87:FreeModbus/mb_m.c **** 
+  88:FreeModbus/mb_m.c **** /* Callback functions required by the porting layer. They are called when
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 3
+
+
+  89:FreeModbus/mb_m.c ****  * an external event has happend which includes a timeout or the reception
+  90:FreeModbus/mb_m.c ****  * or transmission of a character.
+  91:FreeModbus/mb_m.c ****  * Using for Modbus Master,Add by Armink 20130813
+  92:FreeModbus/mb_m.c ****  */
+  93:FreeModbus/mb_m.c **** BOOL( *pxMBMasterFrameCBByteReceived ) ( void );
+  94:FreeModbus/mb_m.c **** BOOL( *pxMBMasterFrameCBTransmitterEmpty ) ( void );
+  95:FreeModbus/mb_m.c **** BOOL( *pxMBMasterPortCBTimerExpired ) ( void );
+  96:FreeModbus/mb_m.c **** 
+  97:FreeModbus/mb_m.c **** BOOL( *pxMBMasterFrameCBReceiveFSMCur ) ( void );
+  98:FreeModbus/mb_m.c **** BOOL( *pxMBMasterFrameCBTransmitFSMCur ) ( void );
+  99:FreeModbus/mb_m.c **** 
+ 100:FreeModbus/mb_m.c **** /* An array of Modbus functions handlers which associates Modbus function
+ 101:FreeModbus/mb_m.c ****  * codes with implementing functions.
+ 102:FreeModbus/mb_m.c ****  */
+ 103:FreeModbus/mb_m.c **** static xMBFunctionHandler xMasterFuncHandlers[MB_FUNC_HANDLERS_MAX] = {
+ 104:FreeModbus/mb_m.c **** #if MB_FUNC_OTHER_REP_SLAVEID_ENABLED > 0
+ 105:FreeModbus/mb_m.c **** 	//TODO Add Master function define
+ 106:FreeModbus/mb_m.c ****     {MB_FUNC_OTHER_REPORT_SLAVEID, eMBFuncReportSlaveID},
+ 107:FreeModbus/mb_m.c **** #endif
+ 108:FreeModbus/mb_m.c **** #if MB_FUNC_READ_INPUT_ENABLED > 0
+ 109:FreeModbus/mb_m.c ****     {MB_FUNC_READ_INPUT_REGISTER, eMBMasterFuncReadInputRegister},
+ 110:FreeModbus/mb_m.c **** #endif
+ 111:FreeModbus/mb_m.c **** #if MB_FUNC_READ_HOLDING_ENABLED > 0
+ 112:FreeModbus/mb_m.c ****     {MB_FUNC_READ_HOLDING_REGISTER, eMBMasterFuncReadHoldingRegister},
+ 113:FreeModbus/mb_m.c **** #endif
+ 114:FreeModbus/mb_m.c **** #if MB_FUNC_WRITE_MULTIPLE_HOLDING_ENABLED > 0
+ 115:FreeModbus/mb_m.c ****     {MB_FUNC_WRITE_MULTIPLE_REGISTERS, eMBMasterFuncWriteMultipleHoldingRegister},
+ 116:FreeModbus/mb_m.c **** #endif
+ 117:FreeModbus/mb_m.c **** #if MB_FUNC_WRITE_HOLDING_ENABLED > 0
+ 118:FreeModbus/mb_m.c ****     {MB_FUNC_WRITE_REGISTER, eMBMasterFuncWriteHoldingRegister},
+ 119:FreeModbus/mb_m.c **** #endif
+ 120:FreeModbus/mb_m.c **** #if MB_FUNC_READWRITE_HOLDING_ENABLED > 0
+ 121:FreeModbus/mb_m.c ****     {MB_FUNC_READWRITE_MULTIPLE_REGISTERS, eMBMasterFuncReadWriteMultipleHoldingRegister},
+ 122:FreeModbus/mb_m.c **** #endif
+ 123:FreeModbus/mb_m.c **** #if MB_FUNC_READ_COILS_ENABLED > 0
+ 124:FreeModbus/mb_m.c ****     {MB_FUNC_READ_COILS, eMBMasterFuncReadCoils},
+ 125:FreeModbus/mb_m.c **** #endif
+ 126:FreeModbus/mb_m.c **** #if MB_FUNC_WRITE_COIL_ENABLED > 0
+ 127:FreeModbus/mb_m.c ****     {MB_FUNC_WRITE_SINGLE_COIL, eMBMasterFuncWriteCoil},
+ 128:FreeModbus/mb_m.c **** #endif
+ 129:FreeModbus/mb_m.c **** #if MB_FUNC_WRITE_MULTIPLE_COILS_ENABLED > 0
+ 130:FreeModbus/mb_m.c ****     {MB_FUNC_WRITE_MULTIPLE_COILS, eMBMasterFuncWriteMultipleCoils},
+ 131:FreeModbus/mb_m.c **** #endif
+ 132:FreeModbus/mb_m.c **** #if MB_FUNC_READ_DISCRETE_INPUTS_ENABLED > 0
+ 133:FreeModbus/mb_m.c ****     {MB_FUNC_READ_DISCRETE_INPUTS, eMBMasterFuncReadDiscreteInputs},
+ 134:FreeModbus/mb_m.c **** #endif
+ 135:FreeModbus/mb_m.c **** };
+ 136:FreeModbus/mb_m.c **** 
+ 137:FreeModbus/mb_m.c **** /* ----------------------- Start implementation -----------------------------*/
+ 138:FreeModbus/mb_m.c **** eMBErrorCode eMBMasterInit( eMBMode eMode, void *dHUART, ULONG ulBaudRate, void *dHTIM )
+ 139:FreeModbus/mb_m.c **** {
+  28              		.loc 1 139 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 139 1 is_stmt 0 view .LVU1
+  33 0000 10B5     		push	{r4, lr}
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 4
+
+
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+ 140:FreeModbus/mb_m.c ****     eMBErrorCode    eStatus = MB_ENOERR;
+  38              		.loc 1 140 5 is_stmt 1 view .LVU2
+  39              	.LVL1:
+ 141:FreeModbus/mb_m.c **** 
+ 142:FreeModbus/mb_m.c **** 	switch (eMode)
+  40              		.loc 1 142 2 view .LVU3
+  41 0002 10B1     		cbz	r0, .L7
+ 143:FreeModbus/mb_m.c **** 	{
+ 144:FreeModbus/mb_m.c **** #if MB_MASTER_RTU_ENABLED > 0
+ 145:FreeModbus/mb_m.c **** 	case MB_RTU:
+ 146:FreeModbus/mb_m.c **** 		pvMBMasterFrameStartCur = eMBMasterRTUStart;
+ 147:FreeModbus/mb_m.c **** 		pvMBMasterFrameStopCur = eMBMasterRTUStop;
+ 148:FreeModbus/mb_m.c **** 		peMBMasterFrameSendCur = eMBMasterRTUSend;
+ 149:FreeModbus/mb_m.c **** 		peMBMasterFrameReceiveCur = eMBMasterRTUReceive;
+ 150:FreeModbus/mb_m.c **** 		pvMBMasterFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBMasterPortClose : NULL;
+ 151:FreeModbus/mb_m.c **** 		pxMBMasterFrameCBByteReceived = xMBMasterRTUReceiveFSM;
+ 152:FreeModbus/mb_m.c **** 		pxMBMasterFrameCBTransmitterEmpty = xMBMasterRTUTransmitFSM;
+ 153:FreeModbus/mb_m.c **** 		pxMBMasterPortCBTimerExpired = xMBMasterRTUTimerExpired;
+ 154:FreeModbus/mb_m.c **** 
+ 155:FreeModbus/mb_m.c **** 		eStatus = eMBMasterRTUInit(dHUART, ulBaudRate, dHTIM);
+ 156:FreeModbus/mb_m.c **** 		break;
+ 157:FreeModbus/mb_m.c **** #endif
+ 158:FreeModbus/mb_m.c **** #if MB_MASTER_ASCII_ENABLED > 0
+ 159:FreeModbus/mb_m.c **** 		case MB_ASCII:
+ 160:FreeModbus/mb_m.c **** 		pvMBMasterFrameStartCur = eMBMasterASCIIStart;
+ 161:FreeModbus/mb_m.c **** 		pvMBMasterFrameStopCur = eMBMasterASCIIStop;
+ 162:FreeModbus/mb_m.c **** 		peMBMasterFrameSendCur = eMBMasterASCIISend;
+ 163:FreeModbus/mb_m.c **** 		peMBMasterFrameReceiveCur = eMBMasterASCIIReceive;
+ 164:FreeModbus/mb_m.c **** 		pvMBMasterFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBMasterPortClose : NULL;
+ 165:FreeModbus/mb_m.c **** 		pxMBMasterFrameCBByteReceived = xMBMasterASCIIReceiveFSM;
+ 166:FreeModbus/mb_m.c **** 		pxMBMasterFrameCBTransmitterEmpty = xMBMasterASCIITransmitFSM;
+ 167:FreeModbus/mb_m.c **** 		pxMBMasterPortCBTimerExpired = xMBMasterASCIITimerT1SExpired;
+ 168:FreeModbus/mb_m.c **** 
+ 169:FreeModbus/mb_m.c **** 		eStatus = eMBMasterASCIIInit(dHUART, ulBaudRate, dHTIM );
+ 170:FreeModbus/mb_m.c **** 		break;
+ 171:FreeModbus/mb_m.c **** #endif
+ 172:FreeModbus/mb_m.c **** 	default:
+ 173:FreeModbus/mb_m.c **** 		eStatus = MB_EINVAL;
+  42              		.loc 1 173 11 is_stmt 0 view .LVU4
+  43 0004 0224     		movs	r4, #2
+  44              	.LVL2:
+  45              	.L2:
+ 174:FreeModbus/mb_m.c **** 		break;
+ 175:FreeModbus/mb_m.c **** 	}
+ 176:FreeModbus/mb_m.c **** 
+ 177:FreeModbus/mb_m.c **** 	if (eStatus == MB_ENOERR)
+ 178:FreeModbus/mb_m.c **** 	{
+ 179:FreeModbus/mb_m.c **** 		if (!xMBMasterPortEventInit())
+ 180:FreeModbus/mb_m.c **** 		{
+ 181:FreeModbus/mb_m.c **** 			/* port dependent event module initalization failed. */
+ 182:FreeModbus/mb_m.c **** 			eStatus = MB_EPORTERR;
+ 183:FreeModbus/mb_m.c **** 		}
+ 184:FreeModbus/mb_m.c **** 		else
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 5
+
+
+ 185:FreeModbus/mb_m.c **** 		{
+ 186:FreeModbus/mb_m.c **** 			eMBState = STATE_DISABLED;
+ 187:FreeModbus/mb_m.c **** 		}
+ 188:FreeModbus/mb_m.c **** 		/* initialize the OS resource for modbus master. */
+ 189:FreeModbus/mb_m.c **** 		vMBMasterOsResInit();
+ 190:FreeModbus/mb_m.c **** 	}
+ 191:FreeModbus/mb_m.c **** 	return eStatus;
+  46              		.loc 1 191 2 is_stmt 1 view .LVU5
+ 192:FreeModbus/mb_m.c **** }
+  47              		.loc 1 192 1 is_stmt 0 view .LVU6
+  48 0006 2046     		mov	r0, r4
+  49 0008 10BD     		pop	{r4, pc}
+  50              	.LVL3:
+  51              	.L7:
+  52              		.loc 1 192 1 view .LVU7
+  53 000a 0C46     		mov	r4, r1
+  54 000c 1146     		mov	r1, r2
+  55              	.LVL4:
+ 146:FreeModbus/mb_m.c **** 		pvMBMasterFrameStopCur = eMBMasterRTUStop;
+  56              		.loc 1 146 3 is_stmt 1 view .LVU8
+ 146:FreeModbus/mb_m.c **** 		pvMBMasterFrameStopCur = eMBMasterRTUStop;
+  57              		.loc 1 146 27 is_stmt 0 view .LVU9
+  58 000e 154A     		ldr	r2, .L8
+  59              	.LVL5:
+ 146:FreeModbus/mb_m.c **** 		pvMBMasterFrameStopCur = eMBMasterRTUStop;
+  60              		.loc 1 146 27 view .LVU10
+  61 0010 1548     		ldr	r0, .L8+4
+  62              	.LVL6:
+ 146:FreeModbus/mb_m.c **** 		pvMBMasterFrameStopCur = eMBMasterRTUStop;
+  63              		.loc 1 146 27 view .LVU11
+  64 0012 1060     		str	r0, [r2]
+ 147:FreeModbus/mb_m.c **** 		peMBMasterFrameSendCur = eMBMasterRTUSend;
+  65              		.loc 1 147 3 is_stmt 1 view .LVU12
+ 147:FreeModbus/mb_m.c **** 		peMBMasterFrameSendCur = eMBMasterRTUSend;
+  66              		.loc 1 147 26 is_stmt 0 view .LVU13
+  67 0014 154A     		ldr	r2, .L8+8
+  68 0016 1648     		ldr	r0, .L8+12
+  69 0018 1060     		str	r0, [r2]
+ 148:FreeModbus/mb_m.c **** 		peMBMasterFrameReceiveCur = eMBMasterRTUReceive;
+  70              		.loc 1 148 3 is_stmt 1 view .LVU14
+ 148:FreeModbus/mb_m.c **** 		peMBMasterFrameReceiveCur = eMBMasterRTUReceive;
+  71              		.loc 1 148 26 is_stmt 0 view .LVU15
+  72 001a 164A     		ldr	r2, .L8+16
+  73 001c 1648     		ldr	r0, .L8+20
+  74 001e 1060     		str	r0, [r2]
+ 149:FreeModbus/mb_m.c **** 		pvMBMasterFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBMasterPortClose : NULL;
+  75              		.loc 1 149 3 is_stmt 1 view .LVU16
+ 149:FreeModbus/mb_m.c **** 		pvMBMasterFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBMasterPortClose : NULL;
+  76              		.loc 1 149 29 is_stmt 0 view .LVU17
+  77 0020 164A     		ldr	r2, .L8+24
+  78 0022 1748     		ldr	r0, .L8+28
+  79 0024 1060     		str	r0, [r2]
+ 150:FreeModbus/mb_m.c **** 		pxMBMasterFrameCBByteReceived = xMBMasterRTUReceiveFSM;
+  80              		.loc 1 150 3 is_stmt 1 view .LVU18
+ 150:FreeModbus/mb_m.c **** 		pxMBMasterFrameCBByteReceived = xMBMasterRTUReceiveFSM;
+  81              		.loc 1 150 27 is_stmt 0 view .LVU19
+  82 0026 174A     		ldr	r2, .L8+32
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 6
+
+
+  83 0028 0020     		movs	r0, #0
+  84 002a 1060     		str	r0, [r2]
+ 151:FreeModbus/mb_m.c **** 		pxMBMasterFrameCBTransmitterEmpty = xMBMasterRTUTransmitFSM;
+  85              		.loc 1 151 3 is_stmt 1 view .LVU20
+ 151:FreeModbus/mb_m.c **** 		pxMBMasterFrameCBTransmitterEmpty = xMBMasterRTUTransmitFSM;
+  86              		.loc 1 151 33 is_stmt 0 view .LVU21
+  87 002c 164A     		ldr	r2, .L8+36
+  88 002e 1748     		ldr	r0, .L8+40
+  89 0030 1060     		str	r0, [r2]
+ 152:FreeModbus/mb_m.c **** 		pxMBMasterPortCBTimerExpired = xMBMasterRTUTimerExpired;
+  90              		.loc 1 152 3 is_stmt 1 view .LVU22
+ 152:FreeModbus/mb_m.c **** 		pxMBMasterPortCBTimerExpired = xMBMasterRTUTimerExpired;
+  91              		.loc 1 152 37 is_stmt 0 view .LVU23
+  92 0032 174A     		ldr	r2, .L8+44
+  93 0034 1748     		ldr	r0, .L8+48
+  94 0036 1060     		str	r0, [r2]
+ 153:FreeModbus/mb_m.c **** 
+  95              		.loc 1 153 3 is_stmt 1 view .LVU24
+ 153:FreeModbus/mb_m.c **** 
+  96              		.loc 1 153 32 is_stmt 0 view .LVU25
+  97 0038 174A     		ldr	r2, .L8+52
+  98 003a 1848     		ldr	r0, .L8+56
+  99 003c 1060     		str	r0, [r2]
+ 155:FreeModbus/mb_m.c **** 		break;
+ 100              		.loc 1 155 3 is_stmt 1 view .LVU26
+ 155:FreeModbus/mb_m.c **** 		break;
+ 101              		.loc 1 155 13 is_stmt 0 view .LVU27
+ 102 003e 1A46     		mov	r2, r3
+ 103 0040 2046     		mov	r0, r4
+ 104 0042 FFF7FEFF 		bl	eMBMasterRTUInit
+ 105              	.LVL7:
+ 156:FreeModbus/mb_m.c **** #endif
+ 106              		.loc 1 156 3 is_stmt 1 view .LVU28
+ 177:FreeModbus/mb_m.c **** 	{
+ 107              		.loc 1 177 2 view .LVU29
+ 177:FreeModbus/mb_m.c **** 	{
+ 108              		.loc 1 177 5 is_stmt 0 view .LVU30
+ 109 0046 0446     		mov	r4, r0
+ 110              	.LVL8:
+ 177:FreeModbus/mb_m.c **** 	{
+ 111              		.loc 1 177 5 view .LVU31
+ 112 0048 0028     		cmp	r0, #0
+ 113 004a DCD1     		bne	.L2
+ 179:FreeModbus/mb_m.c **** 		{
+ 114              		.loc 1 179 3 is_stmt 1 view .LVU32
+ 179:FreeModbus/mb_m.c **** 		{
+ 115              		.loc 1 179 8 is_stmt 0 view .LVU33
+ 116 004c FFF7FEFF 		bl	xMBMasterPortEventInit
+ 117              	.LVL9:
+ 179:FreeModbus/mb_m.c **** 		{
+ 118              		.loc 1 179 6 view .LVU34
+ 119 0050 18B1     		cbz	r0, .L5
+ 186:FreeModbus/mb_m.c **** 		}
+ 120              		.loc 1 186 4 is_stmt 1 view .LVU35
+ 186:FreeModbus/mb_m.c **** 		}
+ 121              		.loc 1 186 13 is_stmt 0 view .LVU36
+ 122 0052 134B     		ldr	r3, .L8+60
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 7
+
+
+ 123 0054 0122     		movs	r2, #1
+ 124 0056 1A70     		strb	r2, [r3]
+ 125 0058 00E0     		b	.L3
+ 126              	.L5:
+ 182:FreeModbus/mb_m.c **** 		}
+ 127              		.loc 1 182 12 view .LVU37
+ 128 005a 0324     		movs	r4, #3
+ 129              	.L3:
+ 130              	.LVL10:
+ 189:FreeModbus/mb_m.c **** 	}
+ 131              		.loc 1 189 3 is_stmt 1 view .LVU38
+ 132 005c FFF7FEFF 		bl	vMBMasterOsResInit
+ 133              	.LVL11:
+ 134 0060 D1E7     		b	.L2
+ 135              	.L9:
+ 136 0062 00BF     		.align	2
+ 137              	.L8:
+ 138 0064 00000000 		.word	.LANCHOR0
+ 139 0068 00000000 		.word	eMBMasterRTUStart
+ 140 006c 00000000 		.word	.LANCHOR1
+ 141 0070 00000000 		.word	eMBMasterRTUStop
+ 142 0074 00000000 		.word	.LANCHOR2
+ 143 0078 00000000 		.word	eMBMasterRTUSend
+ 144 007c 00000000 		.word	.LANCHOR3
+ 145 0080 00000000 		.word	eMBMasterRTUReceive
+ 146 0084 00000000 		.word	.LANCHOR4
+ 147 0088 00000000 		.word	.LANCHOR5
+ 148 008c 00000000 		.word	xMBMasterRTUReceiveFSM
+ 149 0090 00000000 		.word	.LANCHOR6
+ 150 0094 00000000 		.word	xMBMasterRTUTransmitFSM
+ 151 0098 00000000 		.word	.LANCHOR7
+ 152 009c 00000000 		.word	xMBMasterRTUTimerExpired
+ 153 00a0 00000000 		.word	.LANCHOR8
+ 154              		.cfi_endproc
+ 155              	.LFE65:
+ 157              		.section	.text.eMBMasterClose,"ax",%progbits
+ 158              		.align	1
+ 159              		.global	eMBMasterClose
+ 160              		.syntax unified
+ 161              		.thumb
+ 162              		.thumb_func
+ 164              	eMBMasterClose:
+ 165              	.LFB66:
+ 193:FreeModbus/mb_m.c **** 
+ 194:FreeModbus/mb_m.c **** eMBErrorCode
+ 195:FreeModbus/mb_m.c **** eMBMasterClose( void )
+ 196:FreeModbus/mb_m.c **** {
+ 166              		.loc 1 196 1 view -0
+ 167              		.cfi_startproc
+ 168              		@ args = 0, pretend = 0, frame = 0
+ 169              		@ frame_needed = 0, uses_anonymous_args = 0
+ 170 0000 08B5     		push	{r3, lr}
+ 171              	.LCFI1:
+ 172              		.cfi_def_cfa_offset 8
+ 173              		.cfi_offset 3, -8
+ 174              		.cfi_offset 14, -4
+ 197:FreeModbus/mb_m.c ****     eMBErrorCode    eStatus = MB_ENOERR;
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 8
+
+
+ 175              		.loc 1 197 5 view .LVU40
+ 176              	.LVL12:
+ 198:FreeModbus/mb_m.c **** 
+ 199:FreeModbus/mb_m.c ****     if( eMBState == STATE_DISABLED )
+ 177              		.loc 1 199 5 view .LVU41
+ 178              		.loc 1 199 18 is_stmt 0 view .LVU42
+ 179 0002 074B     		ldr	r3, .L16
+ 180 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 181              		.loc 1 199 7 view .LVU43
+ 182 0006 012B     		cmp	r3, #1
+ 183 0008 01D0     		beq	.L15
+ 200:FreeModbus/mb_m.c ****     {
+ 201:FreeModbus/mb_m.c ****         if( pvMBMasterFrameCloseCur != NULL )
+ 202:FreeModbus/mb_m.c ****         {
+ 203:FreeModbus/mb_m.c ****             pvMBMasterFrameCloseCur(  );
+ 204:FreeModbus/mb_m.c ****         }
+ 205:FreeModbus/mb_m.c ****     }
+ 206:FreeModbus/mb_m.c ****     else
+ 207:FreeModbus/mb_m.c ****     {
+ 208:FreeModbus/mb_m.c ****         eStatus = MB_EILLSTATE;
+ 184              		.loc 1 208 17 view .LVU44
+ 185 000a 0620     		movs	r0, #6
+ 186              	.L11:
+ 187              	.LVL13:
+ 209:FreeModbus/mb_m.c ****     }
+ 210:FreeModbus/mb_m.c ****     return eStatus;
+ 188              		.loc 1 210 5 is_stmt 1 view .LVU45
+ 211:FreeModbus/mb_m.c **** }
+ 189              		.loc 1 211 1 is_stmt 0 view .LVU46
+ 190 000c 08BD     		pop	{r3, pc}
+ 191              	.LVL14:
+ 192              	.L15:
+ 201:FreeModbus/mb_m.c ****         {
+ 193              		.loc 1 201 9 is_stmt 1 view .LVU47
+ 201:FreeModbus/mb_m.c ****         {
+ 194              		.loc 1 201 37 is_stmt 0 view .LVU48
+ 195 000e 054B     		ldr	r3, .L16+4
+ 196 0010 1B68     		ldr	r3, [r3]
+ 201:FreeModbus/mb_m.c ****         {
+ 197              		.loc 1 201 11 view .LVU49
+ 198 0012 13B1     		cbz	r3, .L13
+ 203:FreeModbus/mb_m.c ****         }
+ 199              		.loc 1 203 13 is_stmt 1 view .LVU50
+ 200 0014 9847     		blx	r3
+ 201              	.LVL15:
+ 197:FreeModbus/mb_m.c **** 
+ 202              		.loc 1 197 21 is_stmt 0 view .LVU51
+ 203 0016 0020     		movs	r0, #0
+ 204 0018 F8E7     		b	.L11
+ 205              	.L13:
+ 206 001a 0020     		movs	r0, #0
+ 207 001c F6E7     		b	.L11
+ 208              	.L17:
+ 209 001e 00BF     		.align	2
+ 210              	.L16:
+ 211 0020 00000000 		.word	.LANCHOR8
+ 212 0024 00000000 		.word	.LANCHOR4
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 9
+
+
+ 213              		.cfi_endproc
+ 214              	.LFE66:
+ 216              		.section	.text.eMBMasterEnable,"ax",%progbits
+ 217              		.align	1
+ 218              		.global	eMBMasterEnable
+ 219              		.syntax unified
+ 220              		.thumb
+ 221              		.thumb_func
+ 223              	eMBMasterEnable:
+ 224              	.LFB67:
+ 212:FreeModbus/mb_m.c **** 
+ 213:FreeModbus/mb_m.c **** eMBErrorCode
+ 214:FreeModbus/mb_m.c **** eMBMasterEnable( void )
+ 215:FreeModbus/mb_m.c **** {
+ 225              		.loc 1 215 1 is_stmt 1 view -0
+ 226              		.cfi_startproc
+ 227              		@ args = 0, pretend = 0, frame = 0
+ 228              		@ frame_needed = 0, uses_anonymous_args = 0
+ 229 0000 08B5     		push	{r3, lr}
+ 230              	.LCFI2:
+ 231              		.cfi_def_cfa_offset 8
+ 232              		.cfi_offset 3, -8
+ 233              		.cfi_offset 14, -4
+ 216:FreeModbus/mb_m.c ****     eMBErrorCode    eStatus = MB_ENOERR;
+ 234              		.loc 1 216 5 view .LVU53
+ 235              	.LVL16:
+ 217:FreeModbus/mb_m.c **** 
+ 218:FreeModbus/mb_m.c ****     if( eMBState == STATE_DISABLED )
+ 236              		.loc 1 218 5 view .LVU54
+ 237              		.loc 1 218 18 is_stmt 0 view .LVU55
+ 238 0002 064B     		ldr	r3, .L23
+ 239 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 240              		.loc 1 218 7 view .LVU56
+ 241 0006 012B     		cmp	r3, #1
+ 242 0008 01D0     		beq	.L22
+ 219:FreeModbus/mb_m.c ****     {
+ 220:FreeModbus/mb_m.c ****         /* Activate the protocol stack. */
+ 221:FreeModbus/mb_m.c ****         pvMBMasterFrameStartCur(  );
+ 222:FreeModbus/mb_m.c ****         eMBState = STATE_ENABLED;
+ 223:FreeModbus/mb_m.c ****     }
+ 224:FreeModbus/mb_m.c ****     else
+ 225:FreeModbus/mb_m.c ****     {
+ 226:FreeModbus/mb_m.c ****         eStatus = MB_EILLSTATE;
+ 243              		.loc 1 226 17 view .LVU57
+ 244 000a 0620     		movs	r0, #6
+ 245              	.L19:
+ 246              	.LVL17:
+ 227:FreeModbus/mb_m.c ****     }
+ 228:FreeModbus/mb_m.c ****     return eStatus;
+ 247              		.loc 1 228 5 is_stmt 1 view .LVU58
+ 229:FreeModbus/mb_m.c **** }
+ 248              		.loc 1 229 1 is_stmt 0 view .LVU59
+ 249 000c 08BD     		pop	{r3, pc}
+ 250              	.LVL18:
+ 251              	.L22:
+ 221:FreeModbus/mb_m.c ****         eMBState = STATE_ENABLED;
+ 252              		.loc 1 221 9 is_stmt 1 view .LVU60
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 10
+
+
+ 253 000e 044B     		ldr	r3, .L23+4
+ 254 0010 1B68     		ldr	r3, [r3]
+ 255 0012 9847     		blx	r3
+ 256              	.LVL19:
+ 222:FreeModbus/mb_m.c ****     }
+ 257              		.loc 1 222 9 view .LVU61
+ 222:FreeModbus/mb_m.c ****     }
+ 258              		.loc 1 222 18 is_stmt 0 view .LVU62
+ 259 0014 0020     		movs	r0, #0
+ 260 0016 014B     		ldr	r3, .L23
+ 261 0018 1870     		strb	r0, [r3]
+ 262 001a F7E7     		b	.L19
+ 263              	.L24:
+ 264              		.align	2
+ 265              	.L23:
+ 266 001c 00000000 		.word	.LANCHOR8
+ 267 0020 00000000 		.word	.LANCHOR0
+ 268              		.cfi_endproc
+ 269              	.LFE67:
+ 271              		.section	.text.eMBMasterDisable,"ax",%progbits
+ 272              		.align	1
+ 273              		.global	eMBMasterDisable
+ 274              		.syntax unified
+ 275              		.thumb
+ 276              		.thumb_func
+ 278              	eMBMasterDisable:
+ 279              	.LFB68:
+ 230:FreeModbus/mb_m.c **** 
+ 231:FreeModbus/mb_m.c **** eMBErrorCode
+ 232:FreeModbus/mb_m.c **** eMBMasterDisable( void )
+ 233:FreeModbus/mb_m.c **** {
+ 280              		.loc 1 233 1 is_stmt 1 view -0
+ 281              		.cfi_startproc
+ 282              		@ args = 0, pretend = 0, frame = 0
+ 283              		@ frame_needed = 0, uses_anonymous_args = 0
+ 284 0000 08B5     		push	{r3, lr}
+ 285              	.LCFI3:
+ 286              		.cfi_def_cfa_offset 8
+ 287              		.cfi_offset 3, -8
+ 288              		.cfi_offset 14, -4
+ 234:FreeModbus/mb_m.c ****     eMBErrorCode    eStatus;
+ 289              		.loc 1 234 5 view .LVU64
+ 235:FreeModbus/mb_m.c **** 
+ 236:FreeModbus/mb_m.c ****     if(( eMBState == STATE_ENABLED ) || ( eMBState == STATE_ESTABLISHED))
+ 290              		.loc 1 236 5 view .LVU65
+ 291              		.loc 1 236 19 is_stmt 0 view .LVU66
+ 292 0002 094B     		ldr	r3, .L32
+ 293 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 294              		.loc 1 236 7 view .LVU67
+ 295 0006 2BB1     		cbz	r3, .L26
+ 296              		.loc 1 236 38 discriminator 1 view .LVU68
+ 297 0008 032B     		cmp	r3, #3
+ 298 000a 03D0     		beq	.L26
+ 237:FreeModbus/mb_m.c ****     {
+ 238:FreeModbus/mb_m.c ****         pvMBMasterFrameStopCur(  );
+ 239:FreeModbus/mb_m.c ****         eMBState = STATE_DISABLED;
+ 240:FreeModbus/mb_m.c ****         eStatus = MB_ENOERR;
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 11
+
+
+ 241:FreeModbus/mb_m.c ****     }
+ 242:FreeModbus/mb_m.c ****     else if( eMBState == STATE_DISABLED )
+ 299              		.loc 1 242 10 is_stmt 1 view .LVU69
+ 300              		.loc 1 242 12 is_stmt 0 view .LVU70
+ 301 000c 012B     		cmp	r3, #1
+ 302 000e 09D0     		beq	.L31
+ 243:FreeModbus/mb_m.c ****     {
+ 244:FreeModbus/mb_m.c ****         eStatus = MB_ENOERR;
+ 245:FreeModbus/mb_m.c ****     }
+ 246:FreeModbus/mb_m.c ****     else
+ 247:FreeModbus/mb_m.c ****     {
+ 248:FreeModbus/mb_m.c ****         eStatus = MB_EILLSTATE;
+ 303              		.loc 1 248 17 view .LVU71
+ 304 0010 0620     		movs	r0, #6
+ 305 0012 06E0     		b	.L28
+ 306              	.L26:
+ 238:FreeModbus/mb_m.c ****         eMBState = STATE_DISABLED;
+ 307              		.loc 1 238 9 is_stmt 1 view .LVU72
+ 308 0014 054B     		ldr	r3, .L32+4
+ 309 0016 1B68     		ldr	r3, [r3]
+ 310 0018 9847     		blx	r3
+ 311              	.LVL20:
+ 239:FreeModbus/mb_m.c ****         eStatus = MB_ENOERR;
+ 312              		.loc 1 239 9 view .LVU73
+ 239:FreeModbus/mb_m.c ****         eStatus = MB_ENOERR;
+ 313              		.loc 1 239 18 is_stmt 0 view .LVU74
+ 314 001a 034B     		ldr	r3, .L32
+ 315 001c 0122     		movs	r2, #1
+ 316 001e 1A70     		strb	r2, [r3]
+ 240:FreeModbus/mb_m.c ****     }
+ 317              		.loc 1 240 9 is_stmt 1 view .LVU75
+ 318              	.LVL21:
+ 240:FreeModbus/mb_m.c ****     }
+ 319              		.loc 1 240 17 is_stmt 0 view .LVU76
+ 320 0020 0020     		movs	r0, #0
+ 321              	.LVL22:
+ 322              	.L28:
+ 249:FreeModbus/mb_m.c ****     }
+ 250:FreeModbus/mb_m.c ****     return eStatus;
+ 323              		.loc 1 250 5 is_stmt 1 view .LVU77
+ 251:FreeModbus/mb_m.c **** }
+ 324              		.loc 1 251 1 is_stmt 0 view .LVU78
+ 325 0022 08BD     		pop	{r3, pc}
+ 326              	.LVL23:
+ 327              	.L31:
+ 244:FreeModbus/mb_m.c ****     }
+ 328              		.loc 1 244 17 view .LVU79
+ 329 0024 0020     		movs	r0, #0
+ 330 0026 FCE7     		b	.L28
+ 331              	.L33:
+ 332              		.align	2
+ 333              	.L32:
+ 334 0028 00000000 		.word	.LANCHOR8
+ 335 002c 00000000 		.word	.LANCHOR1
+ 336              		.cfi_endproc
+ 337              	.LFE68:
+ 339              		.section	.text.eMBMasterIsEstablished,"ax",%progbits
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 12
+
+
+ 340              		.align	1
+ 341              		.global	eMBMasterIsEstablished
+ 342              		.syntax unified
+ 343              		.thumb
+ 344              		.thumb_func
+ 346              	eMBMasterIsEstablished:
+ 347              	.LFB69:
+ 252:FreeModbus/mb_m.c **** 
+ 253:FreeModbus/mb_m.c **** BOOL
+ 254:FreeModbus/mb_m.c **** eMBMasterIsEstablished( void )
+ 255:FreeModbus/mb_m.c **** {
+ 348              		.loc 1 255 1 is_stmt 1 view -0
+ 349              		.cfi_startproc
+ 350              		@ args = 0, pretend = 0, frame = 0
+ 351              		@ frame_needed = 0, uses_anonymous_args = 0
+ 352              		@ link register save eliminated.
+ 256:FreeModbus/mb_m.c ****     if(eMBState == STATE_ESTABLISHED)
+ 353              		.loc 1 256 5 view .LVU81
+ 354              		.loc 1 256 17 is_stmt 0 view .LVU82
+ 355 0000 034B     		ldr	r3, .L38
+ 356 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 357              		.loc 1 256 7 view .LVU83
+ 358 0004 032B     		cmp	r3, #3
+ 359 0006 01D0     		beq	.L37
+ 257:FreeModbus/mb_m.c ****     {
+ 258:FreeModbus/mb_m.c ****         return TRUE;
+ 259:FreeModbus/mb_m.c ****     }
+ 260:FreeModbus/mb_m.c ****     else
+ 261:FreeModbus/mb_m.c ****     {
+ 262:FreeModbus/mb_m.c ****         return FALSE;
+ 360              		.loc 1 262 16 view .LVU84
+ 361 0008 0020     		movs	r0, #0
+ 263:FreeModbus/mb_m.c ****     }
+ 264:FreeModbus/mb_m.c **** }
+ 362              		.loc 1 264 1 view .LVU85
+ 363 000a 7047     		bx	lr
+ 364              	.L37:
+ 258:FreeModbus/mb_m.c ****     }
+ 365              		.loc 1 258 16 view .LVU86
+ 366 000c 0120     		movs	r0, #1
+ 367 000e 7047     		bx	lr
+ 368              	.L39:
+ 369              		.align	2
+ 370              	.L38:
+ 371 0010 00000000 		.word	.LANCHOR8
+ 372              		.cfi_endproc
+ 373              	.LFE69:
+ 375              		.section	.text.xMBMasterGetCBRunInMasterMode,"ax",%progbits
+ 376              		.align	1
+ 377              		.global	xMBMasterGetCBRunInMasterMode
+ 378              		.syntax unified
+ 379              		.thumb
+ 380              		.thumb_func
+ 382              	xMBMasterGetCBRunInMasterMode:
+ 383              	.LFB71:
+ 265:FreeModbus/mb_m.c **** 
+ 266:FreeModbus/mb_m.c **** 
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 13
+
+
+ 267:FreeModbus/mb_m.c **** eMBErrorCode
+ 268:FreeModbus/mb_m.c **** eMBMasterPoll( void )
+ 269:FreeModbus/mb_m.c **** {
+ 270:FreeModbus/mb_m.c ****     static UCHAR   *ucMBFrame;
+ 271:FreeModbus/mb_m.c ****     static UCHAR    ucRcvAddress;
+ 272:FreeModbus/mb_m.c ****     static UCHAR    ucFunctionCode;
+ 273:FreeModbus/mb_m.c ****     static USHORT   usLength;
+ 274:FreeModbus/mb_m.c ****     static eMBException eException;
+ 275:FreeModbus/mb_m.c **** 
+ 276:FreeModbus/mb_m.c ****     int             i , j;
+ 277:FreeModbus/mb_m.c ****     eMBErrorCode    eStatus = MB_ENOERR;
+ 278:FreeModbus/mb_m.c ****     eMBMasterEventType    eEvent;
+ 279:FreeModbus/mb_m.c ****     eMBMasterErrorEventType errorType;
+ 280:FreeModbus/mb_m.c **** 
+ 281:FreeModbus/mb_m.c ****     /* Check if the protocol stack is ready. */
+ 282:FreeModbus/mb_m.c ****     if(( eMBState != STATE_ENABLED ) && ( eMBState != STATE_ESTABLISHED))
+ 283:FreeModbus/mb_m.c ****     {
+ 284:FreeModbus/mb_m.c ****         return MB_EILLSTATE;
+ 285:FreeModbus/mb_m.c ****     }
+ 286:FreeModbus/mb_m.c **** 
+ 287:FreeModbus/mb_m.c ****     /* Check if there is a event available. If not return control to caller.
+ 288:FreeModbus/mb_m.c ****      * Otherwise we will handle the event. */
+ 289:FreeModbus/mb_m.c ****     if( xMBMasterPortEventGet( &eEvent ) == TRUE )
+ 290:FreeModbus/mb_m.c ****     {
+ 291:FreeModbus/mb_m.c ****         switch ( eEvent )
+ 292:FreeModbus/mb_m.c ****         {
+ 293:FreeModbus/mb_m.c ****         case EV_MASTER_READY:
+ 294:FreeModbus/mb_m.c ****             eMBState = STATE_ESTABLISHED;
+ 295:FreeModbus/mb_m.c ****             break;
+ 296:FreeModbus/mb_m.c **** 
+ 297:FreeModbus/mb_m.c ****         case EV_MASTER_FRAME_RECEIVED:
+ 298:FreeModbus/mb_m.c ****             eStatus = peMBMasterFrameReceiveCur( &ucRcvAddress, &ucMBFrame, &usLength );
+ 299:FreeModbus/mb_m.c ****             /* Check if the frame is for us. If not ,send an error process event. */
+ 300:FreeModbus/mb_m.c ****             if ( ( eStatus == MB_ENOERR ) && ( ucRcvAddress == ucMBMasterGetDestAddress() ) )
+ 301:FreeModbus/mb_m.c ****             {
+ 302:FreeModbus/mb_m.c ****                 ( void ) xMBMasterPortEventPost( EV_MASTER_EXECUTE );
+ 303:FreeModbus/mb_m.c ****             }
+ 304:FreeModbus/mb_m.c ****             else
+ 305:FreeModbus/mb_m.c ****             {
+ 306:FreeModbus/mb_m.c ****                 vMBMasterSetErrorType(EV_ERROR_RECEIVE_DATA);
+ 307:FreeModbus/mb_m.c ****                 ( void ) xMBMasterPortEventPost( EV_MASTER_ERROR_PROCESS );
+ 308:FreeModbus/mb_m.c ****             }
+ 309:FreeModbus/mb_m.c ****             break;
+ 310:FreeModbus/mb_m.c **** 
+ 311:FreeModbus/mb_m.c ****         case EV_MASTER_EXECUTE:
+ 312:FreeModbus/mb_m.c ****             ucFunctionCode = ucMBFrame[MB_PDU_FUNC_OFF];
+ 313:FreeModbus/mb_m.c ****             eException = MB_EX_ILLEGAL_FUNCTION;
+ 314:FreeModbus/mb_m.c ****             /* If receive frame has exception .The receive function code highest bit is 1.*/
+ 315:FreeModbus/mb_m.c ****             if(ucFunctionCode >> 7) {
+ 316:FreeModbus/mb_m.c ****             	eException = (eMBException)ucMBFrame[MB_PDU_DATA_OFF];
+ 317:FreeModbus/mb_m.c ****             }
+ 318:FreeModbus/mb_m.c **** 			else
+ 319:FreeModbus/mb_m.c **** 			{
+ 320:FreeModbus/mb_m.c **** 				for (i = 0; i < MB_FUNC_HANDLERS_MAX; i++)
+ 321:FreeModbus/mb_m.c **** 				{
+ 322:FreeModbus/mb_m.c **** 					/* No more function handlers registered. Abort. */
+ 323:FreeModbus/mb_m.c **** 					if (xMasterFuncHandlers[i].ucFunctionCode == 0)	{
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 14
+
+
+ 324:FreeModbus/mb_m.c **** 						break;
+ 325:FreeModbus/mb_m.c **** 					}
+ 326:FreeModbus/mb_m.c **** 					else if (xMasterFuncHandlers[i].ucFunctionCode == ucFunctionCode) {
+ 327:FreeModbus/mb_m.c **** 						vMBMasterSetCBRunInMasterMode(TRUE);
+ 328:FreeModbus/mb_m.c **** 						/* If master request is broadcast,
+ 329:FreeModbus/mb_m.c **** 						 * the master need execute function for all slave.
+ 330:FreeModbus/mb_m.c **** 						 */
+ 331:FreeModbus/mb_m.c **** 						if ( xMBMasterRequestIsBroadcast() ) {
+ 332:FreeModbus/mb_m.c **** 							usLength = usMBMasterGetPDUSndLength();
+ 333:FreeModbus/mb_m.c **** 							for(j = 1; j <= MB_MASTER_TOTAL_SLAVE_NUM; j++){
+ 334:FreeModbus/mb_m.c **** 								vMBMasterSetDestAddress(j);
+ 335:FreeModbus/mb_m.c **** 								eException = xMasterFuncHandlers[i].pxHandler(ucMBFrame, &usLength);
+ 336:FreeModbus/mb_m.c **** 							}
+ 337:FreeModbus/mb_m.c **** 						}
+ 338:FreeModbus/mb_m.c **** 						else {
+ 339:FreeModbus/mb_m.c **** 							eException = xMasterFuncHandlers[i].pxHandler(ucMBFrame, &usLength);
+ 340:FreeModbus/mb_m.c **** 						}
+ 341:FreeModbus/mb_m.c **** 						vMBMasterSetCBRunInMasterMode(FALSE);
+ 342:FreeModbus/mb_m.c **** 						break;
+ 343:FreeModbus/mb_m.c **** 					}
+ 344:FreeModbus/mb_m.c **** 				}
+ 345:FreeModbus/mb_m.c **** 			}
+ 346:FreeModbus/mb_m.c ****             /* If master has exception ,Master will send error process.Otherwise the Master is idle
+ 347:FreeModbus/mb_m.c ****             if (eException != MB_EX_NONE) {
+ 348:FreeModbus/mb_m.c ****             	vMBMasterSetErrorType(EV_ERROR_EXECUTE_FUNCTION);
+ 349:FreeModbus/mb_m.c ****             	( void ) xMBMasterPortEventPost( EV_MASTER_ERROR_PROCESS );
+ 350:FreeModbus/mb_m.c ****             }
+ 351:FreeModbus/mb_m.c ****             else {
+ 352:FreeModbus/mb_m.c ****             	vMBMasterCBRequestScuuess( );
+ 353:FreeModbus/mb_m.c ****             	vMBMasterRunResRelease( );
+ 354:FreeModbus/mb_m.c ****             }
+ 355:FreeModbus/mb_m.c ****             break;
+ 356:FreeModbus/mb_m.c **** 
+ 357:FreeModbus/mb_m.c ****         case EV_MASTER_FRAME_SENT:
+ 358:FreeModbus/mb_m.c ****         	/* Master is busy now. */
+ 359:FreeModbus/mb_m.c ****         	vMBMasterGetPDUSndBuf( &ucMBFrame );
+ 360:FreeModbus/mb_m.c **** 			eStatus = peMBMasterFrameSendCur( ucMBMasterGetDestAddress(), ucMBFrame, usMBMasterGetPDUSndLeng
+ 361:FreeModbus/mb_m.c ****             break;
+ 362:FreeModbus/mb_m.c **** 
+ 363:FreeModbus/mb_m.c ****         case EV_MASTER_ERROR_PROCESS:
+ 364:FreeModbus/mb_m.c ****         	/* Execute specified error process callback function. */
+ 365:FreeModbus/mb_m.c **** 			errorType = eMBMasterGetErrorType();
+ 366:FreeModbus/mb_m.c **** 			vMBMasterGetPDUSndBuf( &ucMBFrame );
+ 367:FreeModbus/mb_m.c **** 			switch (errorType) {
+ 368:FreeModbus/mb_m.c **** 			case EV_ERROR_RESPOND_TIMEOUT:
+ 369:FreeModbus/mb_m.c **** 				vMBMasterErrorCBRespondTimeout(ucMBMasterGetDestAddress(),
+ 370:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 371:FreeModbus/mb_m.c **** 				break;
+ 372:FreeModbus/mb_m.c **** 			case EV_ERROR_RECEIVE_DATA:
+ 373:FreeModbus/mb_m.c **** 				vMBMasterErrorCBReceiveData(ucMBMasterGetDestAddress(),
+ 374:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 375:FreeModbus/mb_m.c **** 				break;
+ 376:FreeModbus/mb_m.c **** 			case EV_ERROR_EXECUTE_FUNCTION:
+ 377:FreeModbus/mb_m.c **** 				vMBMasterErrorCBExecuteFunction(ucMBMasterGetDestAddress(),
+ 378:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 379:FreeModbus/mb_m.c **** 				break;
+ 380:FreeModbus/mb_m.c **** 			}
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 15
+
+
+ 381:FreeModbus/mb_m.c **** 			vMBMasterRunResRelease();
+ 382:FreeModbus/mb_m.c ****         	break;
+ 383:FreeModbus/mb_m.c ****             
+ 384:FreeModbus/mb_m.c ****         default:
+ 385:FreeModbus/mb_m.c ****             break;
+ 386:FreeModbus/mb_m.c ****         }
+ 387:FreeModbus/mb_m.c **** 
+ 388:FreeModbus/mb_m.c ****     }
+ 389:FreeModbus/mb_m.c ****     return MB_ENOERR;
+ 390:FreeModbus/mb_m.c **** }
+ 391:FreeModbus/mb_m.c **** 
+ 392:FreeModbus/mb_m.c **** /* Get whether the Modbus Master is run in master mode.*/
+ 393:FreeModbus/mb_m.c **** BOOL xMBMasterGetCBRunInMasterMode( void )
+ 394:FreeModbus/mb_m.c **** {
+ 384              		.loc 1 394 1 is_stmt 1 view -0
+ 385              		.cfi_startproc
+ 386              		@ args = 0, pretend = 0, frame = 0
+ 387              		@ frame_needed = 0, uses_anonymous_args = 0
+ 388              		@ link register save eliminated.
+ 395:FreeModbus/mb_m.c **** 	return xMBRunInMasterMode;
+ 389              		.loc 1 395 2 view .LVU88
+ 396:FreeModbus/mb_m.c **** }
+ 390              		.loc 1 396 1 is_stmt 0 view .LVU89
+ 391 0000 014B     		ldr	r3, .L41
+ 392 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 393 0004 7047     		bx	lr
+ 394              	.L42:
+ 395 0006 00BF     		.align	2
+ 396              	.L41:
+ 397 0008 00000000 		.word	.LANCHOR9
+ 398              		.cfi_endproc
+ 399              	.LFE71:
+ 401              		.section	.text.vMBMasterSetCBRunInMasterMode,"ax",%progbits
+ 402              		.align	1
+ 403              		.global	vMBMasterSetCBRunInMasterMode
+ 404              		.syntax unified
+ 405              		.thumb
+ 406              		.thumb_func
+ 408              	vMBMasterSetCBRunInMasterMode:
+ 409              	.LVL24:
+ 410              	.LFB72:
+ 397:FreeModbus/mb_m.c **** /* Set whether the Modbus Master is run in master mode.*/
+ 398:FreeModbus/mb_m.c **** void vMBMasterSetCBRunInMasterMode( BOOL IsMasterMode )
+ 399:FreeModbus/mb_m.c **** {
+ 411              		.loc 1 399 1 is_stmt 1 view -0
+ 412              		.cfi_startproc
+ 413              		@ args = 0, pretend = 0, frame = 0
+ 414              		@ frame_needed = 0, uses_anonymous_args = 0
+ 415              		@ link register save eliminated.
+ 400:FreeModbus/mb_m.c **** 	xMBRunInMasterMode = IsMasterMode;
+ 416              		.loc 1 400 2 view .LVU91
+ 417              		.loc 1 400 21 is_stmt 0 view .LVU92
+ 418 0000 014B     		ldr	r3, .L44
+ 419 0002 1870     		strb	r0, [r3]
+ 401:FreeModbus/mb_m.c **** }
+ 420              		.loc 1 401 1 view .LVU93
+ 421 0004 7047     		bx	lr
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 16
+
+
+ 422              	.L45:
+ 423 0006 00BF     		.align	2
+ 424              	.L44:
+ 425 0008 00000000 		.word	.LANCHOR9
+ 426              		.cfi_endproc
+ 427              	.LFE72:
+ 429              		.section	.text.ucMBMasterGetDestAddress,"ax",%progbits
+ 430              		.align	1
+ 431              		.global	ucMBMasterGetDestAddress
+ 432              		.syntax unified
+ 433              		.thumb
+ 434              		.thumb_func
+ 436              	ucMBMasterGetDestAddress:
+ 437              	.LFB73:
+ 402:FreeModbus/mb_m.c **** /* Get Modbus Master send destination address. */
+ 403:FreeModbus/mb_m.c **** UCHAR ucMBMasterGetDestAddress( void )
+ 404:FreeModbus/mb_m.c **** {
+ 438              		.loc 1 404 1 is_stmt 1 view -0
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 0
+ 441              		@ frame_needed = 0, uses_anonymous_args = 0
+ 442              		@ link register save eliminated.
+ 405:FreeModbus/mb_m.c **** 	return ucMBMasterDestAddress;
+ 443              		.loc 1 405 2 view .LVU95
+ 406:FreeModbus/mb_m.c **** }
+ 444              		.loc 1 406 1 is_stmt 0 view .LVU96
+ 445 0000 014B     		ldr	r3, .L47
+ 446 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 447 0004 7047     		bx	lr
+ 448              	.L48:
+ 449 0006 00BF     		.align	2
+ 450              	.L47:
+ 451 0008 00000000 		.word	.LANCHOR10
+ 452              		.cfi_endproc
+ 453              	.LFE73:
+ 455              		.section	.text.vMBMasterSetDestAddress,"ax",%progbits
+ 456              		.align	1
+ 457              		.global	vMBMasterSetDestAddress
+ 458              		.syntax unified
+ 459              		.thumb
+ 460              		.thumb_func
+ 462              	vMBMasterSetDestAddress:
+ 463              	.LVL25:
+ 464              	.LFB74:
+ 407:FreeModbus/mb_m.c **** /* Set Modbus Master send destination address. */
+ 408:FreeModbus/mb_m.c **** void vMBMasterSetDestAddress( UCHAR Address )
+ 409:FreeModbus/mb_m.c **** {
+ 465              		.loc 1 409 1 is_stmt 1 view -0
+ 466              		.cfi_startproc
+ 467              		@ args = 0, pretend = 0, frame = 0
+ 468              		@ frame_needed = 0, uses_anonymous_args = 0
+ 469              		@ link register save eliminated.
+ 410:FreeModbus/mb_m.c **** 	ucMBMasterDestAddress = Address;
+ 470              		.loc 1 410 2 view .LVU98
+ 471              		.loc 1 410 24 is_stmt 0 view .LVU99
+ 472 0000 014B     		ldr	r3, .L50
+ 473 0002 1870     		strb	r0, [r3]
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 17
+
+
+ 411:FreeModbus/mb_m.c **** }
+ 474              		.loc 1 411 1 view .LVU100
+ 475 0004 7047     		bx	lr
+ 476              	.L51:
+ 477 0006 00BF     		.align	2
+ 478              	.L50:
+ 479 0008 00000000 		.word	.LANCHOR10
+ 480              		.cfi_endproc
+ 481              	.LFE74:
+ 483              		.section	.text.eMBMasterGetErrorType,"ax",%progbits
+ 484              		.align	1
+ 485              		.global	eMBMasterGetErrorType
+ 486              		.syntax unified
+ 487              		.thumb
+ 488              		.thumb_func
+ 490              	eMBMasterGetErrorType:
+ 491              	.LFB75:
+ 412:FreeModbus/mb_m.c **** /* Get Modbus Master current error event type. */
+ 413:FreeModbus/mb_m.c **** eMBMasterErrorEventType eMBMasterGetErrorType( void )
+ 414:FreeModbus/mb_m.c **** {
+ 492              		.loc 1 414 1 is_stmt 1 view -0
+ 493              		.cfi_startproc
+ 494              		@ args = 0, pretend = 0, frame = 0
+ 495              		@ frame_needed = 0, uses_anonymous_args = 0
+ 496              		@ link register save eliminated.
+ 415:FreeModbus/mb_m.c **** 	return eMBMasterCurErrorType;
+ 497              		.loc 1 415 2 view .LVU102
+ 416:FreeModbus/mb_m.c **** }
+ 498              		.loc 1 416 1 is_stmt 0 view .LVU103
+ 499 0000 014B     		ldr	r3, .L53
+ 500 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 501 0004 7047     		bx	lr
+ 502              	.L54:
+ 503 0006 00BF     		.align	2
+ 504              	.L53:
+ 505 0008 00000000 		.word	.LANCHOR11
+ 506              		.cfi_endproc
+ 507              	.LFE75:
+ 509              		.section	.text.vMBMasterSetErrorType,"ax",%progbits
+ 510              		.align	1
+ 511              		.global	vMBMasterSetErrorType
+ 512              		.syntax unified
+ 513              		.thumb
+ 514              		.thumb_func
+ 516              	vMBMasterSetErrorType:
+ 517              	.LVL26:
+ 518              	.LFB76:
+ 417:FreeModbus/mb_m.c **** /* Set Modbus Master current error event type. */
+ 418:FreeModbus/mb_m.c **** void vMBMasterSetErrorType( eMBMasterErrorEventType errorType )
+ 419:FreeModbus/mb_m.c **** {
+ 519              		.loc 1 419 1 is_stmt 1 view -0
+ 520              		.cfi_startproc
+ 521              		@ args = 0, pretend = 0, frame = 0
+ 522              		@ frame_needed = 0, uses_anonymous_args = 0
+ 523              		@ link register save eliminated.
+ 420:FreeModbus/mb_m.c **** 	eMBMasterCurErrorType = errorType;
+ 524              		.loc 1 420 2 view .LVU105
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 18
+
+
+ 525              		.loc 1 420 24 is_stmt 0 view .LVU106
+ 526 0000 014B     		ldr	r3, .L56
+ 527 0002 1870     		strb	r0, [r3]
+ 421:FreeModbus/mb_m.c **** }
+ 528              		.loc 1 421 1 view .LVU107
+ 529 0004 7047     		bx	lr
+ 530              	.L57:
+ 531 0006 00BF     		.align	2
+ 532              	.L56:
+ 533 0008 00000000 		.word	.LANCHOR11
+ 534              		.cfi_endproc
+ 535              	.LFE76:
+ 537              		.section	.text.eMBMasterPoll,"ax",%progbits
+ 538              		.align	1
+ 539              		.global	eMBMasterPoll
+ 540              		.syntax unified
+ 541              		.thumb
+ 542              		.thumb_func
+ 544              	eMBMasterPoll:
+ 545              	.LFB70:
+ 269:FreeModbus/mb_m.c ****     static UCHAR   *ucMBFrame;
+ 546              		.loc 1 269 1 is_stmt 1 view -0
+ 547              		.cfi_startproc
+ 548              		@ args = 0, pretend = 0, frame = 8
+ 549              		@ frame_needed = 0, uses_anonymous_args = 0
+ 550 0000 70B5     		push	{r4, r5, r6, lr}
+ 551              	.LCFI4:
+ 552              		.cfi_def_cfa_offset 16
+ 553              		.cfi_offset 4, -16
+ 554              		.cfi_offset 5, -12
+ 555              		.cfi_offset 6, -8
+ 556              		.cfi_offset 14, -4
+ 557 0002 82B0     		sub	sp, sp, #8
+ 558              	.LCFI5:
+ 559              		.cfi_def_cfa_offset 24
+ 270:FreeModbus/mb_m.c ****     static UCHAR    ucRcvAddress;
+ 560              		.loc 1 270 5 view .LVU109
+ 271:FreeModbus/mb_m.c ****     static UCHAR    ucFunctionCode;
+ 561              		.loc 1 271 5 view .LVU110
+ 272:FreeModbus/mb_m.c ****     static USHORT   usLength;
+ 562              		.loc 1 272 5 view .LVU111
+ 273:FreeModbus/mb_m.c ****     static eMBException eException;
+ 563              		.loc 1 273 5 view .LVU112
+ 274:FreeModbus/mb_m.c **** 
+ 564              		.loc 1 274 5 view .LVU113
+ 276:FreeModbus/mb_m.c ****     eMBErrorCode    eStatus = MB_ENOERR;
+ 565              		.loc 1 276 5 view .LVU114
+ 277:FreeModbus/mb_m.c ****     eMBMasterEventType    eEvent;
+ 566              		.loc 1 277 5 view .LVU115
+ 567              	.LVL27:
+ 278:FreeModbus/mb_m.c ****     eMBMasterErrorEventType errorType;
+ 568              		.loc 1 278 5 view .LVU116
+ 279:FreeModbus/mb_m.c **** 
+ 569              		.loc 1 279 5 view .LVU117
+ 282:FreeModbus/mb_m.c ****     {
+ 570              		.loc 1 282 5 view .LVU118
+ 282:FreeModbus/mb_m.c ****     {
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 19
+
+
+ 571              		.loc 1 282 19 is_stmt 0 view .LVU119
+ 572 0004 6F4B     		ldr	r3, .L91
+ 573 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 282:FreeModbus/mb_m.c ****     {
+ 574              		.loc 1 282 7 view .LVU120
+ 575 0008 13B1     		cbz	r3, .L59
+ 282:FreeModbus/mb_m.c ****     {
+ 576              		.loc 1 282 38 discriminator 1 view .LVU121
+ 577 000a 032B     		cmp	r3, #3
+ 578 000c 40F0D580 		bne	.L80
+ 579              	.L59:
+ 289:FreeModbus/mb_m.c ****     {
+ 580              		.loc 1 289 5 is_stmt 1 view .LVU122
+ 289:FreeModbus/mb_m.c ****     {
+ 581              		.loc 1 289 9 is_stmt 0 view .LVU123
+ 582 0010 0DF10600 		add	r0, sp, #6
+ 583 0014 FFF7FEFF 		bl	xMBMasterPortEventGet
+ 584              	.LVL28:
+ 289:FreeModbus/mb_m.c ****     {
+ 585              		.loc 1 289 7 view .LVU124
+ 586 0018 0128     		cmp	r0, #1
+ 587 001a 03D0     		beq	.L85
+ 389:FreeModbus/mb_m.c **** }
+ 588              		.loc 1 389 12 view .LVU125
+ 589 001c 0024     		movs	r4, #0
+ 590              	.LVL29:
+ 591              	.L60:
+ 390:FreeModbus/mb_m.c **** 
+ 592              		.loc 1 390 1 view .LVU126
+ 593 001e 2046     		mov	r0, r4
+ 594 0020 02B0     		add	sp, sp, #8
+ 595              	.LCFI6:
+ 596              		.cfi_remember_state
+ 597              		.cfi_def_cfa_offset 16
+ 598              		@ sp needed
+ 599 0022 70BD     		pop	{r4, r5, r6, pc}
+ 600              	.LVL30:
+ 601              	.L85:
+ 602              	.LCFI7:
+ 603              		.cfi_restore_state
+ 291:FreeModbus/mb_m.c ****         {
+ 604              		.loc 1 291 9 is_stmt 1 view .LVU127
+ 605 0024 BDF80630 		ldrh	r3, [sp, #6]
+ 606 0028 013B     		subs	r3, r3, #1
+ 607 002a 0F2B     		cmp	r3, #15
+ 608 002c 00F2C780 		bhi	.L82
+ 609 0030 DFE803F0 		tbb	[pc, r3]
+ 610              	.L62:
+ 611 0034 08       		.byte	(.L66-.L62)/2
+ 612 0035 0D       		.byte	(.L65-.L62)/2
+ 613 0036 C5       		.byte	(.L82-.L62)/2
+ 614 0037 27       		.byte	(.L64-.L62)/2
+ 615 0038 C5       		.byte	(.L82-.L62)/2
+ 616 0039 C5       		.byte	(.L82-.L62)/2
+ 617 003a C5       		.byte	(.L82-.L62)/2
+ 618 003b 7B       		.byte	(.L63-.L62)/2
+ 619 003c C5       		.byte	(.L82-.L62)/2
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 20
+
+
+ 620 003d C5       		.byte	(.L82-.L62)/2
+ 621 003e C5       		.byte	(.L82-.L62)/2
+ 622 003f C5       		.byte	(.L82-.L62)/2
+ 623 0040 C5       		.byte	(.L82-.L62)/2
+ 624 0041 C5       		.byte	(.L82-.L62)/2
+ 625 0042 C5       		.byte	(.L82-.L62)/2
+ 626 0043 8D       		.byte	(.L61-.L62)/2
+ 627              		.p2align 1
+ 628              	.L66:
+ 294:FreeModbus/mb_m.c ****             break;
+ 629              		.loc 1 294 13 view .LVU128
+ 294:FreeModbus/mb_m.c ****             break;
+ 630              		.loc 1 294 22 is_stmt 0 view .LVU129
+ 631 0044 5F4B     		ldr	r3, .L91
+ 632 0046 0322     		movs	r2, #3
+ 633 0048 1A70     		strb	r2, [r3]
+ 295:FreeModbus/mb_m.c **** 
+ 634              		.loc 1 295 13 is_stmt 1 view .LVU130
+ 389:FreeModbus/mb_m.c **** }
+ 635              		.loc 1 389 12 is_stmt 0 view .LVU131
+ 636 004a 0024     		movs	r4, #0
+ 295:FreeModbus/mb_m.c **** 
+ 637              		.loc 1 295 13 view .LVU132
+ 638 004c E7E7     		b	.L60
+ 639              	.L65:
+ 298:FreeModbus/mb_m.c ****             /* Check if the frame is for us. If not ,send an error process event. */
+ 640              		.loc 1 298 13 is_stmt 1 view .LVU133
+ 298:FreeModbus/mb_m.c ****             /* Check if the frame is for us. If not ,send an error process event. */
+ 641              		.loc 1 298 23 is_stmt 0 view .LVU134
+ 642 004e 5E4B     		ldr	r3, .L91+4
+ 643 0050 1B68     		ldr	r3, [r3]
+ 644 0052 5E4A     		ldr	r2, .L91+8
+ 645 0054 5E49     		ldr	r1, .L91+12
+ 646 0056 5F48     		ldr	r0, .L91+16
+ 647 0058 9847     		blx	r3
+ 648              	.LVL31:
+ 300:FreeModbus/mb_m.c ****             {
+ 649              		.loc 1 300 13 is_stmt 1 view .LVU135
+ 300:FreeModbus/mb_m.c ****             {
+ 650              		.loc 1 300 16 is_stmt 0 view .LVU136
+ 651 005a 0446     		mov	r4, r0
+ 652 005c 28B9     		cbnz	r0, .L67
+ 300:FreeModbus/mb_m.c ****             {
+ 653              		.loc 1 300 64 discriminator 1 view .LVU137
+ 654 005e FFF7FEFF 		bl	ucMBMasterGetDestAddress
+ 655              	.LVL32:
+ 300:FreeModbus/mb_m.c ****             {
+ 656              		.loc 1 300 61 discriminator 1 view .LVU138
+ 657 0062 5C4B     		ldr	r3, .L91+16
+ 658 0064 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 300:FreeModbus/mb_m.c ****             {
+ 659              		.loc 1 300 43 discriminator 1 view .LVU139
+ 660 0066 9842     		cmp	r0, r3
+ 661 0068 07D0     		beq	.L86
+ 662              	.L67:
+ 306:FreeModbus/mb_m.c ****                 ( void ) xMBMasterPortEventPost( EV_MASTER_ERROR_PROCESS );
+ 663              		.loc 1 306 17 is_stmt 1 view .LVU140
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 21
+
+
+ 664 006a 0120     		movs	r0, #1
+ 665 006c FFF7FEFF 		bl	vMBMasterSetErrorType
+ 666              	.LVL33:
+ 307:FreeModbus/mb_m.c ****             }
+ 667              		.loc 1 307 17 view .LVU141
+ 307:FreeModbus/mb_m.c ****             }
+ 668              		.loc 1 307 26 is_stmt 0 view .LVU142
+ 669 0070 1020     		movs	r0, #16
+ 670 0072 FFF7FEFF 		bl	xMBMasterPortEventPost
+ 671              	.LVL34:
+ 389:FreeModbus/mb_m.c **** }
+ 672              		.loc 1 389 12 view .LVU143
+ 673 0076 0024     		movs	r4, #0
+ 674 0078 D1E7     		b	.L60
+ 675              	.L86:
+ 302:FreeModbus/mb_m.c ****             }
+ 676              		.loc 1 302 17 is_stmt 1 view .LVU144
+ 302:FreeModbus/mb_m.c ****             }
+ 677              		.loc 1 302 26 is_stmt 0 view .LVU145
+ 678 007a 0420     		movs	r0, #4
+ 679 007c FFF7FEFF 		bl	xMBMasterPortEventPost
+ 680              	.LVL35:
+ 302:FreeModbus/mb_m.c ****             }
+ 681              		.loc 1 302 17 view .LVU146
+ 682 0080 CDE7     		b	.L60
+ 683              	.LVL36:
+ 684              	.L64:
+ 312:FreeModbus/mb_m.c ****             eException = MB_EX_ILLEGAL_FUNCTION;
+ 685              		.loc 1 312 13 is_stmt 1 view .LVU147
+ 312:FreeModbus/mb_m.c ****             eException = MB_EX_ILLEGAL_FUNCTION;
+ 686              		.loc 1 312 39 is_stmt 0 view .LVU148
+ 687 0082 534B     		ldr	r3, .L91+12
+ 688 0084 1B68     		ldr	r3, [r3]
+ 689 0086 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 312:FreeModbus/mb_m.c ****             eException = MB_EX_ILLEGAL_FUNCTION;
+ 690              		.loc 1 312 28 view .LVU149
+ 691 0088 5349     		ldr	r1, .L91+20
+ 692 008a 0A70     		strb	r2, [r1]
+ 313:FreeModbus/mb_m.c ****             /* If receive frame has exception .The receive function code highest bit is 1.*/
+ 693              		.loc 1 313 13 is_stmt 1 view .LVU150
+ 313:FreeModbus/mb_m.c ****             /* If receive frame has exception .The receive function code highest bit is 1.*/
+ 694              		.loc 1 313 24 is_stmt 0 view .LVU151
+ 695 008c 5349     		ldr	r1, .L91+24
+ 696 008e 0120     		movs	r0, #1
+ 697 0090 0870     		strb	r0, [r1]
+ 315:FreeModbus/mb_m.c ****             	eException = (eMBException)ucMBFrame[MB_PDU_DATA_OFF];
+ 698              		.loc 1 315 13 is_stmt 1 view .LVU152
+ 315:FreeModbus/mb_m.c ****             	eException = (eMBException)ucMBFrame[MB_PDU_DATA_OFF];
+ 699              		.loc 1 315 15 is_stmt 0 view .LVU153
+ 700 0092 12F0800F 		tst	r2, #128
+ 701 0096 0AD1     		bne	.L87
+ 320:FreeModbus/mb_m.c **** 				{
+ 702              		.loc 1 320 12 view .LVU154
+ 703 0098 0024     		movs	r4, #0
+ 704              	.L68:
+ 705              	.LVL37:
+ 320:FreeModbus/mb_m.c **** 				{
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 22
+
+
+ 706              		.loc 1 320 17 is_stmt 1 discriminator 1 view .LVU155
+ 320:FreeModbus/mb_m.c **** 				{
+ 707              		.loc 1 320 5 is_stmt 0 discriminator 1 view .LVU156
+ 708 009a 0F2C     		cmp	r4, #15
+ 709 009c 09DC     		bgt	.L69
+ 323:FreeModbus/mb_m.c **** 						break;
+ 710              		.loc 1 323 6 is_stmt 1 view .LVU157
+ 323:FreeModbus/mb_m.c **** 						break;
+ 711              		.loc 1 323 32 is_stmt 0 view .LVU158
+ 712 009e 504B     		ldr	r3, .L91+28
+ 713 00a0 13F83430 		ldrb	r3, [r3, r4, lsl #3]	@ zero_extendqisi2
+ 323:FreeModbus/mb_m.c **** 						break;
+ 714              		.loc 1 323 9 view .LVU159
+ 715 00a4 2BB1     		cbz	r3, .L69
+ 326:FreeModbus/mb_m.c **** 						vMBMasterSetCBRunInMasterMode(TRUE);
+ 716              		.loc 1 326 11 is_stmt 1 view .LVU160
+ 326:FreeModbus/mb_m.c **** 						vMBMasterSetCBRunInMasterMode(TRUE);
+ 717              		.loc 1 326 14 is_stmt 0 view .LVU161
+ 718 00a6 9A42     		cmp	r2, r3
+ 719 00a8 0FD0     		beq	.L88
+ 320:FreeModbus/mb_m.c **** 				{
+ 720              		.loc 1 320 43 is_stmt 1 discriminator 2 view .LVU162
+ 320:FreeModbus/mb_m.c **** 				{
+ 721              		.loc 1 320 44 is_stmt 0 discriminator 2 view .LVU163
+ 722 00aa 0134     		adds	r4, r4, #1
+ 723              	.LVL38:
+ 320:FreeModbus/mb_m.c **** 				{
+ 724              		.loc 1 320 44 discriminator 2 view .LVU164
+ 725 00ac F5E7     		b	.L68
+ 726              	.LVL39:
+ 727              	.L87:
+ 316:FreeModbus/mb_m.c ****             }
+ 728              		.loc 1 316 14 is_stmt 1 view .LVU165
+ 316:FreeModbus/mb_m.c ****             }
+ 729              		.loc 1 316 27 is_stmt 0 view .LVU166
+ 730 00ae 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 316:FreeModbus/mb_m.c ****             }
+ 731              		.loc 1 316 25 view .LVU167
+ 732 00b0 0A70     		strb	r2, [r1]
+ 733              	.L69:
+ 347:FreeModbus/mb_m.c ****             	vMBMasterSetErrorType(EV_ERROR_EXECUTE_FUNCTION);
+ 734              		.loc 1 347 13 is_stmt 1 view .LVU168
+ 347:FreeModbus/mb_m.c ****             	vMBMasterSetErrorType(EV_ERROR_EXECUTE_FUNCTION);
+ 735              		.loc 1 347 28 is_stmt 0 view .LVU169
+ 736 00b2 4A4B     		ldr	r3, .L91+24
+ 737 00b4 1C78     		ldrb	r4, [r3]	@ zero_extendqisi2
+ 347:FreeModbus/mb_m.c ****             	vMBMasterSetErrorType(EV_ERROR_EXECUTE_FUNCTION);
+ 738              		.loc 1 347 16 view .LVU170
+ 739 00b6 002C     		cmp	r4, #0
+ 740 00b8 32D0     		beq	.L76
+ 348:FreeModbus/mb_m.c ****             	( void ) xMBMasterPortEventPost( EV_MASTER_ERROR_PROCESS );
+ 741              		.loc 1 348 14 is_stmt 1 view .LVU171
+ 742 00ba 0220     		movs	r0, #2
+ 743 00bc FFF7FEFF 		bl	vMBMasterSetErrorType
+ 744              	.LVL40:
+ 349:FreeModbus/mb_m.c ****             }
+ 745              		.loc 1 349 14 view .LVU172
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 23
+
+
+ 349:FreeModbus/mb_m.c ****             }
+ 746              		.loc 1 349 23 is_stmt 0 view .LVU173
+ 747 00c0 1020     		movs	r0, #16
+ 748 00c2 FFF7FEFF 		bl	xMBMasterPortEventPost
+ 749              	.LVL41:
+ 389:FreeModbus/mb_m.c **** }
+ 750              		.loc 1 389 12 view .LVU174
+ 751 00c6 0024     		movs	r4, #0
+ 752 00c8 A9E7     		b	.L60
+ 753              	.LVL42:
+ 754              	.L88:
+ 327:FreeModbus/mb_m.c **** 						/* If master request is broadcast,
+ 755              		.loc 1 327 7 is_stmt 1 view .LVU175
+ 756 00ca 0120     		movs	r0, #1
+ 757 00cc FFF7FEFF 		bl	vMBMasterSetCBRunInMasterMode
+ 758              	.LVL43:
+ 331:FreeModbus/mb_m.c **** 							usLength = usMBMasterGetPDUSndLength();
+ 759              		.loc 1 331 7 view .LVU176
+ 331:FreeModbus/mb_m.c **** 							usLength = usMBMasterGetPDUSndLength();
+ 760              		.loc 1 331 12 is_stmt 0 view .LVU177
+ 761 00d0 FFF7FEFF 		bl	xMBMasterRequestIsBroadcast
+ 762              	.LVL44:
+ 331:FreeModbus/mb_m.c **** 							usLength = usMBMasterGetPDUSndLength();
+ 763              		.loc 1 331 10 view .LVU178
+ 764 00d4 68B9     		cbnz	r0, .L89
+ 339:FreeModbus/mb_m.c **** 						}
+ 765              		.loc 1 339 8 is_stmt 1 view .LVU179
+ 339:FreeModbus/mb_m.c **** 						}
+ 766              		.loc 1 339 43 is_stmt 0 view .LVU180
+ 767 00d6 424B     		ldr	r3, .L91+28
+ 768 00d8 03EBC404 		add	r4, r3, r4, lsl #3
+ 769              	.LVL45:
+ 339:FreeModbus/mb_m.c **** 						}
+ 770              		.loc 1 339 43 view .LVU181
+ 771 00dc 6368     		ldr	r3, [r4, #4]
+ 339:FreeModbus/mb_m.c **** 						}
+ 772              		.loc 1 339 21 view .LVU182
+ 773 00de 3B49     		ldr	r1, .L91+8
+ 774 00e0 3B4A     		ldr	r2, .L91+12
+ 775 00e2 1068     		ldr	r0, [r2]
+ 776 00e4 9847     		blx	r3
+ 777              	.LVL46:
+ 339:FreeModbus/mb_m.c **** 						}
+ 778              		.loc 1 339 19 view .LVU183
+ 779 00e6 3D4B     		ldr	r3, .L91+24
+ 780 00e8 1870     		strb	r0, [r3]
+ 781              	.L74:
+ 341:FreeModbus/mb_m.c **** 						break;
+ 782              		.loc 1 341 7 is_stmt 1 view .LVU184
+ 783 00ea 0020     		movs	r0, #0
+ 784 00ec FFF7FEFF 		bl	vMBMasterSetCBRunInMasterMode
+ 785              	.LVL47:
+ 342:FreeModbus/mb_m.c **** 					}
+ 786              		.loc 1 342 7 view .LVU185
+ 787 00f0 DFE7     		b	.L69
+ 788              	.LVL48:
+ 789              	.L89:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 24
+
+
+ 332:FreeModbus/mb_m.c **** 							for(j = 1; j <= MB_MASTER_TOTAL_SLAVE_NUM; j++){
+ 790              		.loc 1 332 8 view .LVU186
+ 332:FreeModbus/mb_m.c **** 							for(j = 1; j <= MB_MASTER_TOTAL_SLAVE_NUM; j++){
+ 791              		.loc 1 332 19 is_stmt 0 view .LVU187
+ 792 00f2 FFF7FEFF 		bl	usMBMasterGetPDUSndLength
+ 793              	.LVL49:
+ 332:FreeModbus/mb_m.c **** 							for(j = 1; j <= MB_MASTER_TOTAL_SLAVE_NUM; j++){
+ 794              		.loc 1 332 17 view .LVU188
+ 795 00f6 354B     		ldr	r3, .L91+8
+ 796 00f8 1880     		strh	r0, [r3]	@ movhi
+ 333:FreeModbus/mb_m.c **** 								vMBMasterSetDestAddress(j);
+ 797              		.loc 1 333 8 is_stmt 1 view .LVU189
+ 798              	.LVL50:
+ 333:FreeModbus/mb_m.c **** 								vMBMasterSetDestAddress(j);
+ 799              		.loc 1 333 14 is_stmt 0 view .LVU190
+ 800 00fa 0125     		movs	r5, #1
+ 333:FreeModbus/mb_m.c **** 								vMBMasterSetDestAddress(j);
+ 801              		.loc 1 333 8 view .LVU191
+ 802 00fc 0DE0     		b	.L72
+ 803              	.LVL51:
+ 804              	.L73:
+ 334:FreeModbus/mb_m.c **** 								eException = xMasterFuncHandlers[i].pxHandler(ucMBFrame, &usLength);
+ 805              		.loc 1 334 9 is_stmt 1 discriminator 3 view .LVU192
+ 806 00fe E8B2     		uxtb	r0, r5
+ 807 0100 FFF7FEFF 		bl	vMBMasterSetDestAddress
+ 808              	.LVL52:
+ 335:FreeModbus/mb_m.c **** 							}
+ 809              		.loc 1 335 9 discriminator 3 view .LVU193
+ 335:FreeModbus/mb_m.c **** 							}
+ 810              		.loc 1 335 44 is_stmt 0 discriminator 3 view .LVU194
+ 811 0104 364B     		ldr	r3, .L91+28
+ 812 0106 03EBC403 		add	r3, r3, r4, lsl #3
+ 813 010a 5B68     		ldr	r3, [r3, #4]
+ 335:FreeModbus/mb_m.c **** 							}
+ 814              		.loc 1 335 22 discriminator 3 view .LVU195
+ 815 010c 2F49     		ldr	r1, .L91+8
+ 816 010e 304A     		ldr	r2, .L91+12
+ 817 0110 1068     		ldr	r0, [r2]
+ 818 0112 9847     		blx	r3
+ 819              	.LVL53:
+ 335:FreeModbus/mb_m.c **** 							}
+ 820              		.loc 1 335 20 discriminator 3 view .LVU196
+ 821 0114 314B     		ldr	r3, .L91+24
+ 822 0116 1870     		strb	r0, [r3]
+ 333:FreeModbus/mb_m.c **** 								vMBMasterSetDestAddress(j);
+ 823              		.loc 1 333 51 is_stmt 1 discriminator 3 view .LVU197
+ 333:FreeModbus/mb_m.c **** 								vMBMasterSetDestAddress(j);
+ 824              		.loc 1 333 52 is_stmt 0 discriminator 3 view .LVU198
+ 825 0118 0135     		adds	r5, r5, #1
+ 826              	.LVL54:
+ 827              	.L72:
+ 333:FreeModbus/mb_m.c **** 								vMBMasterSetDestAddress(j);
+ 828              		.loc 1 333 19 is_stmt 1 discriminator 1 view .LVU199
+ 333:FreeModbus/mb_m.c **** 								vMBMasterSetDestAddress(j);
+ 829              		.loc 1 333 8 is_stmt 0 discriminator 1 view .LVU200
+ 830 011a 102D     		cmp	r5, #16
+ 831 011c EFDD     		ble	.L73
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 25
+
+
+ 832 011e E4E7     		b	.L74
+ 833              	.LVL55:
+ 834              	.L76:
+ 352:FreeModbus/mb_m.c ****             	vMBMasterRunResRelease( );
+ 835              		.loc 1 352 14 is_stmt 1 view .LVU201
+ 836 0120 FFF7FEFF 		bl	vMBMasterCBRequestScuuess
+ 837              	.LVL56:
+ 353:FreeModbus/mb_m.c ****             }
+ 838              		.loc 1 353 14 view .LVU202
+ 839 0124 FFF7FEFF 		bl	vMBMasterRunResRelease
+ 840              	.LVL57:
+ 841 0128 79E7     		b	.L60
+ 842              	.L63:
+ 359:FreeModbus/mb_m.c **** 			eStatus = peMBMasterFrameSendCur( ucMBMasterGetDestAddress(), ucMBFrame, usMBMasterGetPDUSndLeng
+ 843              		.loc 1 359 10 view .LVU203
+ 844 012a 294D     		ldr	r5, .L91+12
+ 845 012c 2846     		mov	r0, r5
+ 846 012e FFF7FEFF 		bl	vMBMasterGetPDUSndBuf
+ 847              	.LVL58:
+ 360:FreeModbus/mb_m.c ****             break;
+ 848              		.loc 1 360 4 view .LVU204
+ 360:FreeModbus/mb_m.c ****             break;
+ 849              		.loc 1 360 14 is_stmt 0 view .LVU205
+ 850 0132 2C4B     		ldr	r3, .L91+32
+ 851 0134 1E68     		ldr	r6, [r3]
+ 852 0136 FFF7FEFF 		bl	ucMBMasterGetDestAddress
+ 853              	.LVL59:
+ 854 013a 0446     		mov	r4, r0
+ 855 013c 2D68     		ldr	r5, [r5]
+ 856 013e FFF7FEFF 		bl	usMBMasterGetPDUSndLength
+ 857              	.LVL60:
+ 858 0142 0246     		mov	r2, r0
+ 859 0144 2946     		mov	r1, r5
+ 860 0146 2046     		mov	r0, r4
+ 861 0148 B047     		blx	r6
+ 862              	.LVL61:
+ 361:FreeModbus/mb_m.c **** 
+ 863              		.loc 1 361 13 is_stmt 1 view .LVU206
+ 389:FreeModbus/mb_m.c **** }
+ 864              		.loc 1 389 12 is_stmt 0 view .LVU207
+ 865 014a 0024     		movs	r4, #0
+ 361:FreeModbus/mb_m.c **** 
+ 866              		.loc 1 361 13 view .LVU208
+ 867 014c 67E7     		b	.L60
+ 868              	.LVL62:
+ 869              	.L61:
+ 365:FreeModbus/mb_m.c **** 			vMBMasterGetPDUSndBuf( &ucMBFrame );
+ 870              		.loc 1 365 4 is_stmt 1 view .LVU209
+ 365:FreeModbus/mb_m.c **** 			vMBMasterGetPDUSndBuf( &ucMBFrame );
+ 871              		.loc 1 365 16 is_stmt 0 view .LVU210
+ 872 014e FFF7FEFF 		bl	eMBMasterGetErrorType
+ 873              	.LVL63:
+ 874 0152 0446     		mov	r4, r0
+ 875              	.LVL64:
+ 366:FreeModbus/mb_m.c **** 			switch (errorType) {
+ 876              		.loc 1 366 4 is_stmt 1 view .LVU211
+ 877 0154 1E48     		ldr	r0, .L91+12
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 26
+
+
+ 878 0156 FFF7FEFF 		bl	vMBMasterGetPDUSndBuf
+ 879              	.LVL65:
+ 367:FreeModbus/mb_m.c **** 			case EV_ERROR_RESPOND_TIMEOUT:
+ 880              		.loc 1 367 4 view .LVU212
+ 881 015a 012C     		cmp	r4, #1
+ 882 015c 13D0     		beq	.L77
+ 883 015e 022C     		cmp	r4, #2
+ 884 0160 1ED0     		beq	.L78
+ 885 0162 1CB1     		cbz	r4, .L90
+ 886              	.LVL66:
+ 887              	.L79:
+ 381:FreeModbus/mb_m.c ****         	break;
+ 888              		.loc 1 381 4 view .LVU213
+ 889 0164 FFF7FEFF 		bl	vMBMasterRunResRelease
+ 890              	.LVL67:
+ 382:FreeModbus/mb_m.c ****             
+ 891              		.loc 1 382 10 view .LVU214
+ 389:FreeModbus/mb_m.c **** }
+ 892              		.loc 1 389 12 is_stmt 0 view .LVU215
+ 893 0168 0024     		movs	r4, #0
+ 382:FreeModbus/mb_m.c ****             
+ 894              		.loc 1 382 10 view .LVU216
+ 895 016a 58E7     		b	.L60
+ 896              	.LVL68:
+ 897              	.L90:
+ 369:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 898              		.loc 1 369 5 is_stmt 1 view .LVU217
+ 899 016c FFF7FEFF 		bl	ucMBMasterGetDestAddress
+ 900              	.LVL69:
+ 901 0170 0446     		mov	r4, r0
+ 902              	.LVL70:
+ 369:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 903              		.loc 1 369 5 is_stmt 0 view .LVU218
+ 904 0172 174B     		ldr	r3, .L91+12
+ 905 0174 1D68     		ldr	r5, [r3]
+ 906 0176 FFF7FEFF 		bl	usMBMasterGetPDUSndLength
+ 907              	.LVL71:
+ 908 017a 0246     		mov	r2, r0
+ 909 017c 2946     		mov	r1, r5
+ 910 017e 2046     		mov	r0, r4
+ 911 0180 FFF7FEFF 		bl	vMBMasterErrorCBRespondTimeout
+ 912              	.LVL72:
+ 371:FreeModbus/mb_m.c **** 			case EV_ERROR_RECEIVE_DATA:
+ 913              		.loc 1 371 5 is_stmt 1 view .LVU219
+ 914 0184 EEE7     		b	.L79
+ 915              	.LVL73:
+ 916              	.L77:
+ 373:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 917              		.loc 1 373 5 view .LVU220
+ 918 0186 FFF7FEFF 		bl	ucMBMasterGetDestAddress
+ 919              	.LVL74:
+ 920 018a 0446     		mov	r4, r0
+ 921              	.LVL75:
+ 373:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 922              		.loc 1 373 5 is_stmt 0 view .LVU221
+ 923 018c 104B     		ldr	r3, .L91+12
+ 924 018e 1D68     		ldr	r5, [r3]
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 27
+
+
+ 925 0190 FFF7FEFF 		bl	usMBMasterGetPDUSndLength
+ 926              	.LVL76:
+ 927 0194 0246     		mov	r2, r0
+ 928 0196 2946     		mov	r1, r5
+ 929 0198 2046     		mov	r0, r4
+ 930 019a FFF7FEFF 		bl	vMBMasterErrorCBReceiveData
+ 931              	.LVL77:
+ 375:FreeModbus/mb_m.c **** 			case EV_ERROR_EXECUTE_FUNCTION:
+ 932              		.loc 1 375 5 is_stmt 1 view .LVU222
+ 933 019e E1E7     		b	.L79
+ 934              	.LVL78:
+ 935              	.L78:
+ 377:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 936              		.loc 1 377 5 view .LVU223
+ 937 01a0 FFF7FEFF 		bl	ucMBMasterGetDestAddress
+ 938              	.LVL79:
+ 939 01a4 0446     		mov	r4, r0
+ 940              	.LVL80:
+ 377:FreeModbus/mb_m.c **** 						ucMBFrame, usMBMasterGetPDUSndLength());
+ 941              		.loc 1 377 5 is_stmt 0 view .LVU224
+ 942 01a6 0A4B     		ldr	r3, .L91+12
+ 943 01a8 1D68     		ldr	r5, [r3]
+ 944 01aa FFF7FEFF 		bl	usMBMasterGetPDUSndLength
+ 945              	.LVL81:
+ 946 01ae 0246     		mov	r2, r0
+ 947 01b0 2946     		mov	r1, r5
+ 948 01b2 2046     		mov	r0, r4
+ 949 01b4 FFF7FEFF 		bl	vMBMasterErrorCBExecuteFunction
+ 950              	.LVL82:
+ 379:FreeModbus/mb_m.c **** 			}
+ 951              		.loc 1 379 5 is_stmt 1 view .LVU225
+ 952 01b8 D4E7     		b	.L79
+ 953              	.L80:
+ 284:FreeModbus/mb_m.c ****     }
+ 954              		.loc 1 284 16 is_stmt 0 view .LVU226
+ 955 01ba 0624     		movs	r4, #6
+ 956 01bc 2FE7     		b	.L60
+ 957              	.L82:
+ 291:FreeModbus/mb_m.c ****         {
+ 958              		.loc 1 291 9 view .LVU227
+ 959 01be 0024     		movs	r4, #0
+ 960 01c0 2DE7     		b	.L60
+ 961              	.L92:
+ 962 01c2 00BF     		.align	2
+ 963              	.L91:
+ 964 01c4 00000000 		.word	.LANCHOR8
+ 965 01c8 00000000 		.word	.LANCHOR3
+ 966 01cc 00000000 		.word	.LANCHOR12
+ 967 01d0 00000000 		.word	.LANCHOR13
+ 968 01d4 00000000 		.word	.LANCHOR14
+ 969 01d8 00000000 		.word	.LANCHOR15
+ 970 01dc 00000000 		.word	.LANCHOR16
+ 971 01e0 00000000 		.word	.LANCHOR17
+ 972 01e4 00000000 		.word	.LANCHOR2
+ 973              		.cfi_endproc
+ 974              	.LFE70:
+ 976              		.global	pxMBMasterFrameCBTransmitFSMCur
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 28
+
+
+ 977              		.global	pxMBMasterFrameCBReceiveFSMCur
+ 978              		.global	pxMBMasterPortCBTimerExpired
+ 979              		.global	pxMBMasterFrameCBTransmitterEmpty
+ 980              		.global	pxMBMasterFrameCBByteReceived
+ 981              		.section	.bss.eException.0,"aw",%nobits
+ 982              		.set	.LANCHOR16,. + 0
+ 985              	eException.0:
+ 986 0000 00       		.space	1
+ 987              		.section	.bss.eMBMasterCurErrorType,"aw",%nobits
+ 988              		.set	.LANCHOR11,. + 0
+ 991              	eMBMasterCurErrorType:
+ 992 0000 00       		.space	1
+ 993              		.section	.bss.peMBMasterFrameReceiveCur,"aw",%nobits
+ 994              		.align	2
+ 995              		.set	.LANCHOR3,. + 0
+ 998              	peMBMasterFrameReceiveCur:
+ 999 0000 00000000 		.space	4
+ 1000              		.section	.bss.peMBMasterFrameSendCur,"aw",%nobits
+ 1001              		.align	2
+ 1002              		.set	.LANCHOR2,. + 0
+ 1005              	peMBMasterFrameSendCur:
+ 1006 0000 00000000 		.space	4
+ 1007              		.section	.bss.pvMBMasterFrameCloseCur,"aw",%nobits
+ 1008              		.align	2
+ 1009              		.set	.LANCHOR4,. + 0
+ 1012              	pvMBMasterFrameCloseCur:
+ 1013 0000 00000000 		.space	4
+ 1014              		.section	.bss.pvMBMasterFrameStartCur,"aw",%nobits
+ 1015              		.align	2
+ 1016              		.set	.LANCHOR0,. + 0
+ 1019              	pvMBMasterFrameStartCur:
+ 1020 0000 00000000 		.space	4
+ 1021              		.section	.bss.pvMBMasterFrameStopCur,"aw",%nobits
+ 1022              		.align	2
+ 1023              		.set	.LANCHOR1,. + 0
+ 1026              	pvMBMasterFrameStopCur:
+ 1027 0000 00000000 		.space	4
+ 1028              		.section	.bss.pxMBMasterFrameCBByteReceived,"aw",%nobits
+ 1029              		.align	2
+ 1030              		.set	.LANCHOR5,. + 0
+ 1033              	pxMBMasterFrameCBByteReceived:
+ 1034 0000 00000000 		.space	4
+ 1035              		.section	.bss.pxMBMasterFrameCBReceiveFSMCur,"aw",%nobits
+ 1036              		.align	2
+ 1039              	pxMBMasterFrameCBReceiveFSMCur:
+ 1040 0000 00000000 		.space	4
+ 1041              		.section	.bss.pxMBMasterFrameCBTransmitFSMCur,"aw",%nobits
+ 1042              		.align	2
+ 1045              	pxMBMasterFrameCBTransmitFSMCur:
+ 1046 0000 00000000 		.space	4
+ 1047              		.section	.bss.pxMBMasterFrameCBTransmitterEmpty,"aw",%nobits
+ 1048              		.align	2
+ 1049              		.set	.LANCHOR6,. + 0
+ 1052              	pxMBMasterFrameCBTransmitterEmpty:
+ 1053 0000 00000000 		.space	4
+ 1054              		.section	.bss.pxMBMasterPortCBTimerExpired,"aw",%nobits
+ 1055              		.align	2
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 29
+
+
+ 1056              		.set	.LANCHOR7,. + 0
+ 1059              	pxMBMasterPortCBTimerExpired:
+ 1060 0000 00000000 		.space	4
+ 1061              		.section	.bss.ucFunctionCode.1,"aw",%nobits
+ 1062              		.set	.LANCHOR15,. + 0
+ 1065              	ucFunctionCode.1:
+ 1066 0000 00       		.space	1
+ 1067              		.section	.bss.ucMBFrame.3,"aw",%nobits
+ 1068              		.align	2
+ 1069              		.set	.LANCHOR13,. + 0
+ 1072              	ucMBFrame.3:
+ 1073 0000 00000000 		.space	4
+ 1074              		.section	.bss.ucMBMasterDestAddress,"aw",%nobits
+ 1075              		.set	.LANCHOR10,. + 0
+ 1078              	ucMBMasterDestAddress:
+ 1079 0000 00       		.space	1
+ 1080              		.section	.bss.ucRcvAddress.4,"aw",%nobits
+ 1081              		.set	.LANCHOR14,. + 0
+ 1084              	ucRcvAddress.4:
+ 1085 0000 00       		.space	1
+ 1086              		.section	.bss.usLength.2,"aw",%nobits
+ 1087              		.align	1
+ 1088              		.set	.LANCHOR12,. + 0
+ 1091              	usLength.2:
+ 1092 0000 0000     		.space	2
+ 1093              		.section	.bss.xMBRunInMasterMode,"aw",%nobits
+ 1094              		.set	.LANCHOR9,. + 0
+ 1097              	xMBRunInMasterMode:
+ 1098 0000 00       		.space	1
+ 1099              		.section	.data.eMBState,"aw"
+ 1100              		.set	.LANCHOR8,. + 0
+ 1103              	eMBState:
+ 1104 0000 02       		.byte	2
+ 1105              		.section	.rodata.xMasterFuncHandlers,"a"
+ 1106              		.align	2
+ 1107              		.set	.LANCHOR17,. + 0
+ 1110              	xMasterFuncHandlers:
+ 1111 0000 11       		.byte	17
+ 1112 0001 000000   		.space	3
+ 1113 0004 00000000 		.word	eMBFuncReportSlaveID
+ 1114 0008 04       		.byte	4
+ 1115 0009 000000   		.space	3
+ 1116 000c 00000000 		.word	eMBMasterFuncReadInputRegister
+ 1117 0010 03       		.byte	3
+ 1118 0011 000000   		.space	3
+ 1119 0014 00000000 		.word	eMBMasterFuncReadHoldingRegister
+ 1120 0018 10       		.byte	16
+ 1121 0019 000000   		.space	3
+ 1122 001c 00000000 		.word	eMBMasterFuncWriteMultipleHoldingRegister
+ 1123 0020 06       		.byte	6
+ 1124 0021 000000   		.space	3
+ 1125 0024 00000000 		.word	eMBMasterFuncWriteHoldingRegister
+ 1126 0028 17       		.byte	23
+ 1127 0029 000000   		.space	3
+ 1128 002c 00000000 		.word	eMBMasterFuncReadWriteMultipleHoldingRegister
+ 1129 0030 01       		.byte	1
+ 1130 0031 000000   		.space	3
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 30
+
+
+ 1131 0034 00000000 		.word	eMBMasterFuncReadCoils
+ 1132 0038 05       		.byte	5
+ 1133 0039 000000   		.space	3
+ 1134 003c 00000000 		.word	eMBMasterFuncWriteCoil
+ 1135 0040 0F       		.byte	15
+ 1136 0041 000000   		.space	3
+ 1137 0044 00000000 		.word	eMBMasterFuncWriteMultipleCoils
+ 1138 0048 02       		.byte	2
+ 1139 0049 000000   		.space	3
+ 1140 004c 00000000 		.word	eMBMasterFuncReadDiscreteInputs
+ 1141 0050 00000000 		.space	48
+ 1141      00000000 
+ 1141      00000000 
+ 1141      00000000 
+ 1141      00000000 
+ 1142              		.text
+ 1143              	.Letext0:
+ 1144              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 1145              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 1146              		.file 4 "FreeModbus/port/port.h"
+ 1147              		.file 5 "FreeModbus/include/mbport.h"
+ 1148              		.file 6 "FreeModbus/include/mbproto.h"
+ 1149              		.file 7 "FreeModbus/include/mb.h"
+ 1150              		.file 8 "FreeModbus/include/mbframe.h"
+ 1151              		.file 9 "FreeModbus/include/mb_m.h"
+ 1152              		.file 10 "FreeModbus/rtu/mbrtu.h"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 31
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mb_m.c
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:18     .text.eMBMasterInit:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:24     .text.eMBMasterInit:00000000 eMBMasterInit
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:138    .text.eMBMasterInit:00000064 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:158    .text.eMBMasterClose:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:164    .text.eMBMasterClose:00000000 eMBMasterClose
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:211    .text.eMBMasterClose:00000020 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:217    .text.eMBMasterEnable:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:223    .text.eMBMasterEnable:00000000 eMBMasterEnable
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:266    .text.eMBMasterEnable:0000001c $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:272    .text.eMBMasterDisable:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:278    .text.eMBMasterDisable:00000000 eMBMasterDisable
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:334    .text.eMBMasterDisable:00000028 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:340    .text.eMBMasterIsEstablished:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:346    .text.eMBMasterIsEstablished:00000000 eMBMasterIsEstablished
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:371    .text.eMBMasterIsEstablished:00000010 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:376    .text.xMBMasterGetCBRunInMasterMode:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:382    .text.xMBMasterGetCBRunInMasterMode:00000000 xMBMasterGetCBRunInMasterMode
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:397    .text.xMBMasterGetCBRunInMasterMode:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:402    .text.vMBMasterSetCBRunInMasterMode:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:408    .text.vMBMasterSetCBRunInMasterMode:00000000 vMBMasterSetCBRunInMasterMode
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:425    .text.vMBMasterSetCBRunInMasterMode:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:430    .text.ucMBMasterGetDestAddress:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:436    .text.ucMBMasterGetDestAddress:00000000 ucMBMasterGetDestAddress
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:451    .text.ucMBMasterGetDestAddress:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:456    .text.vMBMasterSetDestAddress:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:462    .text.vMBMasterSetDestAddress:00000000 vMBMasterSetDestAddress
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:479    .text.vMBMasterSetDestAddress:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:484    .text.eMBMasterGetErrorType:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:490    .text.eMBMasterGetErrorType:00000000 eMBMasterGetErrorType
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:505    .text.eMBMasterGetErrorType:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:510    .text.vMBMasterSetErrorType:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:516    .text.vMBMasterSetErrorType:00000000 vMBMasterSetErrorType
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:533    .text.vMBMasterSetErrorType:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:538    .text.eMBMasterPoll:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:544    .text.eMBMasterPoll:00000000 eMBMasterPoll
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:611    .text.eMBMasterPoll:00000034 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:627    .text.eMBMasterPoll:00000044 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:964    .text.eMBMasterPoll:000001c4 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1045   .bss.pxMBMasterFrameCBTransmitFSMCur:00000000 pxMBMasterFrameCBTransmitFSMCur
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1039   .bss.pxMBMasterFrameCBReceiveFSMCur:00000000 pxMBMasterFrameCBReceiveFSMCur
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1059   .bss.pxMBMasterPortCBTimerExpired:00000000 pxMBMasterPortCBTimerExpired
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1052   .bss.pxMBMasterFrameCBTransmitterEmpty:00000000 pxMBMasterFrameCBTransmitterEmpty
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1033   .bss.pxMBMasterFrameCBByteReceived:00000000 pxMBMasterFrameCBByteReceived
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:985    .bss.eException.0:00000000 eException.0
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:986    .bss.eException.0:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:991    .bss.eMBMasterCurErrorType:00000000 eMBMasterCurErrorType
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:992    .bss.eMBMasterCurErrorType:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:994    .bss.peMBMasterFrameReceiveCur:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:998    .bss.peMBMasterFrameReceiveCur:00000000 peMBMasterFrameReceiveCur
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1001   .bss.peMBMasterFrameSendCur:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1005   .bss.peMBMasterFrameSendCur:00000000 peMBMasterFrameSendCur
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1008   .bss.pvMBMasterFrameCloseCur:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1012   .bss.pvMBMasterFrameCloseCur:00000000 pvMBMasterFrameCloseCur
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1015   .bss.pvMBMasterFrameStartCur:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1019   .bss.pvMBMasterFrameStartCur:00000000 pvMBMasterFrameStartCur
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s 			page 32
+
+
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1022   .bss.pvMBMasterFrameStopCur:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1026   .bss.pvMBMasterFrameStopCur:00000000 pvMBMasterFrameStopCur
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1029   .bss.pxMBMasterFrameCBByteReceived:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1036   .bss.pxMBMasterFrameCBReceiveFSMCur:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1042   .bss.pxMBMasterFrameCBTransmitFSMCur:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1048   .bss.pxMBMasterFrameCBTransmitterEmpty:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1055   .bss.pxMBMasterPortCBTimerExpired:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1065   .bss.ucFunctionCode.1:00000000 ucFunctionCode.1
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1066   .bss.ucFunctionCode.1:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1068   .bss.ucMBFrame.3:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1072   .bss.ucMBFrame.3:00000000 ucMBFrame.3
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1078   .bss.ucMBMasterDestAddress:00000000 ucMBMasterDestAddress
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1079   .bss.ucMBMasterDestAddress:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1084   .bss.ucRcvAddress.4:00000000 ucRcvAddress.4
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1085   .bss.ucRcvAddress.4:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1087   .bss.usLength.2:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1091   .bss.usLength.2:00000000 usLength.2
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1097   .bss.xMBRunInMasterMode:00000000 xMBRunInMasterMode
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1098   .bss.xMBRunInMasterMode:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1103   .data.eMBState:00000000 eMBState
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1106   .rodata.xMasterFuncHandlers:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccZyR4v5.s:1110   .rodata.xMasterFuncHandlers:00000000 xMasterFuncHandlers
+
+UNDEFINED SYMBOLS
+eMBMasterRTUInit
+xMBMasterPortEventInit
+vMBMasterOsResInit
+eMBMasterRTUStart
+eMBMasterRTUStop
+eMBMasterRTUSend
+eMBMasterRTUReceive
+xMBMasterRTUReceiveFSM
+xMBMasterRTUTransmitFSM
+xMBMasterRTUTimerExpired
+xMBMasterPortEventGet
+xMBMasterPortEventPost
+xMBMasterRequestIsBroadcast
+usMBMasterGetPDUSndLength
+vMBMasterCBRequestScuuess
+vMBMasterRunResRelease
+vMBMasterGetPDUSndBuf
+vMBMasterErrorCBRespondTimeout
+vMBMasterErrorCBReceiveData
+vMBMasterErrorCBExecuteFunction
+eMBFuncReportSlaveID
+eMBMasterFuncReadInputRegister
+eMBMasterFuncReadHoldingRegister
+eMBMasterFuncWriteMultipleHoldingRegister
+eMBMasterFuncWriteHoldingRegister
+eMBMasterFuncReadWriteMultipleHoldingRegister
+eMBMasterFuncReadCoils
+eMBMasterFuncWriteCoil
+eMBMasterFuncWriteMultipleCoils
+eMBMasterFuncReadDiscreteInputs

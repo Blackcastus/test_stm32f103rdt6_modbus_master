@@ -1,0 +1,1770 @@
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mbrtu_m.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.eMBMasterRTUInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	eMBMasterRTUInit
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	eMBMasterRTUInit:
+  25              	.LVL0:
+  26              	.LFB65:
+  27              		.file 1 "FreeModbus/rtu/mbrtu_m.c"
+   1:FreeModbus/rtu/mbrtu_m.c **** /* 
+   2:FreeModbus/rtu/mbrtu_m.c ****  * FreeModbus Libary: A portable Modbus implementation for Modbus ASCII/RTU.
+   3:FreeModbus/rtu/mbrtu_m.c ****  * Copyright (c) 2013 China Beijing Armink <armink.ztl@gmail.com>
+   4:FreeModbus/rtu/mbrtu_m.c ****  * All rights reserved.
+   5:FreeModbus/rtu/mbrtu_m.c ****  *
+   6:FreeModbus/rtu/mbrtu_m.c ****  * Redistribution and use in source and binary forms, with or without
+   7:FreeModbus/rtu/mbrtu_m.c ****  * modification, are permitted provided that the following conditions
+   8:FreeModbus/rtu/mbrtu_m.c ****  * are met:
+   9:FreeModbus/rtu/mbrtu_m.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:FreeModbus/rtu/mbrtu_m.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:FreeModbus/rtu/mbrtu_m.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:FreeModbus/rtu/mbrtu_m.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:FreeModbus/rtu/mbrtu_m.c ****  *    documentation and/or other materials provided with the distribution.
+  14:FreeModbus/rtu/mbrtu_m.c ****  * 3. The name of the author may not be used to endorse or promote products
+  15:FreeModbus/rtu/mbrtu_m.c ****  *    derived from this software without specific prior written permission.
+  16:FreeModbus/rtu/mbrtu_m.c ****  *
+  17:FreeModbus/rtu/mbrtu_m.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+  18:FreeModbus/rtu/mbrtu_m.c ****  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  19:FreeModbus/rtu/mbrtu_m.c ****  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  20:FreeModbus/rtu/mbrtu_m.c ****  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+  21:FreeModbus/rtu/mbrtu_m.c ****  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  22:FreeModbus/rtu/mbrtu_m.c ****  * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  23:FreeModbus/rtu/mbrtu_m.c ****  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  24:FreeModbus/rtu/mbrtu_m.c ****  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  25:FreeModbus/rtu/mbrtu_m.c ****  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+  26:FreeModbus/rtu/mbrtu_m.c ****  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  27:FreeModbus/rtu/mbrtu_m.c ****  *
+  28:FreeModbus/rtu/mbrtu_m.c ****  * File: $Id: mbrtu_m.c,v 1.60 2013/08/17 11:42:56 Armink Add Master Functions $
+  29:FreeModbus/rtu/mbrtu_m.c ****  */
+  30:FreeModbus/rtu/mbrtu_m.c **** 
+  31:FreeModbus/rtu/mbrtu_m.c **** /* ----------------------- System includes ----------------------------------*/
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 2
+
+
+  32:FreeModbus/rtu/mbrtu_m.c **** #include "stdlib.h"
+  33:FreeModbus/rtu/mbrtu_m.c **** #include "string.h"
+  34:FreeModbus/rtu/mbrtu_m.c **** 
+  35:FreeModbus/rtu/mbrtu_m.c **** /* ----------------------- Platform includes --------------------------------*/
+  36:FreeModbus/rtu/mbrtu_m.c **** #include "port.h"
+  37:FreeModbus/rtu/mbrtu_m.c **** 
+  38:FreeModbus/rtu/mbrtu_m.c **** /* ----------------------- Modbus includes ----------------------------------*/
+  39:FreeModbus/rtu/mbrtu_m.c **** #include "mb.h"
+  40:FreeModbus/rtu/mbrtu_m.c **** #include "mb_m.h"
+  41:FreeModbus/rtu/mbrtu_m.c **** #include "mbrtu.h"
+  42:FreeModbus/rtu/mbrtu_m.c **** #include "mbframe.h"
+  43:FreeModbus/rtu/mbrtu_m.c **** 
+  44:FreeModbus/rtu/mbrtu_m.c **** #include "mbcrc.h"
+  45:FreeModbus/rtu/mbrtu_m.c **** #include "mbport.h"
+  46:FreeModbus/rtu/mbrtu_m.c **** 
+  47:FreeModbus/rtu/mbrtu_m.c **** #if MB_MASTER_RTU_ENABLED > 0
+  48:FreeModbus/rtu/mbrtu_m.c **** /* ----------------------- Defines ------------------------------------------*/
+  49:FreeModbus/rtu/mbrtu_m.c **** #define MB_SER_PDU_SIZE_MIN     4       /*!< Minimum size of a Modbus RTU frame. */
+  50:FreeModbus/rtu/mbrtu_m.c **** #define MB_SER_PDU_SIZE_MAX     256     /*!< Maximum size of a Modbus RTU frame. */
+  51:FreeModbus/rtu/mbrtu_m.c **** #define MB_SER_PDU_SIZE_CRC     2       /*!< Size of CRC field in PDU. */
+  52:FreeModbus/rtu/mbrtu_m.c **** #define MB_SER_PDU_ADDR_OFF     0       /*!< Offset of slave address in Ser-PDU. */
+  53:FreeModbus/rtu/mbrtu_m.c **** #define MB_SER_PDU_PDU_OFF      1       /*!< Offset of Modbus-PDU in Ser-PDU. */
+  54:FreeModbus/rtu/mbrtu_m.c **** 
+  55:FreeModbus/rtu/mbrtu_m.c **** /* ----------------------- Type definitions ---------------------------------*/
+  56:FreeModbus/rtu/mbrtu_m.c **** typedef enum
+  57:FreeModbus/rtu/mbrtu_m.c **** {
+  58:FreeModbus/rtu/mbrtu_m.c ****     STATE_M_RX_INIT,              /*!< Receiver is in initial state. */
+  59:FreeModbus/rtu/mbrtu_m.c ****     STATE_M_RX_IDLE,              /*!< Receiver is in idle state. */
+  60:FreeModbus/rtu/mbrtu_m.c ****     STATE_M_RX_RCV,               /*!< Frame is beeing received. */
+  61:FreeModbus/rtu/mbrtu_m.c ****     STATE_M_RX_ERROR,              /*!< If the frame is invalid. */
+  62:FreeModbus/rtu/mbrtu_m.c **** } eMBMasterRcvState;
+  63:FreeModbus/rtu/mbrtu_m.c **** 
+  64:FreeModbus/rtu/mbrtu_m.c **** typedef enum
+  65:FreeModbus/rtu/mbrtu_m.c **** {
+  66:FreeModbus/rtu/mbrtu_m.c ****     STATE_M_TX_IDLE,              /*!< Transmitter is in idle state. */
+  67:FreeModbus/rtu/mbrtu_m.c ****     STATE_M_TX_XMIT,              /*!< Transmitter is in transfer state. */
+  68:FreeModbus/rtu/mbrtu_m.c ****     STATE_M_TX_XFWR,              /*!< Transmitter is in transfer finish and wait receive state. */
+  69:FreeModbus/rtu/mbrtu_m.c **** } eMBMasterSndState;
+  70:FreeModbus/rtu/mbrtu_m.c **** 
+  71:FreeModbus/rtu/mbrtu_m.c **** /* ----------------------- Static variables ---------------------------------*/
+  72:FreeModbus/rtu/mbrtu_m.c **** static volatile eMBMasterSndState eSndState;
+  73:FreeModbus/rtu/mbrtu_m.c **** static volatile eMBMasterRcvState eRcvState;
+  74:FreeModbus/rtu/mbrtu_m.c **** 
+  75:FreeModbus/rtu/mbrtu_m.c **** static volatile UCHAR  ucMasterRTUSndBuf[MB_PDU_SIZE_MAX];
+  76:FreeModbus/rtu/mbrtu_m.c **** static volatile UCHAR  ucMasterRTURcvBuf[MB_SER_PDU_SIZE_MAX];
+  77:FreeModbus/rtu/mbrtu_m.c **** static volatile USHORT usMasterSendPDULength;
+  78:FreeModbus/rtu/mbrtu_m.c **** 
+  79:FreeModbus/rtu/mbrtu_m.c **** static volatile UCHAR *pucMasterSndBufferCur;
+  80:FreeModbus/rtu/mbrtu_m.c **** static volatile USHORT usMasterSndBufferCount;
+  81:FreeModbus/rtu/mbrtu_m.c **** 
+  82:FreeModbus/rtu/mbrtu_m.c **** static volatile USHORT usMasterRcvBufferPos;
+  83:FreeModbus/rtu/mbrtu_m.c **** static volatile BOOL   xFrameIsBroadcast = FALSE;
+  84:FreeModbus/rtu/mbrtu_m.c **** 
+  85:FreeModbus/rtu/mbrtu_m.c **** static volatile eMBMasterTimerMode eMasterCurTimerMode;
+  86:FreeModbus/rtu/mbrtu_m.c **** 
+  87:FreeModbus/rtu/mbrtu_m.c **** /* ----------------------- Start implementation -----------------------------*/
+  88:FreeModbus/rtu/mbrtu_m.c **** eMBErrorCode
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 3
+
+
+  89:FreeModbus/rtu/mbrtu_m.c **** eMBMasterRTUInit( void *dHUART, ULONG ulBaudRate, void *dHTIM )
+  90:FreeModbus/rtu/mbrtu_m.c **** {
+  28              		.loc 1 90 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 90 1 is_stmt 0 view .LVU1
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 4, -16
+  37              		.cfi_offset 5, -12
+  38              		.cfi_offset 6, -8
+  39              		.cfi_offset 14, -4
+  40 0002 0646     		mov	r6, r0
+  41 0004 0C46     		mov	r4, r1
+  42 0006 1546     		mov	r5, r2
+  91:FreeModbus/rtu/mbrtu_m.c ****     eMBErrorCode    eStatus = MB_ENOERR;
+  43              		.loc 1 91 5 is_stmt 1 view .LVU2
+  44              	.LVL1:
+  92:FreeModbus/rtu/mbrtu_m.c ****     ULONG           usTimerT35_50us;
+  45              		.loc 1 92 5 view .LVU3
+  93:FreeModbus/rtu/mbrtu_m.c **** 
+  94:FreeModbus/rtu/mbrtu_m.c ****     ENTER_CRITICAL_SECTION(  );
+  46              		.loc 1 94 5 view .LVU4
+  47 0008 FFF7FEFF 		bl	__critical_enter
+  48              	.LVL2:
+  95:FreeModbus/rtu/mbrtu_m.c **** 
+  96:FreeModbus/rtu/mbrtu_m.c ****     /* Modbus RTU uses 8 Databits. */
+  97:FreeModbus/rtu/mbrtu_m.c ****     if( xMBMasterPortSerialInit( dHUART, ulBaudRate, dHTIM ) != TRUE )
+  49              		.loc 1 97 5 view .LVU5
+  50              		.loc 1 97 9 is_stmt 0 view .LVU6
+  51 000c 2A46     		mov	r2, r5
+  52 000e 2146     		mov	r1, r4
+  53 0010 3046     		mov	r0, r6
+  54 0012 FFF7FEFF 		bl	xMBMasterPortSerialInit
+  55              	.LVL3:
+  56              		.loc 1 97 7 view .LVU7
+  57 0016 0128     		cmp	r0, #1
+  58 0018 04D0     		beq	.L8
+  98:FreeModbus/rtu/mbrtu_m.c ****     {
+  99:FreeModbus/rtu/mbrtu_m.c ****         eStatus = MB_EPORTERR;
+  59              		.loc 1 99 17 view .LVU8
+  60 001a 0324     		movs	r4, #3
+  61              	.LVL4:
+  62              	.L2:
+ 100:FreeModbus/rtu/mbrtu_m.c ****     }
+ 101:FreeModbus/rtu/mbrtu_m.c ****     else
+ 102:FreeModbus/rtu/mbrtu_m.c ****     {
+ 103:FreeModbus/rtu/mbrtu_m.c ****         /* If baudrate > 19200 then we should use the fixed timer values
+ 104:FreeModbus/rtu/mbrtu_m.c ****          * t35 = 1750us. Otherwise t35 must be 3.5 times the character time.
+ 105:FreeModbus/rtu/mbrtu_m.c ****          */
+ 106:FreeModbus/rtu/mbrtu_m.c ****         if( ulBaudRate > 19200 )
+ 107:FreeModbus/rtu/mbrtu_m.c ****         {
+ 108:FreeModbus/rtu/mbrtu_m.c ****             usTimerT35_50us = 35;       /* 1800us. */
+ 109:FreeModbus/rtu/mbrtu_m.c ****         }
+ 110:FreeModbus/rtu/mbrtu_m.c ****         else
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 4
+
+
+ 111:FreeModbus/rtu/mbrtu_m.c ****         {
+ 112:FreeModbus/rtu/mbrtu_m.c ****             /* The timer reload value for a character is given by:
+ 113:FreeModbus/rtu/mbrtu_m.c ****              *
+ 114:FreeModbus/rtu/mbrtu_m.c ****              * ChTimeValue = Ticks_per_1s / ( Baudrate / 11 )
+ 115:FreeModbus/rtu/mbrtu_m.c ****              *             = 11 * Ticks_per_1s / Baudrate
+ 116:FreeModbus/rtu/mbrtu_m.c ****              *             = 220000 / Baudrate
+ 117:FreeModbus/rtu/mbrtu_m.c ****              * The reload for t3.5 is 1.5 times this value and similary
+ 118:FreeModbus/rtu/mbrtu_m.c ****              * for t3.5.
+ 119:FreeModbus/rtu/mbrtu_m.c ****              */
+ 120:FreeModbus/rtu/mbrtu_m.c ****             usTimerT35_50us = ( 7UL * 220000UL ) / ( 2UL * ulBaudRate );
+ 121:FreeModbus/rtu/mbrtu_m.c ****         }
+ 122:FreeModbus/rtu/mbrtu_m.c ****         if( xMBMasterPortTimersInit( ( USHORT ) usTimerT35_50us, dHTIM ) != TRUE )
+ 123:FreeModbus/rtu/mbrtu_m.c ****         {
+ 124:FreeModbus/rtu/mbrtu_m.c ****             eStatus = MB_EPORTERR;
+ 125:FreeModbus/rtu/mbrtu_m.c ****         }
+ 126:FreeModbus/rtu/mbrtu_m.c ****     }
+ 127:FreeModbus/rtu/mbrtu_m.c ****     EXIT_CRITICAL_SECTION(  );
+  63              		.loc 1 127 5 is_stmt 1 view .LVU9
+  64 001c FFF7FEFF 		bl	__critical_exit
+  65              	.LVL5:
+ 128:FreeModbus/rtu/mbrtu_m.c **** 
+ 129:FreeModbus/rtu/mbrtu_m.c ****     return eStatus;
+  66              		.loc 1 129 5 view .LVU10
+ 130:FreeModbus/rtu/mbrtu_m.c **** }
+  67              		.loc 1 130 1 is_stmt 0 view .LVU11
+  68 0020 2046     		mov	r0, r4
+  69 0022 70BD     		pop	{r4, r5, r6, pc}
+  70              	.LVL6:
+  71              	.L8:
+ 106:FreeModbus/rtu/mbrtu_m.c ****         {
+  72              		.loc 1 106 9 is_stmt 1 view .LVU12
+ 106:FreeModbus/rtu/mbrtu_m.c ****         {
+  73              		.loc 1 106 11 is_stmt 0 view .LVU13
+  74 0024 B4F5964F 		cmp	r4, #19200
+  75 0028 0BD8     		bhi	.L5
+ 120:FreeModbus/rtu/mbrtu_m.c ****         }
+  76              		.loc 1 120 13 is_stmt 1 view .LVU14
+ 120:FreeModbus/rtu/mbrtu_m.c ****         }
+  77              		.loc 1 120 58 is_stmt 0 view .LVU15
+  78 002a 6400     		lsls	r4, r4, #1
+  79              	.LVL7:
+ 120:FreeModbus/rtu/mbrtu_m.c ****         }
+  80              		.loc 1 120 29 view .LVU16
+  81 002c 0748     		ldr	r0, .L10
+  82 002e B0FBF4F0 		udiv	r0, r0, r4
+  83              	.LVL8:
+  84              	.L3:
+ 122:FreeModbus/rtu/mbrtu_m.c ****         {
+  85              		.loc 1 122 9 is_stmt 1 view .LVU17
+ 122:FreeModbus/rtu/mbrtu_m.c ****         {
+  86              		.loc 1 122 13 is_stmt 0 view .LVU18
+  87 0032 2946     		mov	r1, r5
+  88 0034 80B2     		uxth	r0, r0
+  89              	.LVL9:
+ 122:FreeModbus/rtu/mbrtu_m.c ****         {
+  90              		.loc 1 122 13 view .LVU19
+  91 0036 FFF7FEFF 		bl	xMBMasterPortTimersInit
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 5
+
+
+  92              	.LVL10:
+ 122:FreeModbus/rtu/mbrtu_m.c ****         {
+  93              		.loc 1 122 11 view .LVU20
+  94 003a 0128     		cmp	r0, #1
+  95 003c 03D0     		beq	.L9
+ 124:FreeModbus/rtu/mbrtu_m.c ****         }
+  96              		.loc 1 124 21 view .LVU21
+  97 003e 0324     		movs	r4, #3
+  98 0040 ECE7     		b	.L2
+  99              	.LVL11:
+ 100              	.L5:
+ 108:FreeModbus/rtu/mbrtu_m.c ****         }
+ 101              		.loc 1 108 29 view .LVU22
+ 102 0042 2320     		movs	r0, #35
+ 103 0044 F5E7     		b	.L3
+ 104              	.LVL12:
+ 105              	.L9:
+  91:FreeModbus/rtu/mbrtu_m.c ****     ULONG           usTimerT35_50us;
+ 106              		.loc 1 91 21 view .LVU23
+ 107 0046 0024     		movs	r4, #0
+ 108 0048 E8E7     		b	.L2
+ 109              	.L11:
+ 110 004a 00BF     		.align	2
+ 111              	.L10:
+ 112 004c A07F1700 		.word	1540000
+ 113              		.cfi_endproc
+ 114              	.LFE65:
+ 116              		.section	.text.eMBMasterRTUStart,"ax",%progbits
+ 117              		.align	1
+ 118              		.global	eMBMasterRTUStart
+ 119              		.syntax unified
+ 120              		.thumb
+ 121              		.thumb_func
+ 123              	eMBMasterRTUStart:
+ 124              	.LFB66:
+ 131:FreeModbus/rtu/mbrtu_m.c **** 
+ 132:FreeModbus/rtu/mbrtu_m.c **** void
+ 133:FreeModbus/rtu/mbrtu_m.c **** eMBMasterRTUStart( void )
+ 134:FreeModbus/rtu/mbrtu_m.c **** {
+ 125              		.loc 1 134 1 is_stmt 1 view -0
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 0
+ 128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129 0000 08B5     		push	{r3, lr}
+ 130              	.LCFI1:
+ 131              		.cfi_def_cfa_offset 8
+ 132              		.cfi_offset 3, -8
+ 133              		.cfi_offset 14, -4
+ 135:FreeModbus/rtu/mbrtu_m.c ****     ENTER_CRITICAL_SECTION(  );
+ 134              		.loc 1 135 5 view .LVU25
+ 135 0002 FFF7FEFF 		bl	__critical_enter
+ 136              	.LVL13:
+ 136:FreeModbus/rtu/mbrtu_m.c ****     /* Initially the receiver is in the state STATE_M_RX_INIT. we start
+ 137:FreeModbus/rtu/mbrtu_m.c ****      * the timer and if no character is received within t3.5 we change
+ 138:FreeModbus/rtu/mbrtu_m.c ****      * to STATE_M_RX_IDLE. This makes sure that we delay startup of the
+ 139:FreeModbus/rtu/mbrtu_m.c ****      * modbus protocol stack until the bus is free.
+ 140:FreeModbus/rtu/mbrtu_m.c ****      */
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 6
+
+
+ 141:FreeModbus/rtu/mbrtu_m.c ****     eRcvState = STATE_M_RX_INIT;
+ 137              		.loc 1 141 5 view .LVU26
+ 138              		.loc 1 141 15 is_stmt 0 view .LVU27
+ 139 0006 0021     		movs	r1, #0
+ 140 0008 044B     		ldr	r3, .L14
+ 141 000a 1970     		strb	r1, [r3]
+ 142:FreeModbus/rtu/mbrtu_m.c ****     vMBMasterPortSerialEnable( TRUE, FALSE );
+ 142              		.loc 1 142 5 is_stmt 1 view .LVU28
+ 143 000c 0120     		movs	r0, #1
+ 144 000e FFF7FEFF 		bl	vMBMasterPortSerialEnable
+ 145              	.LVL14:
+ 143:FreeModbus/rtu/mbrtu_m.c ****     vMBMasterPortTimersT35Enable(  );
+ 146              		.loc 1 143 5 view .LVU29
+ 147 0012 FFF7FEFF 		bl	vMBMasterPortTimersT35Enable
+ 148              	.LVL15:
+ 144:FreeModbus/rtu/mbrtu_m.c **** 
+ 145:FreeModbus/rtu/mbrtu_m.c ****     EXIT_CRITICAL_SECTION(  );
+ 149              		.loc 1 145 5 view .LVU30
+ 150 0016 FFF7FEFF 		bl	__critical_exit
+ 151              	.LVL16:
+ 146:FreeModbus/rtu/mbrtu_m.c **** }
+ 152              		.loc 1 146 1 is_stmt 0 view .LVU31
+ 153 001a 08BD     		pop	{r3, pc}
+ 154              	.L15:
+ 155              		.align	2
+ 156              	.L14:
+ 157 001c 00000000 		.word	.LANCHOR0
+ 158              		.cfi_endproc
+ 159              	.LFE66:
+ 161              		.section	.text.eMBMasterRTUStop,"ax",%progbits
+ 162              		.align	1
+ 163              		.global	eMBMasterRTUStop
+ 164              		.syntax unified
+ 165              		.thumb
+ 166              		.thumb_func
+ 168              	eMBMasterRTUStop:
+ 169              	.LFB67:
+ 147:FreeModbus/rtu/mbrtu_m.c **** 
+ 148:FreeModbus/rtu/mbrtu_m.c **** void
+ 149:FreeModbus/rtu/mbrtu_m.c **** eMBMasterRTUStop( void )
+ 150:FreeModbus/rtu/mbrtu_m.c **** {
+ 170              		.loc 1 150 1 is_stmt 1 view -0
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 0
+ 173              		@ frame_needed = 0, uses_anonymous_args = 0
+ 174 0000 08B5     		push	{r3, lr}
+ 175              	.LCFI2:
+ 176              		.cfi_def_cfa_offset 8
+ 177              		.cfi_offset 3, -8
+ 178              		.cfi_offset 14, -4
+ 151:FreeModbus/rtu/mbrtu_m.c ****     ENTER_CRITICAL_SECTION(  );
+ 179              		.loc 1 151 5 view .LVU33
+ 180 0002 FFF7FEFF 		bl	__critical_enter
+ 181              	.LVL17:
+ 152:FreeModbus/rtu/mbrtu_m.c ****     vMBMasterPortSerialEnable( FALSE, FALSE );
+ 182              		.loc 1 152 5 view .LVU34
+ 183 0006 0021     		movs	r1, #0
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 7
+
+
+ 184 0008 0846     		mov	r0, r1
+ 185 000a FFF7FEFF 		bl	vMBMasterPortSerialEnable
+ 186              	.LVL18:
+ 153:FreeModbus/rtu/mbrtu_m.c ****     vMBMasterPortTimersDisable(  );
+ 187              		.loc 1 153 5 view .LVU35
+ 188 000e FFF7FEFF 		bl	vMBMasterPortTimersDisable
+ 189              	.LVL19:
+ 154:FreeModbus/rtu/mbrtu_m.c ****     EXIT_CRITICAL_SECTION(  );
+ 190              		.loc 1 154 5 view .LVU36
+ 191 0012 FFF7FEFF 		bl	__critical_exit
+ 192              	.LVL20:
+ 155:FreeModbus/rtu/mbrtu_m.c **** }
+ 193              		.loc 1 155 1 is_stmt 0 view .LVU37
+ 194 0016 08BD     		pop	{r3, pc}
+ 195              		.cfi_endproc
+ 196              	.LFE67:
+ 198              		.section	.text.eMBMasterRTUReceive,"ax",%progbits
+ 199              		.align	1
+ 200              		.global	eMBMasterRTUReceive
+ 201              		.syntax unified
+ 202              		.thumb
+ 203              		.thumb_func
+ 205              	eMBMasterRTUReceive:
+ 206              	.LVL21:
+ 207              	.LFB68:
+ 156:FreeModbus/rtu/mbrtu_m.c **** 
+ 157:FreeModbus/rtu/mbrtu_m.c **** eMBErrorCode
+ 158:FreeModbus/rtu/mbrtu_m.c **** eMBMasterRTUReceive( UCHAR * pucRcvAddress, UCHAR ** pucFrame, USHORT * pusLength )
+ 159:FreeModbus/rtu/mbrtu_m.c **** {
+ 208              		.loc 1 159 1 is_stmt 1 view -0
+ 209              		.cfi_startproc
+ 210              		@ args = 0, pretend = 0, frame = 0
+ 211              		@ frame_needed = 0, uses_anonymous_args = 0
+ 212              		.loc 1 159 1 is_stmt 0 view .LVU39
+ 213 0000 70B5     		push	{r4, r5, r6, lr}
+ 214              	.LCFI3:
+ 215              		.cfi_def_cfa_offset 16
+ 216              		.cfi_offset 4, -16
+ 217              		.cfi_offset 5, -12
+ 218              		.cfi_offset 6, -8
+ 219              		.cfi_offset 14, -4
+ 220 0002 0646     		mov	r6, r0
+ 221 0004 0D46     		mov	r5, r1
+ 222 0006 1446     		mov	r4, r2
+ 160:FreeModbus/rtu/mbrtu_m.c ****     eMBErrorCode    eStatus = MB_ENOERR;
+ 223              		.loc 1 160 5 is_stmt 1 view .LVU40
+ 224              	.LVL22:
+ 161:FreeModbus/rtu/mbrtu_m.c **** 
+ 162:FreeModbus/rtu/mbrtu_m.c ****     ENTER_CRITICAL_SECTION(  );
+ 225              		.loc 1 162 5 view .LVU41
+ 226 0008 FFF7FEFF 		bl	__critical_enter
+ 227              	.LVL23:
+ 163:FreeModbus/rtu/mbrtu_m.c ****     assert_param( usMasterRcvBufferPos < MB_SER_PDU_SIZE_MAX );
+ 228              		.loc 1 163 5 view .LVU42
+ 164:FreeModbus/rtu/mbrtu_m.c **** 
+ 165:FreeModbus/rtu/mbrtu_m.c ****     /* Length and CRC check */
+ 166:FreeModbus/rtu/mbrtu_m.c ****     if( ( usMasterRcvBufferPos >= MB_SER_PDU_SIZE_MIN )
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 8
+
+
+ 229              		.loc 1 166 5 view .LVU43
+ 230              		.loc 1 166 32 is_stmt 0 view .LVU44
+ 231 000c 0F4B     		ldr	r3, .L24
+ 232 000e 1B88     		ldrh	r3, [r3]
+ 233 0010 9BB2     		uxth	r3, r3
+ 234              		.loc 1 166 7 view .LVU45
+ 235 0012 032B     		cmp	r3, #3
+ 236 0014 04D8     		bhi	.L23
+ 167:FreeModbus/rtu/mbrtu_m.c ****         && ( usMBCRC16( ( UCHAR * ) ucMasterRTURcvBuf, usMasterRcvBufferPos ) == 0 ) )
+ 168:FreeModbus/rtu/mbrtu_m.c ****     {
+ 169:FreeModbus/rtu/mbrtu_m.c ****         /* Save the address field. All frames are passed to the upper layed
+ 170:FreeModbus/rtu/mbrtu_m.c ****          * and the decision if a frame is used is done there.
+ 171:FreeModbus/rtu/mbrtu_m.c ****          */
+ 172:FreeModbus/rtu/mbrtu_m.c ****         *pucRcvAddress = ucMasterRTURcvBuf[MB_SER_PDU_ADDR_OFF];
+ 173:FreeModbus/rtu/mbrtu_m.c **** 
+ 174:FreeModbus/rtu/mbrtu_m.c ****         /* Total length of Modbus-PDU is Modbus-Serial-Line-PDU minus
+ 175:FreeModbus/rtu/mbrtu_m.c ****          * size of address field and CRC checksum.
+ 176:FreeModbus/rtu/mbrtu_m.c ****          */
+ 177:FreeModbus/rtu/mbrtu_m.c ****         *pusLength = ( USHORT )( usMasterRcvBufferPos - MB_SER_PDU_PDU_OFF - MB_SER_PDU_SIZE_CRC );
+ 178:FreeModbus/rtu/mbrtu_m.c **** 
+ 179:FreeModbus/rtu/mbrtu_m.c ****         /* Return the start of the Modbus PDU to the caller. */
+ 180:FreeModbus/rtu/mbrtu_m.c ****         *pucFrame = ( UCHAR * ) & ucMasterRTURcvBuf[MB_SER_PDU_PDU_OFF];
+ 181:FreeModbus/rtu/mbrtu_m.c ****     }
+ 182:FreeModbus/rtu/mbrtu_m.c ****     else
+ 183:FreeModbus/rtu/mbrtu_m.c ****     {
+ 184:FreeModbus/rtu/mbrtu_m.c ****         eStatus = MB_EIO;
+ 237              		.loc 1 184 17 view .LVU46
+ 238 0016 0524     		movs	r4, #5
+ 239              	.LVL24:
+ 240              	.L19:
+ 185:FreeModbus/rtu/mbrtu_m.c ****     }
+ 186:FreeModbus/rtu/mbrtu_m.c **** 
+ 187:FreeModbus/rtu/mbrtu_m.c ****     EXIT_CRITICAL_SECTION(  );
+ 241              		.loc 1 187 5 is_stmt 1 view .LVU47
+ 242 0018 FFF7FEFF 		bl	__critical_exit
+ 243              	.LVL25:
+ 188:FreeModbus/rtu/mbrtu_m.c ****     return eStatus;
+ 244              		.loc 1 188 5 view .LVU48
+ 189:FreeModbus/rtu/mbrtu_m.c **** }
+ 245              		.loc 1 189 1 is_stmt 0 view .LVU49
+ 246 001c 2046     		mov	r0, r4
+ 247 001e 70BD     		pop	{r4, r5, r6, pc}
+ 248              	.LVL26:
+ 249              	.L23:
+ 167:FreeModbus/rtu/mbrtu_m.c ****     {
+ 250              		.loc 1 167 14 view .LVU50
+ 251 0020 0A4B     		ldr	r3, .L24
+ 252 0022 1988     		ldrh	r1, [r3]
+ 253 0024 89B2     		uxth	r1, r1
+ 254 0026 0A48     		ldr	r0, .L24+4
+ 255 0028 FFF7FEFF 		bl	usMBCRC16
+ 256              	.LVL27:
+ 167:FreeModbus/rtu/mbrtu_m.c ****     {
+ 257              		.loc 1 167 9 view .LVU51
+ 258 002c 58B9     		cbnz	r0, .L21
+ 172:FreeModbus/rtu/mbrtu_m.c **** 
+ 259              		.loc 1 172 9 is_stmt 1 view .LVU52
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 9
+
+
+ 172:FreeModbus/rtu/mbrtu_m.c **** 
+ 260              		.loc 1 172 43 is_stmt 0 view .LVU53
+ 261 002e 084A     		ldr	r2, .L24+4
+ 262 0030 12F8013B 		ldrb	r3, [r2], #1	@ zero_extendqisi2
+ 172:FreeModbus/rtu/mbrtu_m.c **** 
+ 263              		.loc 1 172 24 view .LVU54
+ 264 0034 3370     		strb	r3, [r6]
+ 177:FreeModbus/rtu/mbrtu_m.c **** 
+ 265              		.loc 1 177 9 is_stmt 1 view .LVU55
+ 177:FreeModbus/rtu/mbrtu_m.c **** 
+ 266              		.loc 1 177 22 is_stmt 0 view .LVU56
+ 267 0036 054B     		ldr	r3, .L24
+ 268 0038 1B88     		ldrh	r3, [r3]
+ 269 003a 9BB2     		uxth	r3, r3
+ 270 003c 033B     		subs	r3, r3, #3
+ 177:FreeModbus/rtu/mbrtu_m.c **** 
+ 271              		.loc 1 177 20 view .LVU57
+ 272 003e 2380     		strh	r3, [r4]	@ movhi
+ 180:FreeModbus/rtu/mbrtu_m.c ****     }
+ 273              		.loc 1 180 9 is_stmt 1 view .LVU58
+ 180:FreeModbus/rtu/mbrtu_m.c ****     }
+ 274              		.loc 1 180 19 is_stmt 0 view .LVU59
+ 275 0040 2A60     		str	r2, [r5]
+ 160:FreeModbus/rtu/mbrtu_m.c **** 
+ 276              		.loc 1 160 21 view .LVU60
+ 277 0042 0024     		movs	r4, #0
+ 278              	.LVL28:
+ 180:FreeModbus/rtu/mbrtu_m.c ****     }
+ 279              		.loc 1 180 19 view .LVU61
+ 280 0044 E8E7     		b	.L19
+ 281              	.LVL29:
+ 282              	.L21:
+ 184:FreeModbus/rtu/mbrtu_m.c ****     }
+ 283              		.loc 1 184 17 view .LVU62
+ 284 0046 0524     		movs	r4, #5
+ 285              	.LVL30:
+ 184:FreeModbus/rtu/mbrtu_m.c ****     }
+ 286              		.loc 1 184 17 view .LVU63
+ 287 0048 E6E7     		b	.L19
+ 288              	.L25:
+ 289 004a 00BF     		.align	2
+ 290              	.L24:
+ 291 004c 00000000 		.word	.LANCHOR1
+ 292 0050 00000000 		.word	.LANCHOR2
+ 293              		.cfi_endproc
+ 294              	.LFE68:
+ 296              		.section	.text.eMBMasterRTUSend,"ax",%progbits
+ 297              		.align	1
+ 298              		.global	eMBMasterRTUSend
+ 299              		.syntax unified
+ 300              		.thumb
+ 301              		.thumb_func
+ 303              	eMBMasterRTUSend:
+ 304              	.LVL31:
+ 305              	.LFB69:
+ 190:FreeModbus/rtu/mbrtu_m.c **** 
+ 191:FreeModbus/rtu/mbrtu_m.c **** eMBErrorCode
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 10
+
+
+ 192:FreeModbus/rtu/mbrtu_m.c **** eMBMasterRTUSend( UCHAR ucSlaveAddress, const UCHAR * pucFrame, USHORT usLength )
+ 193:FreeModbus/rtu/mbrtu_m.c **** {
+ 306              		.loc 1 193 1 is_stmt 1 view -0
+ 307              		.cfi_startproc
+ 308              		@ args = 0, pretend = 0, frame = 0
+ 309              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310              		.loc 1 193 1 is_stmt 0 view .LVU65
+ 311 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 312              	.LCFI4:
+ 313              		.cfi_def_cfa_offset 24
+ 314              		.cfi_offset 4, -24
+ 315              		.cfi_offset 5, -20
+ 316              		.cfi_offset 6, -16
+ 317              		.cfi_offset 7, -12
+ 318              		.cfi_offset 8, -8
+ 319              		.cfi_offset 14, -4
+ 194:FreeModbus/rtu/mbrtu_m.c ****     eMBErrorCode    eStatus = MB_ENOERR;
+ 320              		.loc 1 194 5 is_stmt 1 view .LVU66
+ 321              	.LVL32:
+ 195:FreeModbus/rtu/mbrtu_m.c ****     USHORT          usCRC16;
+ 322              		.loc 1 195 5 view .LVU67
+ 196:FreeModbus/rtu/mbrtu_m.c **** 
+ 197:FreeModbus/rtu/mbrtu_m.c ****     if ( ucSlaveAddress > MB_MASTER_TOTAL_SLAVE_NUM ) return MB_EINVAL;
+ 323              		.loc 1 197 5 view .LVU68
+ 324              		.loc 1 197 8 is_stmt 0 view .LVU69
+ 325 0004 1028     		cmp	r0, #16
+ 326 0006 3DD8     		bhi	.L29
+ 327 0008 0446     		mov	r4, r0
+ 328 000a 0E46     		mov	r6, r1
+ 329 000c 1546     		mov	r5, r2
+ 198:FreeModbus/rtu/mbrtu_m.c **** 
+ 199:FreeModbus/rtu/mbrtu_m.c ****     ENTER_CRITICAL_SECTION(  );
+ 330              		.loc 1 199 5 is_stmt 1 view .LVU70
+ 331 000e FFF7FEFF 		bl	__critical_enter
+ 332              	.LVL33:
+ 200:FreeModbus/rtu/mbrtu_m.c **** 
+ 201:FreeModbus/rtu/mbrtu_m.c ****     /* Check if the receiver is still in idle state. If not we where to
+ 202:FreeModbus/rtu/mbrtu_m.c ****      * slow with processing the received frame and the master sent another
+ 203:FreeModbus/rtu/mbrtu_m.c ****      * frame on the network. We have to abort sending the frame.
+ 204:FreeModbus/rtu/mbrtu_m.c ****      */
+ 205:FreeModbus/rtu/mbrtu_m.c ****     if( eRcvState == STATE_M_RX_IDLE )
+ 333              		.loc 1 205 5 view .LVU71
+ 334              		.loc 1 205 19 is_stmt 0 view .LVU72
+ 335 0012 1D4B     		ldr	r3, .L33
+ 336 0014 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 337 0016 DBB2     		uxtb	r3, r3
+ 338              		.loc 1 205 7 view .LVU73
+ 339 0018 012B     		cmp	r3, #1
+ 340 001a 05D0     		beq	.L32
+ 206:FreeModbus/rtu/mbrtu_m.c ****     {
+ 207:FreeModbus/rtu/mbrtu_m.c ****         /* First byte before the Modbus-PDU is the slave address. */
+ 208:FreeModbus/rtu/mbrtu_m.c ****         pucMasterSndBufferCur = ( UCHAR * ) pucFrame - 1;
+ 209:FreeModbus/rtu/mbrtu_m.c ****         usMasterSndBufferCount = 1;
+ 210:FreeModbus/rtu/mbrtu_m.c **** 
+ 211:FreeModbus/rtu/mbrtu_m.c ****         /* Now copy the Modbus-PDU into the Modbus-Serial-Line-PDU. */
+ 212:FreeModbus/rtu/mbrtu_m.c ****         pucMasterSndBufferCur[MB_SER_PDU_ADDR_OFF] = ucSlaveAddress;
+ 213:FreeModbus/rtu/mbrtu_m.c ****         usMasterSndBufferCount += usLength;
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 11
+
+
+ 214:FreeModbus/rtu/mbrtu_m.c **** 
+ 215:FreeModbus/rtu/mbrtu_m.c ****         /* Calculate CRC16 checksum for Modbus-Serial-Line-PDU. */
+ 216:FreeModbus/rtu/mbrtu_m.c ****         usCRC16 = usMBCRC16( ( UCHAR * ) pucMasterSndBufferCur, usMasterSndBufferCount );
+ 217:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTUSndBuf[usMasterSndBufferCount++] = ( UCHAR )( usCRC16 & 0xFF );
+ 218:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTUSndBuf[usMasterSndBufferCount++] = ( UCHAR )( usCRC16 >> 8 );
+ 219:FreeModbus/rtu/mbrtu_m.c **** 
+ 220:FreeModbus/rtu/mbrtu_m.c ****         /* Activate the transmitter. */
+ 221:FreeModbus/rtu/mbrtu_m.c ****         eSndState = STATE_M_TX_XMIT;
+ 222:FreeModbus/rtu/mbrtu_m.c ****         vMBMasterPortSerialEnable( FALSE, TRUE );
+ 223:FreeModbus/rtu/mbrtu_m.c ****     }
+ 224:FreeModbus/rtu/mbrtu_m.c ****     else
+ 225:FreeModbus/rtu/mbrtu_m.c ****     {
+ 226:FreeModbus/rtu/mbrtu_m.c ****         eStatus = MB_EIO;
+ 341              		.loc 1 226 17 view .LVU74
+ 342 001c 0524     		movs	r4, #5
+ 343              	.L28:
+ 344              	.LVL34:
+ 227:FreeModbus/rtu/mbrtu_m.c ****     }
+ 228:FreeModbus/rtu/mbrtu_m.c ****     EXIT_CRITICAL_SECTION(  );
+ 345              		.loc 1 228 5 is_stmt 1 view .LVU75
+ 346 001e FFF7FEFF 		bl	__critical_exit
+ 347              	.LVL35:
+ 229:FreeModbus/rtu/mbrtu_m.c ****     return eStatus;
+ 348              		.loc 1 229 5 view .LVU76
+ 349              	.L27:
+ 230:FreeModbus/rtu/mbrtu_m.c **** }
+ 350              		.loc 1 230 1 is_stmt 0 view .LVU77
+ 351 0022 2046     		mov	r0, r4
+ 352 0024 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 353              	.LVL36:
+ 354              	.L32:
+ 208:FreeModbus/rtu/mbrtu_m.c ****         usMasterSndBufferCount = 1;
+ 355              		.loc 1 208 9 is_stmt 1 view .LVU78
+ 208:FreeModbus/rtu/mbrtu_m.c ****         usMasterSndBufferCount = 1;
+ 356              		.loc 1 208 54 is_stmt 0 view .LVU79
+ 357 0028 701E     		subs	r0, r6, #1
+ 208:FreeModbus/rtu/mbrtu_m.c ****         usMasterSndBufferCount = 1;
+ 358              		.loc 1 208 31 view .LVU80
+ 359 002a 184B     		ldr	r3, .L33+4
+ 360 002c 1860     		str	r0, [r3]
+ 209:FreeModbus/rtu/mbrtu_m.c **** 
+ 361              		.loc 1 209 9 is_stmt 1 view .LVU81
+ 209:FreeModbus/rtu/mbrtu_m.c **** 
+ 362              		.loc 1 209 32 is_stmt 0 view .LVU82
+ 363 002e 184F     		ldr	r7, .L33+8
+ 364 0030 4FF00108 		mov	r8, #1
+ 365 0034 A7F80080 		strh	r8, [r7]	@ movhi
+ 212:FreeModbus/rtu/mbrtu_m.c ****         usMasterSndBufferCount += usLength;
+ 366              		.loc 1 212 9 is_stmt 1 view .LVU83
+ 212:FreeModbus/rtu/mbrtu_m.c ****         usMasterSndBufferCount += usLength;
+ 367              		.loc 1 212 52 is_stmt 0 view .LVU84
+ 368 0038 06F8014C 		strb	r4, [r6, #-1]
+ 213:FreeModbus/rtu/mbrtu_m.c **** 
+ 369              		.loc 1 213 9 is_stmt 1 view .LVU85
+ 213:FreeModbus/rtu/mbrtu_m.c **** 
+ 370              		.loc 1 213 32 is_stmt 0 view .LVU86
+ 371 003c 3A88     		ldrh	r2, [r7]
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 12
+
+
+ 372 003e 92B2     		uxth	r2, r2
+ 373 0040 2A44     		add	r2, r2, r5
+ 374 0042 92B2     		uxth	r2, r2
+ 375 0044 3A80     		strh	r2, [r7]	@ movhi
+ 216:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTUSndBuf[usMasterSndBufferCount++] = ( UCHAR )( usCRC16 & 0xFF );
+ 376              		.loc 1 216 9 is_stmt 1 view .LVU87
+ 216:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTUSndBuf[usMasterSndBufferCount++] = ( UCHAR )( usCRC16 & 0xFF );
+ 377              		.loc 1 216 19 is_stmt 0 view .LVU88
+ 378 0046 3988     		ldrh	r1, [r7]
+ 379 0048 89B2     		uxth	r1, r1
+ 380 004a FFF7FEFF 		bl	usMBCRC16
+ 381              	.LVL37:
+ 217:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTUSndBuf[usMasterSndBufferCount++] = ( UCHAR )( usCRC16 >> 8 );
+ 382              		.loc 1 217 9 is_stmt 1 view .LVU89
+ 217:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTUSndBuf[usMasterSndBufferCount++] = ( UCHAR )( usCRC16 >> 8 );
+ 383              		.loc 1 217 49 is_stmt 0 view .LVU90
+ 384 004e 3B88     		ldrh	r3, [r7]
+ 385 0050 9BB2     		uxth	r3, r3
+ 386 0052 03EB0802 		add	r2, r3, r8
+ 387 0056 92B2     		uxth	r2, r2
+ 388 0058 3A80     		strh	r2, [r7]	@ movhi
+ 217:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTUSndBuf[usMasterSndBufferCount++] = ( UCHAR )( usCRC16 >> 8 );
+ 389              		.loc 1 217 55 view .LVU91
+ 390 005a C2B2     		uxtb	r2, r0
+ 217:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTUSndBuf[usMasterSndBufferCount++] = ( UCHAR )( usCRC16 >> 8 );
+ 391              		.loc 1 217 53 view .LVU92
+ 392 005c 0D49     		ldr	r1, .L33+12
+ 393 005e CA54     		strb	r2, [r1, r3]
+ 218:FreeModbus/rtu/mbrtu_m.c **** 
+ 394              		.loc 1 218 9 is_stmt 1 view .LVU93
+ 218:FreeModbus/rtu/mbrtu_m.c **** 
+ 395              		.loc 1 218 49 is_stmt 0 view .LVU94
+ 396 0060 3B88     		ldrh	r3, [r7]
+ 397 0062 9BB2     		uxth	r3, r3
+ 398 0064 03EB0802 		add	r2, r3, r8
+ 399 0068 92B2     		uxth	r2, r2
+ 400 006a 3A80     		strh	r2, [r7]	@ movhi
+ 218:FreeModbus/rtu/mbrtu_m.c **** 
+ 401              		.loc 1 218 55 view .LVU95
+ 402 006c C0F30720 		ubfx	r0, r0, #8, #8
+ 403              	.LVL38:
+ 218:FreeModbus/rtu/mbrtu_m.c **** 
+ 404              		.loc 1 218 53 view .LVU96
+ 405 0070 C854     		strb	r0, [r1, r3]
+ 221:FreeModbus/rtu/mbrtu_m.c ****         vMBMasterPortSerialEnable( FALSE, TRUE );
+ 406              		.loc 1 221 9 is_stmt 1 view .LVU97
+ 221:FreeModbus/rtu/mbrtu_m.c ****         vMBMasterPortSerialEnable( FALSE, TRUE );
+ 407              		.loc 1 221 19 is_stmt 0 view .LVU98
+ 408 0072 094B     		ldr	r3, .L33+16
+ 409 0074 83F80080 		strb	r8, [r3]
+ 222:FreeModbus/rtu/mbrtu_m.c ****     }
+ 410              		.loc 1 222 9 is_stmt 1 view .LVU99
+ 411 0078 4146     		mov	r1, r8
+ 412 007a 0020     		movs	r0, #0
+ 413 007c FFF7FEFF 		bl	vMBMasterPortSerialEnable
+ 414              	.LVL39:
+ 194:FreeModbus/rtu/mbrtu_m.c ****     USHORT          usCRC16;
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 13
+
+
+ 415              		.loc 1 194 21 is_stmt 0 view .LVU100
+ 416 0080 0024     		movs	r4, #0
+ 417 0082 CCE7     		b	.L28
+ 418              	.LVL40:
+ 419              	.L29:
+ 197:FreeModbus/rtu/mbrtu_m.c **** 
+ 420              		.loc 1 197 62 view .LVU101
+ 421 0084 0224     		movs	r4, #2
+ 422 0086 CCE7     		b	.L27
+ 423              	.L34:
+ 424              		.align	2
+ 425              	.L33:
+ 426 0088 00000000 		.word	.LANCHOR0
+ 427 008c 00000000 		.word	.LANCHOR3
+ 428 0090 00000000 		.word	.LANCHOR4
+ 429 0094 00000000 		.word	.LANCHOR5
+ 430 0098 00000000 		.word	.LANCHOR6
+ 431              		.cfi_endproc
+ 432              	.LFE69:
+ 434              		.section	.text.xMBMasterRTUReceiveFSM,"ax",%progbits
+ 435              		.align	1
+ 436              		.global	xMBMasterRTUReceiveFSM
+ 437              		.syntax unified
+ 438              		.thumb
+ 439              		.thumb_func
+ 441              	xMBMasterRTUReceiveFSM:
+ 442              	.LFB70:
+ 231:FreeModbus/rtu/mbrtu_m.c **** 
+ 232:FreeModbus/rtu/mbrtu_m.c **** BOOL
+ 233:FreeModbus/rtu/mbrtu_m.c **** xMBMasterRTUReceiveFSM( void )
+ 234:FreeModbus/rtu/mbrtu_m.c **** {
+ 443              		.loc 1 234 1 is_stmt 1 view -0
+ 444              		.cfi_startproc
+ 445              		@ args = 0, pretend = 0, frame = 8
+ 446              		@ frame_needed = 0, uses_anonymous_args = 0
+ 447 0000 00B5     		push	{lr}
+ 448              	.LCFI5:
+ 449              		.cfi_def_cfa_offset 4
+ 450              		.cfi_offset 14, -4
+ 451 0002 83B0     		sub	sp, sp, #12
+ 452              	.LCFI6:
+ 453              		.cfi_def_cfa_offset 16
+ 235:FreeModbus/rtu/mbrtu_m.c ****     BOOL            xTaskNeedSwitch = FALSE;
+ 454              		.loc 1 235 5 view .LVU103
+ 455              	.LVL41:
+ 236:FreeModbus/rtu/mbrtu_m.c ****     UCHAR           ucByte;
+ 456              		.loc 1 236 5 view .LVU104
+ 237:FreeModbus/rtu/mbrtu_m.c **** 
+ 238:FreeModbus/rtu/mbrtu_m.c ****     assert_param(( eSndState == STATE_M_TX_IDLE ) || ( eSndState == STATE_M_TX_XFWR ));
+ 457              		.loc 1 238 5 view .LVU105
+ 239:FreeModbus/rtu/mbrtu_m.c **** 
+ 240:FreeModbus/rtu/mbrtu_m.c ****     /* Always read the character. */
+ 241:FreeModbus/rtu/mbrtu_m.c ****     ( void )xMBMasterPortSerialGetByte( ( CHAR * ) & ucByte );
+ 458              		.loc 1 241 5 view .LVU106
+ 459              		.loc 1 241 13 is_stmt 0 view .LVU107
+ 460 0004 0DF10700 		add	r0, sp, #7
+ 461 0008 FFF7FEFF 		bl	xMBMasterPortSerialGetByte
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 14
+
+
+ 462              	.LVL42:
+ 242:FreeModbus/rtu/mbrtu_m.c **** 
+ 243:FreeModbus/rtu/mbrtu_m.c ****     switch ( eRcvState )
+ 463              		.loc 1 243 5 is_stmt 1 view .LVU108
+ 464 000c 1E4B     		ldr	r3, .L45
+ 465 000e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 466 0010 DBB2     		uxtb	r3, r3
+ 467 0012 032B     		cmp	r3, #3
+ 468 0014 05D8     		bhi	.L36
+ 469 0016 DFE803F0 		tbb	[pc, r3]
+ 470              	.L38:
+ 471 001a 02       		.byte	(.L41-.L38)/2
+ 472 001b 0B       		.byte	(.L40-.L38)/2
+ 473 001c 21       		.byte	(.L39-.L38)/2
+ 474 001d 08       		.byte	(.L37-.L38)/2
+ 475              		.p2align 1
+ 476              	.L41:
+ 244:FreeModbus/rtu/mbrtu_m.c ****     {
+ 245:FreeModbus/rtu/mbrtu_m.c ****         /* If we have received a character in the init state we have to
+ 246:FreeModbus/rtu/mbrtu_m.c ****          * wait until the frame is finished.
+ 247:FreeModbus/rtu/mbrtu_m.c ****          */
+ 248:FreeModbus/rtu/mbrtu_m.c ****     case STATE_M_RX_INIT:
+ 249:FreeModbus/rtu/mbrtu_m.c ****         vMBMasterPortTimersT35Enable( );
+ 477              		.loc 1 249 9 view .LVU109
+ 478 001e FFF7FEFF 		bl	vMBMasterPortTimersT35Enable
+ 479              	.LVL43:
+ 250:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 480              		.loc 1 250 9 view .LVU110
+ 481              	.L36:
+ 251:FreeModbus/rtu/mbrtu_m.c **** 
+ 252:FreeModbus/rtu/mbrtu_m.c ****         /* In the error state we wait until all characters in the
+ 253:FreeModbus/rtu/mbrtu_m.c ****          * damaged frame are transmitted.
+ 254:FreeModbus/rtu/mbrtu_m.c ****          */
+ 255:FreeModbus/rtu/mbrtu_m.c ****     case STATE_M_RX_ERROR:
+ 256:FreeModbus/rtu/mbrtu_m.c ****         vMBMasterPortTimersT35Enable( );
+ 257:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 258:FreeModbus/rtu/mbrtu_m.c **** 
+ 259:FreeModbus/rtu/mbrtu_m.c ****         /* In the idle state we wait for a new character. If a character
+ 260:FreeModbus/rtu/mbrtu_m.c ****          * is received the t1.5 and t3.5 timers are started and the
+ 261:FreeModbus/rtu/mbrtu_m.c ****          * receiver is in the state STATE_RX_RECEIVCE and disable early
+ 262:FreeModbus/rtu/mbrtu_m.c ****          * the timer of respond timeout .
+ 263:FreeModbus/rtu/mbrtu_m.c ****          */
+ 264:FreeModbus/rtu/mbrtu_m.c ****     case STATE_M_RX_IDLE:
+ 265:FreeModbus/rtu/mbrtu_m.c ****     	/* In time of respond timeout,the receiver receive a frame.
+ 266:FreeModbus/rtu/mbrtu_m.c ****     	 * Disable timer of respond timeout and change the transmiter state to idle.
+ 267:FreeModbus/rtu/mbrtu_m.c ****     	 */
+ 268:FreeModbus/rtu/mbrtu_m.c ****     	vMBMasterPortTimersDisable( );
+ 269:FreeModbus/rtu/mbrtu_m.c ****     	eSndState = STATE_M_TX_IDLE;
+ 270:FreeModbus/rtu/mbrtu_m.c **** 
+ 271:FreeModbus/rtu/mbrtu_m.c ****         usMasterRcvBufferPos = 0;
+ 272:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTURcvBuf[usMasterRcvBufferPos++] = ucByte;
+ 273:FreeModbus/rtu/mbrtu_m.c ****         eRcvState = STATE_M_RX_RCV;
+ 274:FreeModbus/rtu/mbrtu_m.c **** 
+ 275:FreeModbus/rtu/mbrtu_m.c ****         /* Enable t3.5 timers. */
+ 276:FreeModbus/rtu/mbrtu_m.c ****         vMBMasterPortTimersT35Enable( );
+ 277:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 278:FreeModbus/rtu/mbrtu_m.c **** 
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 15
+
+
+ 279:FreeModbus/rtu/mbrtu_m.c ****         /* We are currently receiving a frame. Reset the timer after
+ 280:FreeModbus/rtu/mbrtu_m.c ****          * every character received. If more than the maximum possible
+ 281:FreeModbus/rtu/mbrtu_m.c ****          * number of bytes in a modbus frame is received the frame is
+ 282:FreeModbus/rtu/mbrtu_m.c ****          * ignored.
+ 283:FreeModbus/rtu/mbrtu_m.c ****          */
+ 284:FreeModbus/rtu/mbrtu_m.c ****     case STATE_M_RX_RCV:
+ 285:FreeModbus/rtu/mbrtu_m.c ****         if( usMasterRcvBufferPos < MB_SER_PDU_SIZE_MAX )
+ 286:FreeModbus/rtu/mbrtu_m.c ****         {
+ 287:FreeModbus/rtu/mbrtu_m.c ****             ucMasterRTURcvBuf[usMasterRcvBufferPos++] = ucByte;
+ 288:FreeModbus/rtu/mbrtu_m.c ****         }
+ 289:FreeModbus/rtu/mbrtu_m.c ****         else
+ 290:FreeModbus/rtu/mbrtu_m.c ****         {
+ 291:FreeModbus/rtu/mbrtu_m.c ****             eRcvState = STATE_M_RX_ERROR;
+ 292:FreeModbus/rtu/mbrtu_m.c ****         }
+ 293:FreeModbus/rtu/mbrtu_m.c ****         vMBMasterPortTimersT35Enable();
+ 294:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 295:FreeModbus/rtu/mbrtu_m.c ****     }
+ 296:FreeModbus/rtu/mbrtu_m.c ****     return xTaskNeedSwitch;
+ 482              		.loc 1 296 5 view .LVU111
+ 297:FreeModbus/rtu/mbrtu_m.c **** }
+ 483              		.loc 1 297 1 is_stmt 0 view .LVU112
+ 484 0022 0020     		movs	r0, #0
+ 485 0024 03B0     		add	sp, sp, #12
+ 486              	.LCFI7:
+ 487              		.cfi_remember_state
+ 488              		.cfi_def_cfa_offset 4
+ 489              		@ sp needed
+ 490 0026 5DF804FB 		ldr	pc, [sp], #4
+ 491              	.L37:
+ 492              	.LCFI8:
+ 493              		.cfi_restore_state
+ 256:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 494              		.loc 1 256 9 is_stmt 1 view .LVU113
+ 495 002a FFF7FEFF 		bl	vMBMasterPortTimersT35Enable
+ 496              	.LVL44:
+ 257:FreeModbus/rtu/mbrtu_m.c **** 
+ 497              		.loc 1 257 9 view .LVU114
+ 498 002e F8E7     		b	.L36
+ 499              	.L40:
+ 268:FreeModbus/rtu/mbrtu_m.c ****     	eSndState = STATE_M_TX_IDLE;
+ 500              		.loc 1 268 6 view .LVU115
+ 501 0030 FFF7FEFF 		bl	vMBMasterPortTimersDisable
+ 502              	.LVL45:
+ 269:FreeModbus/rtu/mbrtu_m.c **** 
+ 503              		.loc 1 269 6 view .LVU116
+ 269:FreeModbus/rtu/mbrtu_m.c **** 
+ 504              		.loc 1 269 16 is_stmt 0 view .LVU117
+ 505 0034 0023     		movs	r3, #0
+ 506 0036 154A     		ldr	r2, .L45+4
+ 507 0038 1370     		strb	r3, [r2]
+ 271:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTURcvBuf[usMasterRcvBufferPos++] = ucByte;
+ 508              		.loc 1 271 9 is_stmt 1 view .LVU118
+ 271:FreeModbus/rtu/mbrtu_m.c ****         ucMasterRTURcvBuf[usMasterRcvBufferPos++] = ucByte;
+ 509              		.loc 1 271 30 is_stmt 0 view .LVU119
+ 510 003a 154A     		ldr	r2, .L45+8
+ 511 003c 1380     		strh	r3, [r2]	@ movhi
+ 272:FreeModbus/rtu/mbrtu_m.c ****         eRcvState = STATE_M_RX_RCV;
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 16
+
+
+ 512              		.loc 1 272 9 is_stmt 1 view .LVU120
+ 272:FreeModbus/rtu/mbrtu_m.c ****         eRcvState = STATE_M_RX_RCV;
+ 513              		.loc 1 272 47 is_stmt 0 view .LVU121
+ 514 003e 1388     		ldrh	r3, [r2]
+ 515 0040 9BB2     		uxth	r3, r3
+ 516 0042 591C     		adds	r1, r3, #1
+ 517 0044 89B2     		uxth	r1, r1
+ 518 0046 1180     		strh	r1, [r2]	@ movhi
+ 272:FreeModbus/rtu/mbrtu_m.c ****         eRcvState = STATE_M_RX_RCV;
+ 519              		.loc 1 272 51 view .LVU122
+ 520 0048 9DF80710 		ldrb	r1, [sp, #7]	@ zero_extendqisi2
+ 521 004c 114A     		ldr	r2, .L45+12
+ 522 004e D154     		strb	r1, [r2, r3]
+ 273:FreeModbus/rtu/mbrtu_m.c **** 
+ 523              		.loc 1 273 9 is_stmt 1 view .LVU123
+ 273:FreeModbus/rtu/mbrtu_m.c **** 
+ 524              		.loc 1 273 19 is_stmt 0 view .LVU124
+ 525 0050 0D4B     		ldr	r3, .L45
+ 526 0052 0222     		movs	r2, #2
+ 527 0054 1A70     		strb	r2, [r3]
+ 276:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 528              		.loc 1 276 9 is_stmt 1 view .LVU125
+ 529 0056 FFF7FEFF 		bl	vMBMasterPortTimersT35Enable
+ 530              	.LVL46:
+ 277:FreeModbus/rtu/mbrtu_m.c **** 
+ 531              		.loc 1 277 9 view .LVU126
+ 532 005a E2E7     		b	.L36
+ 533              	.L39:
+ 285:FreeModbus/rtu/mbrtu_m.c ****         {
+ 534              		.loc 1 285 9 view .LVU127
+ 285:FreeModbus/rtu/mbrtu_m.c ****         {
+ 535              		.loc 1 285 34 is_stmt 0 view .LVU128
+ 536 005c 0C4B     		ldr	r3, .L45+8
+ 537 005e 1B88     		ldrh	r3, [r3]
+ 538 0060 9BB2     		uxth	r3, r3
+ 285:FreeModbus/rtu/mbrtu_m.c ****         {
+ 539              		.loc 1 285 11 view .LVU129
+ 540 0062 FF2B     		cmp	r3, #255
+ 541 0064 0CD8     		bhi	.L42
+ 287:FreeModbus/rtu/mbrtu_m.c ****         }
+ 542              		.loc 1 287 13 is_stmt 1 view .LVU130
+ 287:FreeModbus/rtu/mbrtu_m.c ****         }
+ 543              		.loc 1 287 51 is_stmt 0 view .LVU131
+ 544 0066 0A49     		ldr	r1, .L45+8
+ 545 0068 0B88     		ldrh	r3, [r1]
+ 546 006a 9BB2     		uxth	r3, r3
+ 547 006c 5A1C     		adds	r2, r3, #1
+ 548 006e 92B2     		uxth	r2, r2
+ 549 0070 0A80     		strh	r2, [r1]	@ movhi
+ 287:FreeModbus/rtu/mbrtu_m.c ****         }
+ 550              		.loc 1 287 55 view .LVU132
+ 551 0072 9DF80710 		ldrb	r1, [sp, #7]	@ zero_extendqisi2
+ 552 0076 074A     		ldr	r2, .L45+12
+ 553 0078 D154     		strb	r1, [r2, r3]
+ 554              	.L43:
+ 293:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 555              		.loc 1 293 9 is_stmt 1 view .LVU133
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 17
+
+
+ 556 007a FFF7FEFF 		bl	vMBMasterPortTimersT35Enable
+ 557              	.LVL47:
+ 294:FreeModbus/rtu/mbrtu_m.c ****     }
+ 558              		.loc 1 294 9 view .LVU134
+ 559 007e D0E7     		b	.L36
+ 560              	.L42:
+ 291:FreeModbus/rtu/mbrtu_m.c ****         }
+ 561              		.loc 1 291 13 view .LVU135
+ 291:FreeModbus/rtu/mbrtu_m.c ****         }
+ 562              		.loc 1 291 23 is_stmt 0 view .LVU136
+ 563 0080 014B     		ldr	r3, .L45
+ 564 0082 0322     		movs	r2, #3
+ 565 0084 1A70     		strb	r2, [r3]
+ 566 0086 F8E7     		b	.L43
+ 567              	.L46:
+ 568              		.align	2
+ 569              	.L45:
+ 570 0088 00000000 		.word	.LANCHOR0
+ 571 008c 00000000 		.word	.LANCHOR6
+ 572 0090 00000000 		.word	.LANCHOR1
+ 573 0094 00000000 		.word	.LANCHOR2
+ 574              		.cfi_endproc
+ 575              	.LFE70:
+ 577              		.section	.text.xMBMasterRTUTransmitFSM,"ax",%progbits
+ 578              		.align	1
+ 579              		.global	xMBMasterRTUTransmitFSM
+ 580              		.syntax unified
+ 581              		.thumb
+ 582              		.thumb_func
+ 584              	xMBMasterRTUTransmitFSM:
+ 585              	.LFB71:
+ 298:FreeModbus/rtu/mbrtu_m.c **** 
+ 299:FreeModbus/rtu/mbrtu_m.c **** BOOL
+ 300:FreeModbus/rtu/mbrtu_m.c **** xMBMasterRTUTransmitFSM( void )
+ 301:FreeModbus/rtu/mbrtu_m.c **** {
+ 586              		.loc 1 301 1 is_stmt 1 view -0
+ 587              		.cfi_startproc
+ 588              		@ args = 0, pretend = 0, frame = 0
+ 589              		@ frame_needed = 0, uses_anonymous_args = 0
+ 590 0000 10B5     		push	{r4, lr}
+ 591              	.LCFI9:
+ 592              		.cfi_def_cfa_offset 8
+ 593              		.cfi_offset 4, -8
+ 594              		.cfi_offset 14, -4
+ 302:FreeModbus/rtu/mbrtu_m.c ****     BOOL            xNeedPoll = FALSE;
+ 595              		.loc 1 302 5 view .LVU138
+ 596              	.LVL48:
+ 303:FreeModbus/rtu/mbrtu_m.c **** 
+ 304:FreeModbus/rtu/mbrtu_m.c ****     assert_param( eRcvState == STATE_M_RX_IDLE );
+ 597              		.loc 1 304 5 view .LVU139
+ 305:FreeModbus/rtu/mbrtu_m.c **** 
+ 306:FreeModbus/rtu/mbrtu_m.c ****     switch ( eSndState )
+ 598              		.loc 1 306 5 view .LVU140
+ 599 0002 1A4B     		ldr	r3, .L55
+ 600 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 601 0006 2BB1     		cbz	r3, .L48
+ 602 0008 03F0FF02 		and	r2, r3, #255
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 18
+
+
+ 603 000c 012A     		cmp	r2, #1
+ 604 000e 06D0     		beq	.L49
+ 605              	.L50:
+ 307:FreeModbus/rtu/mbrtu_m.c ****     {
+ 308:FreeModbus/rtu/mbrtu_m.c ****         /* We should not get a transmitter event if the transmitter is in
+ 309:FreeModbus/rtu/mbrtu_m.c ****          * idle state.  */
+ 310:FreeModbus/rtu/mbrtu_m.c ****     case STATE_M_TX_IDLE:
+ 311:FreeModbus/rtu/mbrtu_m.c ****         /* enable receiver/disable transmitter. */
+ 312:FreeModbus/rtu/mbrtu_m.c ****         vMBMasterPortSerialEnable( TRUE, FALSE );
+ 313:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 314:FreeModbus/rtu/mbrtu_m.c **** 
+ 315:FreeModbus/rtu/mbrtu_m.c ****     case STATE_M_TX_XMIT:
+ 316:FreeModbus/rtu/mbrtu_m.c ****         /* check if we are finished. */
+ 317:FreeModbus/rtu/mbrtu_m.c ****         if( usMasterSndBufferCount != 0 )
+ 318:FreeModbus/rtu/mbrtu_m.c ****         {
+ 319:FreeModbus/rtu/mbrtu_m.c **** #if SEND_ALL_BYTES_IN_ONE_CALL > 0
+ 320:FreeModbus/rtu/mbrtu_m.c **** 			xMBMasterPortSerialPutBytes(pucMasterSndBufferCur, usMasterSndBufferCount);
+ 321:FreeModbus/rtu/mbrtu_m.c **** 			usMasterSndBufferCount = 0;
+ 322:FreeModbus/rtu/mbrtu_m.c **** #else
+ 323:FreeModbus/rtu/mbrtu_m.c ****             xMBMasterPortSerialPutByte( ( CHAR )*pucMasterSndBufferCur );
+ 324:FreeModbus/rtu/mbrtu_m.c ****             pucMasterSndBufferCur++;  /* next byte in sendbuffer. */
+ 325:FreeModbus/rtu/mbrtu_m.c ****             usMasterSndBufferCount--;
+ 326:FreeModbus/rtu/mbrtu_m.c **** #endif
+ 327:FreeModbus/rtu/mbrtu_m.c ****         }
+ 328:FreeModbus/rtu/mbrtu_m.c ****         else
+ 329:FreeModbus/rtu/mbrtu_m.c ****         {
+ 330:FreeModbus/rtu/mbrtu_m.c ****             xFrameIsBroadcast = ( ucMasterRTUSndBuf[MB_SER_PDU_ADDR_OFF] == MB_ADDRESS_BROADCAST ) 
+ 331:FreeModbus/rtu/mbrtu_m.c ****             /* Disable transmitter. This prevents another transmit buffer
+ 332:FreeModbus/rtu/mbrtu_m.c ****              * empty interrupt. */
+ 333:FreeModbus/rtu/mbrtu_m.c ****             vMBMasterPortSerialEnable( TRUE, FALSE );
+ 334:FreeModbus/rtu/mbrtu_m.c ****             eSndState = STATE_M_TX_XFWR;
+ 335:FreeModbus/rtu/mbrtu_m.c ****             /* If the frame is broadcast ,master will enable timer of convert delay,
+ 336:FreeModbus/rtu/mbrtu_m.c ****              * else master will enable timer of respond timeout. */
+ 337:FreeModbus/rtu/mbrtu_m.c ****             if ( xFrameIsBroadcast == TRUE )
+ 338:FreeModbus/rtu/mbrtu_m.c ****             {
+ 339:FreeModbus/rtu/mbrtu_m.c ****             	vMBMasterPortTimersConvertDelayEnable( );
+ 340:FreeModbus/rtu/mbrtu_m.c ****             }
+ 341:FreeModbus/rtu/mbrtu_m.c ****             else
+ 342:FreeModbus/rtu/mbrtu_m.c ****             {
+ 343:FreeModbus/rtu/mbrtu_m.c ****             	vMBMasterPortTimersRespondTimeoutEnable( );
+ 344:FreeModbus/rtu/mbrtu_m.c ****             }
+ 345:FreeModbus/rtu/mbrtu_m.c ****         }
+ 346:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 347:FreeModbus/rtu/mbrtu_m.c **** 
+ 348:FreeModbus/rtu/mbrtu_m.c ****     default:
+ 349:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 350:FreeModbus/rtu/mbrtu_m.c ****     }
+ 351:FreeModbus/rtu/mbrtu_m.c **** 
+ 352:FreeModbus/rtu/mbrtu_m.c ****     return xNeedPoll;
+ 606              		.loc 1 352 5 view .LVU141
+ 353:FreeModbus/rtu/mbrtu_m.c **** }
+ 607              		.loc 1 353 1 is_stmt 0 view .LVU142
+ 608 0010 0020     		movs	r0, #0
+ 609 0012 10BD     		pop	{r4, pc}
+ 610              	.L48:
+ 312:FreeModbus/rtu/mbrtu_m.c ****         break;
+ 611              		.loc 1 312 9 is_stmt 1 view .LVU143
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 19
+
+
+ 612 0014 0021     		movs	r1, #0
+ 613 0016 0120     		movs	r0, #1
+ 614 0018 FFF7FEFF 		bl	vMBMasterPortSerialEnable
+ 615              	.LVL49:
+ 313:FreeModbus/rtu/mbrtu_m.c **** 
+ 616              		.loc 1 313 9 view .LVU144
+ 617 001c F8E7     		b	.L50
+ 618              	.L49:
+ 317:FreeModbus/rtu/mbrtu_m.c ****         {
+ 619              		.loc 1 317 9 view .LVU145
+ 317:FreeModbus/rtu/mbrtu_m.c ****         {
+ 620              		.loc 1 317 36 is_stmt 0 view .LVU146
+ 621 001e 144B     		ldr	r3, .L55+4
+ 622 0020 1B88     		ldrh	r3, [r3]
+ 623 0022 9BB2     		uxth	r3, r3
+ 317:FreeModbus/rtu/mbrtu_m.c ****         {
+ 624              		.loc 1 317 11 view .LVU147
+ 625 0024 4BB1     		cbz	r3, .L51
+ 320:FreeModbus/rtu/mbrtu_m.c **** 			usMasterSndBufferCount = 0;
+ 626              		.loc 1 320 4 is_stmt 1 view .LVU148
+ 627 0026 124C     		ldr	r4, .L55+4
+ 628 0028 2188     		ldrh	r1, [r4]
+ 629 002a 89B2     		uxth	r1, r1
+ 630 002c 114B     		ldr	r3, .L55+8
+ 631 002e 1868     		ldr	r0, [r3]
+ 632 0030 FFF7FEFF 		bl	xMBMasterPortSerialPutBytes
+ 633              	.LVL50:
+ 321:FreeModbus/rtu/mbrtu_m.c **** #else
+ 634              		.loc 1 321 4 view .LVU149
+ 321:FreeModbus/rtu/mbrtu_m.c **** #else
+ 635              		.loc 1 321 27 is_stmt 0 view .LVU150
+ 636 0034 0023     		movs	r3, #0
+ 637 0036 2380     		strh	r3, [r4]	@ movhi
+ 638 0038 EAE7     		b	.L50
+ 639              	.L51:
+ 330:FreeModbus/rtu/mbrtu_m.c ****             /* Disable transmitter. This prevents another transmit buffer
+ 640              		.loc 1 330 13 is_stmt 1 view .LVU151
+ 330:FreeModbus/rtu/mbrtu_m.c ****             /* Disable transmitter. This prevents another transmit buffer
+ 641              		.loc 1 330 52 is_stmt 0 view .LVU152
+ 642 003a 0F4B     		ldr	r3, .L55+12
+ 643 003c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 330:FreeModbus/rtu/mbrtu_m.c ****             /* Disable transmitter. This prevents another transmit buffer
+ 644              		.loc 1 330 107 view .LVU153
+ 645 003e B3FA83F3 		clz	r3, r3
+ 646 0042 5B09     		lsrs	r3, r3, #5
+ 330:FreeModbus/rtu/mbrtu_m.c ****             /* Disable transmitter. This prevents another transmit buffer
+ 647              		.loc 1 330 31 view .LVU154
+ 648 0044 0D4C     		ldr	r4, .L55+16
+ 649 0046 2370     		strb	r3, [r4]
+ 333:FreeModbus/rtu/mbrtu_m.c ****             eSndState = STATE_M_TX_XFWR;
+ 650              		.loc 1 333 13 is_stmt 1 view .LVU155
+ 651 0048 0021     		movs	r1, #0
+ 652 004a 0120     		movs	r0, #1
+ 653 004c FFF7FEFF 		bl	vMBMasterPortSerialEnable
+ 654              	.LVL51:
+ 334:FreeModbus/rtu/mbrtu_m.c ****             /* If the frame is broadcast ,master will enable timer of convert delay,
+ 655              		.loc 1 334 13 view .LVU156
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 20
+
+
+ 334:FreeModbus/rtu/mbrtu_m.c ****             /* If the frame is broadcast ,master will enable timer of convert delay,
+ 656              		.loc 1 334 23 is_stmt 0 view .LVU157
+ 657 0050 064B     		ldr	r3, .L55
+ 658 0052 0222     		movs	r2, #2
+ 659 0054 1A70     		strb	r2, [r3]
+ 337:FreeModbus/rtu/mbrtu_m.c ****             {
+ 660              		.loc 1 337 13 is_stmt 1 view .LVU158
+ 337:FreeModbus/rtu/mbrtu_m.c ****             {
+ 661              		.loc 1 337 36 is_stmt 0 view .LVU159
+ 662 0056 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 663 0058 DBB2     		uxtb	r3, r3
+ 337:FreeModbus/rtu/mbrtu_m.c ****             {
+ 664              		.loc 1 337 16 view .LVU160
+ 665 005a 012B     		cmp	r3, #1
+ 666 005c 02D0     		beq	.L54
+ 343:FreeModbus/rtu/mbrtu_m.c ****             }
+ 667              		.loc 1 343 14 is_stmt 1 view .LVU161
+ 668 005e FFF7FEFF 		bl	vMBMasterPortTimersRespondTimeoutEnable
+ 669              	.LVL52:
+ 670 0062 D5E7     		b	.L50
+ 671              	.L54:
+ 339:FreeModbus/rtu/mbrtu_m.c ****             }
+ 672              		.loc 1 339 14 view .LVU162
+ 673 0064 FFF7FEFF 		bl	vMBMasterPortTimersConvertDelayEnable
+ 674              	.LVL53:
+ 675 0068 D2E7     		b	.L50
+ 676              	.L56:
+ 677 006a 00BF     		.align	2
+ 678              	.L55:
+ 679 006c 00000000 		.word	.LANCHOR6
+ 680 0070 00000000 		.word	.LANCHOR4
+ 681 0074 00000000 		.word	.LANCHOR3
+ 682 0078 00000000 		.word	.LANCHOR5
+ 683 007c 00000000 		.word	.LANCHOR7
+ 684              		.cfi_endproc
+ 685              	.LFE71:
+ 687              		.section	.text.xMBMasterRTUTimerExpired,"ax",%progbits
+ 688              		.align	1
+ 689              		.global	xMBMasterRTUTimerExpired
+ 690              		.syntax unified
+ 691              		.thumb
+ 692              		.thumb_func
+ 694              	xMBMasterRTUTimerExpired:
+ 695              	.LFB72:
+ 354:FreeModbus/rtu/mbrtu_m.c **** 
+ 355:FreeModbus/rtu/mbrtu_m.c **** BOOL
+ 356:FreeModbus/rtu/mbrtu_m.c **** xMBMasterRTUTimerExpired(void)
+ 357:FreeModbus/rtu/mbrtu_m.c **** {
+ 696              		.loc 1 357 1 view -0
+ 697              		.cfi_startproc
+ 698              		@ args = 0, pretend = 0, frame = 0
+ 699              		@ frame_needed = 0, uses_anonymous_args = 0
+ 700 0000 10B5     		push	{r4, lr}
+ 701              	.LCFI10:
+ 702              		.cfi_def_cfa_offset 8
+ 703              		.cfi_offset 4, -8
+ 704              		.cfi_offset 14, -4
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 21
+
+
+ 358:FreeModbus/rtu/mbrtu_m.c **** 	BOOL xNeedPoll = FALSE;
+ 705              		.loc 1 358 2 view .LVU164
+ 706              	.LVL54:
+ 359:FreeModbus/rtu/mbrtu_m.c **** 
+ 360:FreeModbus/rtu/mbrtu_m.c **** 	switch (eRcvState)
+ 707              		.loc 1 360 2 view .LVU165
+ 708 0002 204B     		ldr	r3, .L68
+ 709 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 710 0006 DBB2     		uxtb	r3, r3
+ 711 0008 022B     		cmp	r3, #2
+ 712 000a 1CD0     		beq	.L58
+ 713 000c 032B     		cmp	r3, #3
+ 714 000e 1FD0     		beq	.L59
+ 715 0010 A3B1     		cbz	r3, .L65
+ 716 0012 0024     		movs	r4, #0
+ 717              	.LVL55:
+ 718              	.L60:
+ 361:FreeModbus/rtu/mbrtu_m.c **** 	{
+ 362:FreeModbus/rtu/mbrtu_m.c **** 		/* Timer t35 expired. Startup phase is finished. */
+ 363:FreeModbus/rtu/mbrtu_m.c **** 	case STATE_M_RX_INIT:
+ 364:FreeModbus/rtu/mbrtu_m.c **** 		xNeedPoll = xMBMasterPortEventPost(EV_MASTER_READY);
+ 365:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 366:FreeModbus/rtu/mbrtu_m.c **** 
+ 367:FreeModbus/rtu/mbrtu_m.c **** 		/* A frame was received and t35 expired. Notify the listener that
+ 368:FreeModbus/rtu/mbrtu_m.c **** 		 * a new frame was received. */
+ 369:FreeModbus/rtu/mbrtu_m.c **** 	case STATE_M_RX_RCV:
+ 370:FreeModbus/rtu/mbrtu_m.c **** 		xNeedPoll = xMBMasterPortEventPost(EV_MASTER_FRAME_RECEIVED);
+ 371:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 372:FreeModbus/rtu/mbrtu_m.c **** 
+ 373:FreeModbus/rtu/mbrtu_m.c **** 		/* An error occured while receiving the frame. */
+ 374:FreeModbus/rtu/mbrtu_m.c **** 	case STATE_M_RX_ERROR:
+ 375:FreeModbus/rtu/mbrtu_m.c **** 		vMBMasterSetErrorType(EV_ERROR_RECEIVE_DATA);
+ 376:FreeModbus/rtu/mbrtu_m.c **** 		xNeedPoll = xMBMasterPortEventPost( EV_MASTER_ERROR_PROCESS );
+ 377:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 378:FreeModbus/rtu/mbrtu_m.c **** 
+ 379:FreeModbus/rtu/mbrtu_m.c **** 		/* Function called in an illegal state. */
+ 380:FreeModbus/rtu/mbrtu_m.c **** 	default:
+ 381:FreeModbus/rtu/mbrtu_m.c **** 		assert_param(
+ 382:FreeModbus/rtu/mbrtu_m.c **** 				( eRcvState == STATE_M_RX_INIT ) || ( eRcvState == STATE_M_RX_RCV ) ||
+ 383:FreeModbus/rtu/mbrtu_m.c **** 				( eRcvState == STATE_M_RX_ERROR ) || ( eRcvState == STATE_M_RX_IDLE ));
+ 384:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 385:FreeModbus/rtu/mbrtu_m.c **** 	}
+ 386:FreeModbus/rtu/mbrtu_m.c **** 	eRcvState = STATE_M_RX_IDLE;
+ 719              		.loc 1 386 2 view .LVU166
+ 720              		.loc 1 386 12 is_stmt 0 view .LVU167
+ 721 0014 1B4B     		ldr	r3, .L68
+ 722 0016 0122     		movs	r2, #1
+ 723 0018 1A70     		strb	r2, [r3]
+ 387:FreeModbus/rtu/mbrtu_m.c **** 
+ 388:FreeModbus/rtu/mbrtu_m.c **** 	switch (eSndState)
+ 724              		.loc 1 388 2 is_stmt 1 view .LVU168
+ 725 001a 1B4B     		ldr	r3, .L68+4
+ 726 001c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 727 001e DBB2     		uxtb	r3, r3
+ 728 0020 022B     		cmp	r3, #2
+ 729 0022 1DD0     		beq	.L66
+ 730              	.L61:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 22
+
+
+ 389:FreeModbus/rtu/mbrtu_m.c **** 	{
+ 390:FreeModbus/rtu/mbrtu_m.c **** 		/* A frame was send finish and convert delay or respond timeout expired.
+ 391:FreeModbus/rtu/mbrtu_m.c **** 		 * If the frame is broadcast,The master will idle,and if the frame is not
+ 392:FreeModbus/rtu/mbrtu_m.c **** 		 * broadcast.Notify the listener process error.*/
+ 393:FreeModbus/rtu/mbrtu_m.c **** 	case STATE_M_TX_XFWR:
+ 394:FreeModbus/rtu/mbrtu_m.c **** 		if ( xFrameIsBroadcast == FALSE ) {
+ 395:FreeModbus/rtu/mbrtu_m.c **** 			vMBMasterSetErrorType(EV_ERROR_RESPOND_TIMEOUT);
+ 396:FreeModbus/rtu/mbrtu_m.c **** 			xNeedPoll = xMBMasterPortEventPost(EV_MASTER_ERROR_PROCESS);
+ 397:FreeModbus/rtu/mbrtu_m.c **** 		}
+ 398:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 399:FreeModbus/rtu/mbrtu_m.c **** 		/* Function called in an illegal state. */
+ 400:FreeModbus/rtu/mbrtu_m.c **** 	default:
+ 401:FreeModbus/rtu/mbrtu_m.c **** 		assert_param(
+ 402:FreeModbus/rtu/mbrtu_m.c **** 				( eSndState == STATE_M_TX_XFWR ) || ( eSndState == STATE_M_TX_IDLE ));
+ 403:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 404:FreeModbus/rtu/mbrtu_m.c **** 	}
+ 405:FreeModbus/rtu/mbrtu_m.c **** 	eSndState = STATE_M_TX_IDLE;
+ 731              		.loc 1 405 2 view .LVU169
+ 732              		.loc 1 405 12 is_stmt 0 view .LVU170
+ 733 0024 184B     		ldr	r3, .L68+4
+ 734 0026 0022     		movs	r2, #0
+ 735 0028 1A70     		strb	r2, [r3]
+ 406:FreeModbus/rtu/mbrtu_m.c **** 
+ 407:FreeModbus/rtu/mbrtu_m.c **** 	vMBMasterPortTimersDisable( );
+ 736              		.loc 1 407 2 is_stmt 1 view .LVU171
+ 737 002a FFF7FEFF 		bl	vMBMasterPortTimersDisable
+ 738              	.LVL56:
+ 408:FreeModbus/rtu/mbrtu_m.c **** 	/* If timer mode is convert delay, the master event then turns EV_MASTER_EXECUTE status. */
+ 409:FreeModbus/rtu/mbrtu_m.c **** 	if (eMasterCurTimerMode == MB_TMODE_CONVERT_DELAY) {
+ 739              		.loc 1 409 2 view .LVU172
+ 740              		.loc 1 409 26 is_stmt 0 view .LVU173
+ 741 002e 174B     		ldr	r3, .L68+8
+ 742 0030 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 743 0032 DBB2     		uxtb	r3, r3
+ 744              		.loc 1 409 5 view .LVU174
+ 745 0034 022B     		cmp	r3, #2
+ 746 0036 1FD0     		beq	.L67
+ 747              	.L62:
+ 410:FreeModbus/rtu/mbrtu_m.c **** 		xNeedPoll = xMBMasterPortEventPost( EV_MASTER_EXECUTE );
+ 411:FreeModbus/rtu/mbrtu_m.c **** 	}
+ 412:FreeModbus/rtu/mbrtu_m.c **** 
+ 413:FreeModbus/rtu/mbrtu_m.c **** 	return xNeedPoll;
+ 748              		.loc 1 413 2 is_stmt 1 view .LVU175
+ 414:FreeModbus/rtu/mbrtu_m.c **** }
+ 749              		.loc 1 414 1 is_stmt 0 view .LVU176
+ 750 0038 2046     		mov	r0, r4
+ 751 003a 10BD     		pop	{r4, pc}
+ 752              	.LVL57:
+ 753              	.L65:
+ 364:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 754              		.loc 1 364 3 is_stmt 1 view .LVU177
+ 364:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 755              		.loc 1 364 15 is_stmt 0 view .LVU178
+ 756 003c 0120     		movs	r0, #1
+ 757 003e FFF7FEFF 		bl	xMBMasterPortEventPost
+ 758              	.LVL58:
+ 759 0042 0446     		mov	r4, r0
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 23
+
+
+ 760              	.LVL59:
+ 365:FreeModbus/rtu/mbrtu_m.c **** 
+ 761              		.loc 1 365 3 is_stmt 1 view .LVU179
+ 762 0044 E6E7     		b	.L60
+ 763              	.LVL60:
+ 764              	.L58:
+ 370:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 765              		.loc 1 370 3 view .LVU180
+ 370:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 766              		.loc 1 370 15 is_stmt 0 view .LVU181
+ 767 0046 0220     		movs	r0, #2
+ 768 0048 FFF7FEFF 		bl	xMBMasterPortEventPost
+ 769              	.LVL61:
+ 770 004c 0446     		mov	r4, r0
+ 771              	.LVL62:
+ 371:FreeModbus/rtu/mbrtu_m.c **** 
+ 772              		.loc 1 371 3 is_stmt 1 view .LVU182
+ 773 004e E1E7     		b	.L60
+ 774              	.LVL63:
+ 775              	.L59:
+ 375:FreeModbus/rtu/mbrtu_m.c **** 		xNeedPoll = xMBMasterPortEventPost( EV_MASTER_ERROR_PROCESS );
+ 776              		.loc 1 375 3 view .LVU183
+ 777 0050 0120     		movs	r0, #1
+ 778 0052 FFF7FEFF 		bl	vMBMasterSetErrorType
+ 779              	.LVL64:
+ 376:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 780              		.loc 1 376 3 view .LVU184
+ 376:FreeModbus/rtu/mbrtu_m.c **** 		break;
+ 781              		.loc 1 376 15 is_stmt 0 view .LVU185
+ 782 0056 1020     		movs	r0, #16
+ 783 0058 FFF7FEFF 		bl	xMBMasterPortEventPost
+ 784              	.LVL65:
+ 785 005c 0446     		mov	r4, r0
+ 786              	.LVL66:
+ 377:FreeModbus/rtu/mbrtu_m.c **** 
+ 787              		.loc 1 377 3 is_stmt 1 view .LVU186
+ 788 005e D9E7     		b	.L60
+ 789              	.L66:
+ 394:FreeModbus/rtu/mbrtu_m.c **** 			vMBMasterSetErrorType(EV_ERROR_RESPOND_TIMEOUT);
+ 790              		.loc 1 394 3 view .LVU187
+ 394:FreeModbus/rtu/mbrtu_m.c **** 			vMBMasterSetErrorType(EV_ERROR_RESPOND_TIMEOUT);
+ 791              		.loc 1 394 26 is_stmt 0 view .LVU188
+ 792 0060 0B4B     		ldr	r3, .L68+12
+ 793 0062 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 394:FreeModbus/rtu/mbrtu_m.c **** 			vMBMasterSetErrorType(EV_ERROR_RESPOND_TIMEOUT);
+ 794              		.loc 1 394 6 view .LVU189
+ 795 0064 002B     		cmp	r3, #0
+ 796 0066 DDD1     		bne	.L61
+ 395:FreeModbus/rtu/mbrtu_m.c **** 			xNeedPoll = xMBMasterPortEventPost(EV_MASTER_ERROR_PROCESS);
+ 797              		.loc 1 395 4 is_stmt 1 view .LVU190
+ 798 0068 0020     		movs	r0, #0
+ 799 006a FFF7FEFF 		bl	vMBMasterSetErrorType
+ 800              	.LVL67:
+ 396:FreeModbus/rtu/mbrtu_m.c **** 		}
+ 801              		.loc 1 396 4 view .LVU191
+ 396:FreeModbus/rtu/mbrtu_m.c **** 		}
+ 802              		.loc 1 396 16 is_stmt 0 view .LVU192
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 24
+
+
+ 803 006e 1020     		movs	r0, #16
+ 804 0070 FFF7FEFF 		bl	xMBMasterPortEventPost
+ 805              	.LVL68:
+ 806 0074 0446     		mov	r4, r0
+ 807              	.LVL69:
+ 396:FreeModbus/rtu/mbrtu_m.c **** 		}
+ 808              		.loc 1 396 16 view .LVU193
+ 809 0076 D5E7     		b	.L61
+ 810              	.L67:
+ 410:FreeModbus/rtu/mbrtu_m.c **** 	}
+ 811              		.loc 1 410 3 is_stmt 1 view .LVU194
+ 410:FreeModbus/rtu/mbrtu_m.c **** 	}
+ 812              		.loc 1 410 15 is_stmt 0 view .LVU195
+ 813 0078 0420     		movs	r0, #4
+ 814 007a FFF7FEFF 		bl	xMBMasterPortEventPost
+ 815              	.LVL70:
+ 816 007e 0446     		mov	r4, r0
+ 817              	.LVL71:
+ 410:FreeModbus/rtu/mbrtu_m.c **** 	}
+ 818              		.loc 1 410 15 view .LVU196
+ 819 0080 DAE7     		b	.L62
+ 820              	.L69:
+ 821 0082 00BF     		.align	2
+ 822              	.L68:
+ 823 0084 00000000 		.word	.LANCHOR0
+ 824 0088 00000000 		.word	.LANCHOR6
+ 825 008c 00000000 		.word	.LANCHOR8
+ 826 0090 00000000 		.word	.LANCHOR7
+ 827              		.cfi_endproc
+ 828              	.LFE72:
+ 830              		.section	.text.vMBMasterGetRTUSndBuf,"ax",%progbits
+ 831              		.align	1
+ 832              		.global	vMBMasterGetRTUSndBuf
+ 833              		.syntax unified
+ 834              		.thumb
+ 835              		.thumb_func
+ 837              	vMBMasterGetRTUSndBuf:
+ 838              	.LVL72:
+ 839              	.LFB73:
+ 415:FreeModbus/rtu/mbrtu_m.c **** 
+ 416:FreeModbus/rtu/mbrtu_m.c **** /* Get Modbus Master send RTU's buffer address pointer.*/
+ 417:FreeModbus/rtu/mbrtu_m.c **** void vMBMasterGetRTUSndBuf( UCHAR ** pucFrame )
+ 418:FreeModbus/rtu/mbrtu_m.c **** {
+ 840              		.loc 1 418 1 is_stmt 1 view -0
+ 841              		.cfi_startproc
+ 842              		@ args = 0, pretend = 0, frame = 0
+ 843              		@ frame_needed = 0, uses_anonymous_args = 0
+ 844              		@ link register save eliminated.
+ 419:FreeModbus/rtu/mbrtu_m.c **** 	*pucFrame = ( UCHAR * ) ucMasterRTUSndBuf;
+ 845              		.loc 1 419 2 view .LVU198
+ 846              		.loc 1 419 12 is_stmt 0 view .LVU199
+ 847 0000 014B     		ldr	r3, .L71
+ 848 0002 0360     		str	r3, [r0]
+ 420:FreeModbus/rtu/mbrtu_m.c **** }
+ 849              		.loc 1 420 1 view .LVU200
+ 850 0004 7047     		bx	lr
+ 851              	.L72:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 25
+
+
+ 852 0006 00BF     		.align	2
+ 853              	.L71:
+ 854 0008 00000000 		.word	.LANCHOR5
+ 855              		.cfi_endproc
+ 856              	.LFE73:
+ 858              		.section	.text.vMBMasterGetPDUSndBuf,"ax",%progbits
+ 859              		.align	1
+ 860              		.global	vMBMasterGetPDUSndBuf
+ 861              		.syntax unified
+ 862              		.thumb
+ 863              		.thumb_func
+ 865              	vMBMasterGetPDUSndBuf:
+ 866              	.LVL73:
+ 867              	.LFB74:
+ 421:FreeModbus/rtu/mbrtu_m.c **** 
+ 422:FreeModbus/rtu/mbrtu_m.c **** /* Get Modbus Master send PDU's buffer address pointer.*/
+ 423:FreeModbus/rtu/mbrtu_m.c **** void vMBMasterGetPDUSndBuf( UCHAR ** pucFrame )
+ 424:FreeModbus/rtu/mbrtu_m.c **** {
+ 868              		.loc 1 424 1 is_stmt 1 view -0
+ 869              		.cfi_startproc
+ 870              		@ args = 0, pretend = 0, frame = 0
+ 871              		@ frame_needed = 0, uses_anonymous_args = 0
+ 872              		@ link register save eliminated.
+ 425:FreeModbus/rtu/mbrtu_m.c **** 	*pucFrame = ( UCHAR * ) &ucMasterRTUSndBuf[MB_SER_PDU_PDU_OFF];
+ 873              		.loc 1 425 2 view .LVU202
+ 874              		.loc 1 425 12 is_stmt 0 view .LVU203
+ 875 0000 014B     		ldr	r3, .L74
+ 876 0002 0360     		str	r3, [r0]
+ 426:FreeModbus/rtu/mbrtu_m.c **** }
+ 877              		.loc 1 426 1 view .LVU204
+ 878 0004 7047     		bx	lr
+ 879              	.L75:
+ 880 0006 00BF     		.align	2
+ 881              	.L74:
+ 882 0008 01000000 		.word	.LANCHOR5+1
+ 883              		.cfi_endproc
+ 884              	.LFE74:
+ 886              		.section	.text.vMBMasterSetPDUSndLength,"ax",%progbits
+ 887              		.align	1
+ 888              		.global	vMBMasterSetPDUSndLength
+ 889              		.syntax unified
+ 890              		.thumb
+ 891              		.thumb_func
+ 893              	vMBMasterSetPDUSndLength:
+ 894              	.LVL74:
+ 895              	.LFB75:
+ 427:FreeModbus/rtu/mbrtu_m.c **** 
+ 428:FreeModbus/rtu/mbrtu_m.c **** /* Set Modbus Master send PDU's buffer length.*/
+ 429:FreeModbus/rtu/mbrtu_m.c **** void vMBMasterSetPDUSndLength( USHORT SendPDULength )
+ 430:FreeModbus/rtu/mbrtu_m.c **** {
+ 896              		.loc 1 430 1 is_stmt 1 view -0
+ 897              		.cfi_startproc
+ 898              		@ args = 0, pretend = 0, frame = 0
+ 899              		@ frame_needed = 0, uses_anonymous_args = 0
+ 900              		@ link register save eliminated.
+ 431:FreeModbus/rtu/mbrtu_m.c **** 	usMasterSendPDULength = SendPDULength;
+ 901              		.loc 1 431 2 view .LVU206
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 26
+
+
+ 902              		.loc 1 431 24 is_stmt 0 view .LVU207
+ 903 0000 014B     		ldr	r3, .L77
+ 904 0002 1880     		strh	r0, [r3]	@ movhi
+ 432:FreeModbus/rtu/mbrtu_m.c **** }
+ 905              		.loc 1 432 1 view .LVU208
+ 906 0004 7047     		bx	lr
+ 907              	.L78:
+ 908 0006 00BF     		.align	2
+ 909              	.L77:
+ 910 0008 00000000 		.word	.LANCHOR9
+ 911              		.cfi_endproc
+ 912              	.LFE75:
+ 914              		.section	.text.usMBMasterGetPDUSndLength,"ax",%progbits
+ 915              		.align	1
+ 916              		.global	usMBMasterGetPDUSndLength
+ 917              		.syntax unified
+ 918              		.thumb
+ 919              		.thumb_func
+ 921              	usMBMasterGetPDUSndLength:
+ 922              	.LFB76:
+ 433:FreeModbus/rtu/mbrtu_m.c **** 
+ 434:FreeModbus/rtu/mbrtu_m.c **** /* Get Modbus Master send PDU's buffer length.*/
+ 435:FreeModbus/rtu/mbrtu_m.c **** USHORT usMBMasterGetPDUSndLength( void )
+ 436:FreeModbus/rtu/mbrtu_m.c **** {
+ 923              		.loc 1 436 1 is_stmt 1 view -0
+ 924              		.cfi_startproc
+ 925              		@ args = 0, pretend = 0, frame = 0
+ 926              		@ frame_needed = 0, uses_anonymous_args = 0
+ 927              		@ link register save eliminated.
+ 437:FreeModbus/rtu/mbrtu_m.c **** 	return usMasterSendPDULength;
+ 928              		.loc 1 437 2 view .LVU210
+ 929              		.loc 1 437 9 is_stmt 0 view .LVU211
+ 930 0000 014B     		ldr	r3, .L80
+ 931 0002 1888     		ldrh	r0, [r3]
+ 438:FreeModbus/rtu/mbrtu_m.c **** }
+ 932              		.loc 1 438 1 view .LVU212
+ 933 0004 80B2     		uxth	r0, r0
+ 934 0006 7047     		bx	lr
+ 935              	.L81:
+ 936              		.align	2
+ 937              	.L80:
+ 938 0008 00000000 		.word	.LANCHOR9
+ 939              		.cfi_endproc
+ 940              	.LFE76:
+ 942              		.section	.text.vMBMasterSetCurTimerMode,"ax",%progbits
+ 943              		.align	1
+ 944              		.global	vMBMasterSetCurTimerMode
+ 945              		.syntax unified
+ 946              		.thumb
+ 947              		.thumb_func
+ 949              	vMBMasterSetCurTimerMode:
+ 950              	.LVL75:
+ 951              	.LFB77:
+ 439:FreeModbus/rtu/mbrtu_m.c **** 
+ 440:FreeModbus/rtu/mbrtu_m.c **** /* Set Modbus Master current timer mode.*/
+ 441:FreeModbus/rtu/mbrtu_m.c **** void vMBMasterSetCurTimerMode( eMBMasterTimerMode eMBTimerMode )
+ 442:FreeModbus/rtu/mbrtu_m.c **** {
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 27
+
+
+ 952              		.loc 1 442 1 is_stmt 1 view -0
+ 953              		.cfi_startproc
+ 954              		@ args = 0, pretend = 0, frame = 0
+ 955              		@ frame_needed = 0, uses_anonymous_args = 0
+ 956              		@ link register save eliminated.
+ 443:FreeModbus/rtu/mbrtu_m.c **** 	eMasterCurTimerMode = eMBTimerMode;
+ 957              		.loc 1 443 2 view .LVU214
+ 958              		.loc 1 443 22 is_stmt 0 view .LVU215
+ 959 0000 014B     		ldr	r3, .L83
+ 960 0002 1870     		strb	r0, [r3]
+ 444:FreeModbus/rtu/mbrtu_m.c **** }
+ 961              		.loc 1 444 1 view .LVU216
+ 962 0004 7047     		bx	lr
+ 963              	.L84:
+ 964 0006 00BF     		.align	2
+ 965              	.L83:
+ 966 0008 00000000 		.word	.LANCHOR8
+ 967              		.cfi_endproc
+ 968              	.LFE77:
+ 970              		.section	.text.xMBMasterRequestIsBroadcast,"ax",%progbits
+ 971              		.align	1
+ 972              		.global	xMBMasterRequestIsBroadcast
+ 973              		.syntax unified
+ 974              		.thumb
+ 975              		.thumb_func
+ 977              	xMBMasterRequestIsBroadcast:
+ 978              	.LFB78:
+ 445:FreeModbus/rtu/mbrtu_m.c **** 
+ 446:FreeModbus/rtu/mbrtu_m.c **** /* The master request is broadcast? */
+ 447:FreeModbus/rtu/mbrtu_m.c **** BOOL xMBMasterRequestIsBroadcast( void )
+ 448:FreeModbus/rtu/mbrtu_m.c **** {
+ 979              		.loc 1 448 1 is_stmt 1 view -0
+ 980              		.cfi_startproc
+ 981              		@ args = 0, pretend = 0, frame = 0
+ 982              		@ frame_needed = 0, uses_anonymous_args = 0
+ 983              		@ link register save eliminated.
+ 449:FreeModbus/rtu/mbrtu_m.c **** 	return xFrameIsBroadcast;
+ 984              		.loc 1 449 2 view .LVU218
+ 985              		.loc 1 449 9 is_stmt 0 view .LVU219
+ 986 0000 014B     		ldr	r3, .L86
+ 987 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 450:FreeModbus/rtu/mbrtu_m.c **** }
+ 988              		.loc 1 450 1 view .LVU220
+ 989 0004 7047     		bx	lr
+ 990              	.L87:
+ 991 0006 00BF     		.align	2
+ 992              	.L86:
+ 993 0008 00000000 		.word	.LANCHOR7
+ 994              		.cfi_endproc
+ 995              	.LFE78:
+ 997              		.section	.bss.eMasterCurTimerMode,"aw",%nobits
+ 998              		.set	.LANCHOR8,. + 0
+ 1001              	eMasterCurTimerMode:
+ 1002 0000 00       		.space	1
+ 1003              		.section	.bss.eRcvState,"aw",%nobits
+ 1004              		.set	.LANCHOR0,. + 0
+ 1007              	eRcvState:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 28
+
+
+ 1008 0000 00       		.space	1
+ 1009              		.section	.bss.eSndState,"aw",%nobits
+ 1010              		.set	.LANCHOR6,. + 0
+ 1013              	eSndState:
+ 1014 0000 00       		.space	1
+ 1015              		.section	.bss.pucMasterSndBufferCur,"aw",%nobits
+ 1016              		.align	2
+ 1017              		.set	.LANCHOR3,. + 0
+ 1020              	pucMasterSndBufferCur:
+ 1021 0000 00000000 		.space	4
+ 1022              		.section	.bss.ucMasterRTURcvBuf,"aw",%nobits
+ 1023              		.align	2
+ 1024              		.set	.LANCHOR2,. + 0
+ 1027              	ucMasterRTURcvBuf:
+ 1028 0000 00000000 		.space	256
+ 1028      00000000 
+ 1028      00000000 
+ 1028      00000000 
+ 1028      00000000 
+ 1029              		.section	.bss.ucMasterRTUSndBuf,"aw",%nobits
+ 1030              		.align	2
+ 1031              		.set	.LANCHOR5,. + 0
+ 1034              	ucMasterRTUSndBuf:
+ 1035 0000 00000000 		.space	253
+ 1035      00000000 
+ 1035      00000000 
+ 1035      00000000 
+ 1035      00000000 
+ 1036              		.section	.bss.usMasterRcvBufferPos,"aw",%nobits
+ 1037              		.align	1
+ 1038              		.set	.LANCHOR1,. + 0
+ 1041              	usMasterRcvBufferPos:
+ 1042 0000 0000     		.space	2
+ 1043              		.section	.bss.usMasterSendPDULength,"aw",%nobits
+ 1044              		.align	1
+ 1045              		.set	.LANCHOR9,. + 0
+ 1048              	usMasterSendPDULength:
+ 1049 0000 0000     		.space	2
+ 1050              		.section	.bss.usMasterSndBufferCount,"aw",%nobits
+ 1051              		.align	1
+ 1052              		.set	.LANCHOR4,. + 0
+ 1055              	usMasterSndBufferCount:
+ 1056 0000 0000     		.space	2
+ 1057              		.section	.bss.xFrameIsBroadcast,"aw",%nobits
+ 1058              		.set	.LANCHOR7,. + 0
+ 1061              	xFrameIsBroadcast:
+ 1062 0000 00       		.space	1
+ 1063              		.text
+ 1064              	.Letext0:
+ 1065              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 1066              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 1067              		.file 4 "FreeModbus/port/port.h"
+ 1068              		.file 5 "FreeModbus/include/mbport.h"
+ 1069              		.file 6 "FreeModbus/include/mb.h"
+ 1070              		.file 7 "FreeModbus/include/mb_m.h"
+ 1071              		.file 8 "FreeModbus/port/portcritical.h"
+ 1072              		.file 9 "FreeModbus/rtu/mbcrc.h"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 29
+
+
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 30
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mbrtu_m.c
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:18     .text.eMBMasterRTUInit:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:24     .text.eMBMasterRTUInit:00000000 eMBMasterRTUInit
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:112    .text.eMBMasterRTUInit:0000004c $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:117    .text.eMBMasterRTUStart:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:123    .text.eMBMasterRTUStart:00000000 eMBMasterRTUStart
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:157    .text.eMBMasterRTUStart:0000001c $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:162    .text.eMBMasterRTUStop:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:168    .text.eMBMasterRTUStop:00000000 eMBMasterRTUStop
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:199    .text.eMBMasterRTUReceive:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:205    .text.eMBMasterRTUReceive:00000000 eMBMasterRTUReceive
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:291    .text.eMBMasterRTUReceive:0000004c $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:297    .text.eMBMasterRTUSend:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:303    .text.eMBMasterRTUSend:00000000 eMBMasterRTUSend
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:426    .text.eMBMasterRTUSend:00000088 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:435    .text.xMBMasterRTUReceiveFSM:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:441    .text.xMBMasterRTUReceiveFSM:00000000 xMBMasterRTUReceiveFSM
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:471    .text.xMBMasterRTUReceiveFSM:0000001a $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:475    .text.xMBMasterRTUReceiveFSM:0000001e $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:570    .text.xMBMasterRTUReceiveFSM:00000088 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:578    .text.xMBMasterRTUTransmitFSM:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:584    .text.xMBMasterRTUTransmitFSM:00000000 xMBMasterRTUTransmitFSM
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:679    .text.xMBMasterRTUTransmitFSM:0000006c $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:688    .text.xMBMasterRTUTimerExpired:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:694    .text.xMBMasterRTUTimerExpired:00000000 xMBMasterRTUTimerExpired
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:823    .text.xMBMasterRTUTimerExpired:00000084 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:831    .text.vMBMasterGetRTUSndBuf:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:837    .text.vMBMasterGetRTUSndBuf:00000000 vMBMasterGetRTUSndBuf
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:854    .text.vMBMasterGetRTUSndBuf:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:859    .text.vMBMasterGetPDUSndBuf:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:865    .text.vMBMasterGetPDUSndBuf:00000000 vMBMasterGetPDUSndBuf
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:882    .text.vMBMasterGetPDUSndBuf:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:887    .text.vMBMasterSetPDUSndLength:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:893    .text.vMBMasterSetPDUSndLength:00000000 vMBMasterSetPDUSndLength
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:910    .text.vMBMasterSetPDUSndLength:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:915    .text.usMBMasterGetPDUSndLength:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:921    .text.usMBMasterGetPDUSndLength:00000000 usMBMasterGetPDUSndLength
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:938    .text.usMBMasterGetPDUSndLength:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:943    .text.vMBMasterSetCurTimerMode:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:949    .text.vMBMasterSetCurTimerMode:00000000 vMBMasterSetCurTimerMode
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:966    .text.vMBMasterSetCurTimerMode:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:971    .text.xMBMasterRequestIsBroadcast:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:977    .text.xMBMasterRequestIsBroadcast:00000000 xMBMasterRequestIsBroadcast
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:993    .text.xMBMasterRequestIsBroadcast:00000008 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1001   .bss.eMasterCurTimerMode:00000000 eMasterCurTimerMode
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1002   .bss.eMasterCurTimerMode:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1007   .bss.eRcvState:00000000 eRcvState
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1008   .bss.eRcvState:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1013   .bss.eSndState:00000000 eSndState
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1014   .bss.eSndState:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1016   .bss.pucMasterSndBufferCur:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1020   .bss.pucMasterSndBufferCur:00000000 pucMasterSndBufferCur
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1023   .bss.ucMasterRTURcvBuf:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1027   .bss.ucMasterRTURcvBuf:00000000 ucMasterRTURcvBuf
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1030   .bss.ucMasterRTUSndBuf:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1034   .bss.ucMasterRTUSndBuf:00000000 ucMasterRTUSndBuf
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s 			page 31
+
+
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1037   .bss.usMasterRcvBufferPos:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1041   .bss.usMasterRcvBufferPos:00000000 usMasterRcvBufferPos
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1044   .bss.usMasterSendPDULength:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1048   .bss.usMasterSendPDULength:00000000 usMasterSendPDULength
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1051   .bss.usMasterSndBufferCount:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1055   .bss.usMasterSndBufferCount:00000000 usMasterSndBufferCount
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1061   .bss.xFrameIsBroadcast:00000000 xFrameIsBroadcast
+C:\Users\BLACK_~1\AppData\Local\Temp\ccMjA0On.s:1062   .bss.xFrameIsBroadcast:00000000 $d
+
+UNDEFINED SYMBOLS
+__critical_enter
+xMBMasterPortSerialInit
+__critical_exit
+xMBMasterPortTimersInit
+vMBMasterPortSerialEnable
+vMBMasterPortTimersT35Enable
+vMBMasterPortTimersDisable
+usMBCRC16
+xMBMasterPortSerialGetByte
+xMBMasterPortSerialPutBytes
+vMBMasterPortTimersRespondTimeoutEnable
+vMBMasterPortTimersConvertDelayEnable
+xMBMasterPortEventPost
+vMBMasterSetErrorType

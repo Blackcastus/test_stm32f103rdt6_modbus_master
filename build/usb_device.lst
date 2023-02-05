@@ -1,0 +1,348 @@
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"usb_device.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.USB_GPIO_Init,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  23              	USB_GPIO_Init:
+  24              	.LFB69:
+  25              		.file 1 "Core/Src/usb_device.c"
+   1:Core/Src/usb_device.c **** /*
+   2:Core/Src/usb_device.c **** * @Author: nhantt
+   3:Core/Src/usb_device.c **** * @Date:   2020-03-03
+   4:Core/Src/usb_device.c **** * @Last Modified by:   nhantt
+   5:Core/Src/usb_device.c **** * @Last Modified time: 2020-03-03
+   6:Core/Src/usb_device.c **** */
+   7:Core/Src/usb_device.c **** 
+   8:Core/Src/usb_device.c **** #include "usb_device.h"
+   9:Core/Src/usb_device.c **** #include "usbd_core.h"
+  10:Core/Src/usb_device.c **** #include "usbd_desc.h"
+  11:Core/Src/usb_device.c **** #include "usbd_cdc.h"
+  12:Core/Src/usb_device.c **** #include "usbd_cdc_if.h"
+  13:Core/Src/usb_device.c **** 
+  14:Core/Src/usb_device.c **** USBD_HandleTypeDef hUsbDeviceFS;
+  15:Core/Src/usb_device.c **** 
+  16:Core/Src/usb_device.c **** static void USB_GPIO_Init(void);
+  17:Core/Src/usb_device.c **** 
+  18:Core/Src/usb_device.c **** void MX_USB_DEVICE_Init(void)
+  19:Core/Src/usb_device.c **** {
+  20:Core/Src/usb_device.c ****   USB_GPIO_Init();
+  21:Core/Src/usb_device.c ****   USB_DISABLE();
+  22:Core/Src/usb_device.c ****   HAL_Delay(10);
+  23:Core/Src/usb_device.c ****   if (USBD_Init(&hUsbDeviceFS, &FS_Desc, DEVICE_FS) != USBD_OK)
+  24:Core/Src/usb_device.c ****   {
+  25:Core/Src/usb_device.c ****     Error_Handler();
+  26:Core/Src/usb_device.c ****   }
+  27:Core/Src/usb_device.c ****   if (USBD_RegisterClass(&hUsbDeviceFS, &USBD_CDC) != USBD_OK)
+  28:Core/Src/usb_device.c ****   {
+  29:Core/Src/usb_device.c ****     Error_Handler();
+  30:Core/Src/usb_device.c ****   }
+  31:Core/Src/usb_device.c ****   if (USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS) != USBD_OK)
+  32:Core/Src/usb_device.c ****   {
+  33:Core/Src/usb_device.c ****     Error_Handler();
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s 			page 2
+
+
+  34:Core/Src/usb_device.c ****   }
+  35:Core/Src/usb_device.c ****   if (USBD_Start(&hUsbDeviceFS) != USBD_OK)
+  36:Core/Src/usb_device.c ****   {
+  37:Core/Src/usb_device.c ****     Error_Handler();
+  38:Core/Src/usb_device.c ****   }
+  39:Core/Src/usb_device.c ****   USB_ENABLE();
+  40:Core/Src/usb_device.c **** }
+  41:Core/Src/usb_device.c **** 
+  42:Core/Src/usb_device.c **** static void USB_GPIO_Init(void)
+  43:Core/Src/usb_device.c **** {
+  26              		.loc 1 43 1 view -0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 24
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30 0000 30B5     		push	{r4, r5, lr}
+  31              	.LCFI0:
+  32              		.cfi_def_cfa_offset 12
+  33              		.cfi_offset 4, -12
+  34              		.cfi_offset 5, -8
+  35              		.cfi_offset 14, -4
+  36 0002 87B0     		sub	sp, sp, #28
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_offset 40
+  44:Core/Src/usb_device.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  39              		.loc 1 44 3 view .LVU1
+  40              		.loc 1 44 20 is_stmt 0 view .LVU2
+  41 0004 0024     		movs	r4, #0
+  42 0006 0294     		str	r4, [sp, #8]
+  43 0008 0394     		str	r4, [sp, #12]
+  44 000a 0494     		str	r4, [sp, #16]
+  45 000c 0594     		str	r4, [sp, #20]
+  45:Core/Src/usb_device.c **** 
+  46:Core/Src/usb_device.c ****   USB_EN_CLOCK();
+  46              		.loc 1 46 3 is_stmt 1 view .LVU3
+  47              	.LBB2:
+  48              		.loc 1 46 3 view .LVU4
+  49              		.loc 1 46 3 view .LVU5
+  50 000e 0F4B     		ldr	r3, .L3
+  51 0010 9A69     		ldr	r2, [r3, #24]
+  52 0012 42F00402 		orr	r2, r2, #4
+  53 0016 9A61     		str	r2, [r3, #24]
+  54              		.loc 1 46 3 view .LVU6
+  55 0018 9B69     		ldr	r3, [r3, #24]
+  56 001a 03F00403 		and	r3, r3, #4
+  57 001e 0193     		str	r3, [sp, #4]
+  58              		.loc 1 46 3 view .LVU7
+  59 0020 019B     		ldr	r3, [sp, #4]
+  60              	.LBE2:
+  61              		.loc 1 46 3 view .LVU8
+  47:Core/Src/usb_device.c **** 
+  48:Core/Src/usb_device.c ****   HAL_GPIO_WritePin(USB_EN_PORT, USB_EN_PIN, GPIO_PIN_RESET);
+  62              		.loc 1 48 3 view .LVU9
+  63 0022 0B4D     		ldr	r5, .L3+4
+  64 0024 2246     		mov	r2, r4
+  65 0026 4FF40041 		mov	r1, #32768
+  66 002a 2846     		mov	r0, r5
+  67 002c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s 			page 3
+
+
+  68              	.LVL0:
+  49:Core/Src/usb_device.c **** 
+  50:Core/Src/usb_device.c ****   GPIO_InitStruct.Pin = USB_EN_PIN;
+  69              		.loc 1 50 3 view .LVU10
+  70              		.loc 1 50 23 is_stmt 0 view .LVU11
+  71 0030 4FF40043 		mov	r3, #32768
+  72 0034 0293     		str	r3, [sp, #8]
+  51:Core/Src/usb_device.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  73              		.loc 1 51 3 is_stmt 1 view .LVU12
+  74              		.loc 1 51 24 is_stmt 0 view .LVU13
+  75 0036 0123     		movs	r3, #1
+  76 0038 0393     		str	r3, [sp, #12]
+  52:Core/Src/usb_device.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  77              		.loc 1 52 3 is_stmt 1 view .LVU14
+  78              		.loc 1 52 24 is_stmt 0 view .LVU15
+  79 003a 0494     		str	r4, [sp, #16]
+  53:Core/Src/usb_device.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  80              		.loc 1 53 3 is_stmt 1 view .LVU16
+  81              		.loc 1 53 25 is_stmt 0 view .LVU17
+  82 003c 0223     		movs	r3, #2
+  83 003e 0593     		str	r3, [sp, #20]
+  54:Core/Src/usb_device.c ****   HAL_GPIO_Init(USB_EN_PORT, &GPIO_InitStruct);
+  84              		.loc 1 54 3 is_stmt 1 view .LVU18
+  85 0040 02A9     		add	r1, sp, #8
+  86 0042 2846     		mov	r0, r5
+  87 0044 FFF7FEFF 		bl	HAL_GPIO_Init
+  88              	.LVL1:
+  55:Core/Src/usb_device.c **** }
+  89              		.loc 1 55 1 is_stmt 0 view .LVU19
+  90 0048 07B0     		add	sp, sp, #28
+  91              	.LCFI2:
+  92              		.cfi_def_cfa_offset 12
+  93              		@ sp needed
+  94 004a 30BD     		pop	{r4, r5, pc}
+  95              	.L4:
+  96              		.align	2
+  97              	.L3:
+  98 004c 00100240 		.word	1073876992
+  99 0050 00080140 		.word	1073809408
+ 100              		.cfi_endproc
+ 101              	.LFE69:
+ 103              		.section	.text.MX_USB_DEVICE_Init,"ax",%progbits
+ 104              		.align	1
+ 105              		.global	MX_USB_DEVICE_Init
+ 106              		.syntax unified
+ 107              		.thumb
+ 108              		.thumb_func
+ 110              	MX_USB_DEVICE_Init:
+ 111              	.LFB68:
+  19:Core/Src/usb_device.c ****   USB_GPIO_Init();
+ 112              		.loc 1 19 1 is_stmt 1 view -0
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 0
+ 115              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116 0000 08B5     		push	{r3, lr}
+ 117              	.LCFI3:
+ 118              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s 			page 4
+
+
+ 119              		.cfi_offset 3, -8
+ 120              		.cfi_offset 14, -4
+  20:Core/Src/usb_device.c ****   USB_DISABLE();
+ 121              		.loc 1 20 3 view .LVU21
+ 122 0002 FFF7FEFF 		bl	USB_GPIO_Init
+ 123              	.LVL2:
+  21:Core/Src/usb_device.c ****   HAL_Delay(10);
+ 124              		.loc 1 21 3 view .LVU22
+ 125 0006 0022     		movs	r2, #0
+ 126 0008 4FF40041 		mov	r1, #32768
+ 127 000c 1648     		ldr	r0, .L15
+ 128 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 129              	.LVL3:
+  22:Core/Src/usb_device.c ****   if (USBD_Init(&hUsbDeviceFS, &FS_Desc, DEVICE_FS) != USBD_OK)
+ 130              		.loc 1 22 3 view .LVU23
+ 131 0012 0A20     		movs	r0, #10
+ 132 0014 FFF7FEFF 		bl	HAL_Delay
+ 133              	.LVL4:
+  23:Core/Src/usb_device.c ****   {
+ 134              		.loc 1 23 3 view .LVU24
+  23:Core/Src/usb_device.c ****   {
+ 135              		.loc 1 23 7 is_stmt 0 view .LVU25
+ 136 0018 0022     		movs	r2, #0
+ 137 001a 1449     		ldr	r1, .L15+4
+ 138 001c 1448     		ldr	r0, .L15+8
+ 139 001e FFF7FEFF 		bl	USBD_Init
+ 140              	.LVL5:
+  23:Core/Src/usb_device.c ****   {
+ 141              		.loc 1 23 6 view .LVU26
+ 142 0022 A0B9     		cbnz	r0, .L11
+ 143              	.L6:
+  27:Core/Src/usb_device.c ****   {
+ 144              		.loc 1 27 3 is_stmt 1 view .LVU27
+  27:Core/Src/usb_device.c ****   {
+ 145              		.loc 1 27 7 is_stmt 0 view .LVU28
+ 146 0024 1349     		ldr	r1, .L15+12
+ 147 0026 1248     		ldr	r0, .L15+8
+ 148 0028 FFF7FEFF 		bl	USBD_RegisterClass
+ 149              	.LVL6:
+  27:Core/Src/usb_device.c ****   {
+ 150              		.loc 1 27 6 view .LVU29
+ 151 002c 90B9     		cbnz	r0, .L12
+ 152              	.L7:
+  31:Core/Src/usb_device.c ****   {
+ 153              		.loc 1 31 3 is_stmt 1 view .LVU30
+  31:Core/Src/usb_device.c ****   {
+ 154              		.loc 1 31 7 is_stmt 0 view .LVU31
+ 155 002e 1249     		ldr	r1, .L15+16
+ 156 0030 0F48     		ldr	r0, .L15+8
+ 157 0032 FFF7FEFF 		bl	USBD_CDC_RegisterInterface
+ 158              	.LVL7:
+  31:Core/Src/usb_device.c ****   {
+ 159              		.loc 1 31 6 view .LVU32
+ 160 0036 80B9     		cbnz	r0, .L13
+ 161              	.L8:
+  35:Core/Src/usb_device.c ****   {
+ 162              		.loc 1 35 3 is_stmt 1 view .LVU33
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s 			page 5
+
+
+  35:Core/Src/usb_device.c ****   {
+ 163              		.loc 1 35 7 is_stmt 0 view .LVU34
+ 164 0038 0D48     		ldr	r0, .L15+8
+ 165 003a FFF7FEFF 		bl	USBD_Start
+ 166              	.LVL8:
+  35:Core/Src/usb_device.c ****   {
+ 167              		.loc 1 35 6 view .LVU35
+ 168 003e 78B9     		cbnz	r0, .L14
+ 169              	.L9:
+  39:Core/Src/usb_device.c **** }
+ 170              		.loc 1 39 3 is_stmt 1 view .LVU36
+ 171 0040 0122     		movs	r2, #1
+ 172 0042 4FF40041 		mov	r1, #32768
+ 173 0046 0848     		ldr	r0, .L15
+ 174 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 175              	.LVL9:
+  40:Core/Src/usb_device.c **** 
+ 176              		.loc 1 40 1 is_stmt 0 view .LVU37
+ 177 004c 08BD     		pop	{r3, pc}
+ 178              	.L11:
+  25:Core/Src/usb_device.c ****   }
+ 179              		.loc 1 25 5 is_stmt 1 view .LVU38
+ 180 004e FFF7FEFF 		bl	Error_Handler
+ 181              	.LVL10:
+ 182 0052 E7E7     		b	.L6
+ 183              	.L12:
+  29:Core/Src/usb_device.c ****   }
+ 184              		.loc 1 29 5 view .LVU39
+ 185 0054 FFF7FEFF 		bl	Error_Handler
+ 186              	.LVL11:
+ 187 0058 E9E7     		b	.L7
+ 188              	.L13:
+  33:Core/Src/usb_device.c ****   }
+ 189              		.loc 1 33 5 view .LVU40
+ 190 005a FFF7FEFF 		bl	Error_Handler
+ 191              	.LVL12:
+ 192 005e EBE7     		b	.L8
+ 193              	.L14:
+  37:Core/Src/usb_device.c ****   }
+ 194              		.loc 1 37 5 view .LVU41
+ 195 0060 FFF7FEFF 		bl	Error_Handler
+ 196              	.LVL13:
+ 197 0064 ECE7     		b	.L9
+ 198              	.L16:
+ 199 0066 00BF     		.align	2
+ 200              	.L15:
+ 201 0068 00080140 		.word	1073809408
+ 202 006c 00000000 		.word	FS_Desc
+ 203 0070 00000000 		.word	.LANCHOR0
+ 204 0074 00000000 		.word	USBD_CDC
+ 205 0078 00000000 		.word	USBD_Interface_fops_FS
+ 206              		.cfi_endproc
+ 207              	.LFE68:
+ 209              		.global	hUsbDeviceFS
+ 210              		.section	.bss.hUsbDeviceFS,"aw",%nobits
+ 211              		.align	2
+ 212              		.set	.LANCHOR0,. + 0
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s 			page 6
+
+
+ 215              	hUsbDeviceFS:
+ 216 0000 00000000 		.space	708
+ 216      00000000 
+ 216      00000000 
+ 216      00000000 
+ 216      00000000 
+ 217              		.text
+ 218              	.Letext0:
+ 219              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 220              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 221              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xe.h"
+ 222              		.file 5 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 223              		.file 6 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Middlewares/ST/STM32_USB_
+ 224              		.file 7 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Middlewares/ST/STM32_USB_
+ 225              		.file 8 "Core/Inc/usbd_desc.h"
+ 226              		.file 9 "Core/Inc/usbd_cdc_if.h"
+ 227              		.file 10 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 228              		.file 11 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Middlewares/ST/STM32_USB
+ 229              		.file 12 "Core/Inc/main.h"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usb_device.c
+C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s:18     .text.USB_GPIO_Init:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s:23     .text.USB_GPIO_Init:00000000 USB_GPIO_Init
+C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s:98     .text.USB_GPIO_Init:0000004c $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s:104    .text.MX_USB_DEVICE_Init:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s:110    .text.MX_USB_DEVICE_Init:00000000 MX_USB_DEVICE_Init
+C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s:201    .text.MX_USB_DEVICE_Init:00000068 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s:215    .bss.hUsbDeviceFS:00000000 hUsbDeviceFS
+C:\Users\BLACK_~1\AppData\Local\Temp\ccFrYnrp.s:211    .bss.hUsbDeviceFS:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init
+HAL_Delay
+USBD_Init
+USBD_RegisterClass
+USBD_CDC_RegisterInterface
+USBD_Start
+Error_Handler
+FS_Desc
+USBD_CDC
+USBD_Interface_fops_FS

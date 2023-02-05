@@ -1,0 +1,215 @@
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"portevent.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.xMBPortEventInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	xMBPortEventInit
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	xMBPortEventInit:
+  25              	.LFB65:
+  26              		.file 1 "FreeModbus/port/portevent.c"
+   1:FreeModbus/port/portevent.c **** #include "mb.h"
+   2:FreeModbus/port/portevent.c **** #include "mbport.h"
+   3:FreeModbus/port/portevent.c **** 
+   4:FreeModbus/port/portevent.c **** #if MB_SLAVE_RTU_ENABLED > 0 || MB_SLAVE_ASCII_ENABLED > 0
+   5:FreeModbus/port/portevent.c **** 
+   6:FreeModbus/port/portevent.c **** /* ----------------------- Variables ----------------------------------------*/
+   7:FreeModbus/port/portevent.c **** static eMBEventType eQueuedEvent;
+   8:FreeModbus/port/portevent.c **** static BOOL     xEventInQueue;
+   9:FreeModbus/port/portevent.c **** 
+  10:FreeModbus/port/portevent.c **** /* ----------------------- Start implementation -----------------------------*/
+  11:FreeModbus/port/portevent.c **** BOOL xMBPortEventInit( void )
+  12:FreeModbus/port/portevent.c **** {
+  27              		.loc 1 12 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  13:FreeModbus/port/portevent.c ****     xEventInQueue = FALSE;
+  32              		.loc 1 13 5 view .LVU1
+  33              		.loc 1 13 19 is_stmt 0 view .LVU2
+  34 0000 024B     		ldr	r3, .L2
+  35 0002 0022     		movs	r2, #0
+  36 0004 1A70     		strb	r2, [r3]
+  14:FreeModbus/port/portevent.c ****     return TRUE;
+  37              		.loc 1 14 5 is_stmt 1 view .LVU3
+  15:FreeModbus/port/portevent.c **** }
+  38              		.loc 1 15 1 is_stmt 0 view .LVU4
+  39 0006 0120     		movs	r0, #1
+  40 0008 7047     		bx	lr
+  41              	.L3:
+  42 000a 00BF     		.align	2
+  43              	.L2:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s 			page 2
+
+
+  44 000c 00000000 		.word	.LANCHOR0
+  45              		.cfi_endproc
+  46              	.LFE65:
+  48              		.section	.text.xMBPortEventPost,"ax",%progbits
+  49              		.align	1
+  50              		.global	xMBPortEventPost
+  51              		.syntax unified
+  52              		.thumb
+  53              		.thumb_func
+  55              	xMBPortEventPost:
+  56              	.LVL0:
+  57              	.LFB66:
+  16:FreeModbus/port/portevent.c **** 
+  17:FreeModbus/port/portevent.c **** BOOL xMBPortEventPost( eMBEventType eEvent )
+  18:FreeModbus/port/portevent.c **** {
+  58              		.loc 1 18 1 is_stmt 1 view -0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  62              		@ link register save eliminated.
+  19:FreeModbus/port/portevent.c ****     xEventInQueue = TRUE;
+  63              		.loc 1 19 5 view .LVU6
+  64              		.loc 1 19 19 is_stmt 0 view .LVU7
+  65 0000 0123     		movs	r3, #1
+  66 0002 034A     		ldr	r2, .L5
+  67 0004 1370     		strb	r3, [r2]
+  20:FreeModbus/port/portevent.c ****     eQueuedEvent = eEvent;
+  68              		.loc 1 20 5 is_stmt 1 view .LVU8
+  69              		.loc 1 20 18 is_stmt 0 view .LVU9
+  70 0006 034A     		ldr	r2, .L5+4
+  71 0008 1070     		strb	r0, [r2]
+  21:FreeModbus/port/portevent.c ****     return TRUE;
+  72              		.loc 1 21 5 is_stmt 1 view .LVU10
+  22:FreeModbus/port/portevent.c **** }
+  73              		.loc 1 22 1 is_stmt 0 view .LVU11
+  74 000a 1846     		mov	r0, r3
+  75              	.LVL1:
+  76              		.loc 1 22 1 view .LVU12
+  77 000c 7047     		bx	lr
+  78              	.L6:
+  79 000e 00BF     		.align	2
+  80              	.L5:
+  81 0010 00000000 		.word	.LANCHOR0
+  82 0014 00000000 		.word	.LANCHOR1
+  83              		.cfi_endproc
+  84              	.LFE66:
+  86              		.section	.text.xMBPortEventGet,"ax",%progbits
+  87              		.align	1
+  88              		.global	xMBPortEventGet
+  89              		.syntax unified
+  90              		.thumb
+  91              		.thumb_func
+  93              	xMBPortEventGet:
+  94              	.LVL2:
+  95              	.LFB67:
+  23:FreeModbus/port/portevent.c **** 
+  24:FreeModbus/port/portevent.c **** BOOL xMBPortEventGet( eMBEventType * eEvent )
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s 			page 3
+
+
+  25:FreeModbus/port/portevent.c **** {
+  96              		.loc 1 25 1 is_stmt 1 view -0
+  97              		.cfi_startproc
+  98              		@ args = 0, pretend = 0, frame = 0
+  99              		@ frame_needed = 0, uses_anonymous_args = 0
+ 100              		@ link register save eliminated.
+ 101              		.loc 1 25 1 is_stmt 0 view .LVU14
+ 102 0000 0346     		mov	r3, r0
+  26:FreeModbus/port/portevent.c ****     BOOL            xEventHappened = FALSE;
+ 103              		.loc 1 26 5 is_stmt 1 view .LVU15
+ 104              	.LVL3:
+  27:FreeModbus/port/portevent.c **** 
+  28:FreeModbus/port/portevent.c ****     if( xEventInQueue )
+ 105              		.loc 1 28 5 view .LVU16
+ 106              		.loc 1 28 9 is_stmt 0 view .LVU17
+ 107 0002 054A     		ldr	r2, .L9
+ 108 0004 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 109              	.LVL4:
+ 110              		.loc 1 28 7 view .LVU18
+ 111 0006 30B1     		cbz	r0, .L8
+  29:FreeModbus/port/portevent.c ****     {
+  30:FreeModbus/port/portevent.c ****         *eEvent = eQueuedEvent;
+ 112              		.loc 1 30 9 is_stmt 1 view .LVU19
+ 113              		.loc 1 30 17 is_stmt 0 view .LVU20
+ 114 0008 044A     		ldr	r2, .L9+4
+ 115 000a 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 116 000c 1A70     		strb	r2, [r3]
+  31:FreeModbus/port/portevent.c ****         xEventInQueue = FALSE;
+ 117              		.loc 1 31 9 is_stmt 1 view .LVU21
+ 118              		.loc 1 31 23 is_stmt 0 view .LVU22
+ 119 000e 024B     		ldr	r3, .L9
+ 120              	.LVL5:
+ 121              		.loc 1 31 23 view .LVU23
+ 122 0010 0022     		movs	r2, #0
+ 123 0012 1A70     		strb	r2, [r3]
+  32:FreeModbus/port/portevent.c ****         xEventHappened = TRUE;
+ 124              		.loc 1 32 9 is_stmt 1 view .LVU24
+ 125              	.LVL6:
+ 126              		.loc 1 32 24 is_stmt 0 view .LVU25
+ 127 0014 0120     		movs	r0, #1
+ 128              	.LVL7:
+ 129              	.L8:
+  33:FreeModbus/port/portevent.c ****     }
+  34:FreeModbus/port/portevent.c ****     return xEventHappened;
+ 130              		.loc 1 34 5 is_stmt 1 view .LVU26
+  35:FreeModbus/port/portevent.c **** }
+ 131              		.loc 1 35 1 is_stmt 0 view .LVU27
+ 132 0016 7047     		bx	lr
+ 133              	.L10:
+ 134              		.align	2
+ 135              	.L9:
+ 136 0018 00000000 		.word	.LANCHOR0
+ 137 001c 00000000 		.word	.LANCHOR1
+ 138              		.cfi_endproc
+ 139              	.LFE67:
+ 141              		.section	.bss.eQueuedEvent,"aw",%nobits
+ 142              		.set	.LANCHOR1,. + 0
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s 			page 4
+
+
+ 145              	eQueuedEvent:
+ 146 0000 00       		.space	1
+ 147              		.section	.bss.xEventInQueue,"aw",%nobits
+ 148              		.set	.LANCHOR0,. + 0
+ 151              	xEventInQueue:
+ 152 0000 00       		.space	1
+ 153              		.text
+ 154              	.Letext0:
+ 155              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 156              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 157              		.file 4 "FreeModbus/port/port.h"
+ 158              		.file 5 "FreeModbus/include/mbport.h"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 portevent.c
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:18     .text.xMBPortEventInit:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:24     .text.xMBPortEventInit:00000000 xMBPortEventInit
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:44     .text.xMBPortEventInit:0000000c $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:49     .text.xMBPortEventPost:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:55     .text.xMBPortEventPost:00000000 xMBPortEventPost
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:81     .text.xMBPortEventPost:00000010 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:87     .text.xMBPortEventGet:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:93     .text.xMBPortEventGet:00000000 xMBPortEventGet
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:136    .text.xMBPortEventGet:00000018 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:145    .bss.eQueuedEvent:00000000 eQueuedEvent
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:146    .bss.eQueuedEvent:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:151    .bss.xEventInQueue:00000000 xEventInQueue
+C:\Users\BLACK_~1\AppData\Local\Temp\ccY02Fqb.s:152    .bss.xEventInQueue:00000000 $d
+
+NO UNDEFINED SYMBOLS
