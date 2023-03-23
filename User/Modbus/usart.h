@@ -11,7 +11,6 @@
 #define DMA_BUF_SIZE        256      /* DMA circular buffer size in bytes */
 #define DMA_TIMEOUT_MS      4        /* DMA Timeout duration in msec, 9600bps = 4ms, 19200bps = 2ms */
 
-
 typedef struct
 {
     volatile uint8_t  flag;     			/* Timeout event flag */
@@ -22,15 +21,18 @@ typedef struct
     uint16_t 		  prev_cnt;         	/* Holds previous value of DMA_CNDTR */
 } DMA_Event_t;
 
+extern DMA_Event_t      dma_uart2_rx;
+extern UART_HandleTypeDef huart1, huart2;
+
 /* Connect to raspi */
 void 	Uart1_Init(void);
 uint8_t Uart1_Put_Char(uint8_t data);
 void 	Uart1_Send_Data(uint8_t *data, uint16_t length);
 
 /* Connect to RS485 */
-void Uart2_Init(void);
+void Uart2_Init(uint32_t baudrate);
 uint8_t Uart2_Put_Char(uint8_t data);
-void Uart2_Send_Data(uint8_t *data, uint16_t length);
+uint8_t Uart2_Send_Data(uint8_t *data, uint16_t length);
 
 #ifdef __cplusplus
 }

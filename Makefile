@@ -65,8 +65,6 @@ REALESE_DIR = realeses
 C_SOURCES =  \
 Src/main.c \
 Src/gpio.c \
-Src/relay.c \
-Src/input.c \
 Src/stm32f1xx_it.c \
 Src/stm32f1xx_hal_msp.c \
 Src/system_stm32f1xx.c \
@@ -100,9 +98,6 @@ User/Modbus/fifo.c \
 User/Modbus/modbus_crc.c \
 User/Modbus/modbus_data.c \
 User/Modbus/usart.c \
-User/Peripherals/sht_sensor.c \
-User/System/control_system.c \
-User/System/config.c \
 User/USB/usbd_conf.c \
 User/USB/usb_device.c \
 User/USB/usbd_desc.c \
@@ -174,9 +169,7 @@ C_INCLUDES =  \
 -I$(LIB_DIR)/Drivers/CMSIS/Include \
 -IUser/Modbus \
 -IUser/Peripherals \
--IUser/System \
 -IUser/USB	\
--IUser/Math	\
 
 
 # compile gcc flags
@@ -241,22 +234,22 @@ $(BUILD_DIR):
 # flash
 #######################################
 
-# flash:
-# 	openocd 	-f interface/stlink-v2.cfg \
-# 				-f target/stm32f1x.cfg \
-# 		        -c init -c targets -c "reset halt" \
-# 		        -c "flash write_image erase $(BUILD_DIR)/$(TARGET).hex" \
-# 		        -c "verify_image $(BUILD_DIR)/$(TARGET).hex" \
-# 		        -c "reset run" -c shutdown
-
-				
 flash:
-	$(OPENOCD) 	-f interface/stlink-v2.cfg \
+	openocd 	-f interface/stlink-v2.cfg \
 				-f target/stm32f1x.cfg \
 		        -c init -c targets -c "reset halt" \
 		        -c "flash write_image erase $(BUILD_DIR)/$(TARGET).hex" \
 		        -c "verify_image $(BUILD_DIR)/$(TARGET).hex" \
 		        -c "reset run" -c shutdown
+
+				
+# flash:
+# 	$(OPENOCD) 	-f interface/stlink-v2.cfg \
+# 				-f target/stm32f1x.cfg \
+# 		        -c init -c targets -c "reset halt" \
+# 		        -c "flash write_image erase $(BUILD_DIR)/$(TARGET).hex" \
+# 		        -c "verify_image $(BUILD_DIR)/$(TARGET).hex" \
+# 		        -c "reset run" -c shutdown
 
 #######################################0
 # clean up

@@ -9,7 +9,8 @@ uint8_t           dma_rx1_buf[DMA_BUF_SIZE], dma_rx2_buf[DMA_BUF_SIZE],/* Circul
 				  ring_buf_uart1_tx[1024], ring_buf_uart2_tx[1024], tx1_data, tx2_data;
 DMA_Event_t       dma_uart1_rx = {0, {'\0'}, 0, 0, 0, DMA_BUF_SIZE}, 
 				  dma_uart2_rx = {0, {'\0'}, 0, 0, 0, DMA_BUF_SIZE};
-Fifo_t            fifo_uart1_tx, fifo_uart2_tx;				  
+Fifo_t            fifo_uart1_tx, fifo_uart2_tx;		
+
 /**
  * Uart1 connect to raspberry
  */
@@ -73,10 +74,10 @@ void Uart1_Init(void)
 }
 
 
-void Uart2_Init(void)
+void Uart2_Init(uint32_t baudrate)
 {
     huart2.Instance = USART2;
-    huart2.Init.BaudRate = 9600;
+    huart2.Init.BaudRate = baudrate;
     huart2.Init.WordLength = UART_WORDLENGTH_8B;
     huart2.Init.StopBits = UART_STOPBITS_1;
     huart2.Init.Parity = UART_PARITY_NONE;
@@ -163,20 +164,23 @@ uint8_t Uart2_Put_Char(uint8_t data)
 /**
  * [Uart_Rs485_Send_Data description]
  */
-void Uart2_Send_Data(uint8_t *data, uint16_t length)
+uint8_t Uart2_Send_Data(uint8_t *data, uint16_t length)
 {
     uint32_t retry_count;
+    // uint8_t putchar_status;
 
     for (uint32_t i = 0; i < length; ++i)
     {
         retry_count = 0;
+        
         while(Uart2_Put_Char(data[i]))        /* Busy */
         {
             retry_count++;
             if (retry_count > 5)
-                break;
+                return 1;   /* Busy */
         }
     }
+    return 0;   /* OK */
 }
 
 

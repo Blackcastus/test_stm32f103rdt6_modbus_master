@@ -7,8 +7,8 @@ SHT_DEVICE_t sht_list[10];
 extern uint16_t modbus_holding_buf[NoB_HOLDING_REGISTER],
 		modbus_input_buf[NoB_INPUT_REGISTER];
 
-#include "control_system.h"
-extern DEVICE_t device;
+// #include "control_system.h"
+// extern DEVICE_t device;
 
 #include "config.h"
 

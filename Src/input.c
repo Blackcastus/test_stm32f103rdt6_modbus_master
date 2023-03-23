@@ -8,12 +8,12 @@
 #include "input.h"
 #include "relay.h"
 
-#include "config.h"
+// #include "config.h"
 #include "modbus_data.h"
 
-#include "control_system.h"
+// #include "control_system.h"
 
-extern DEVICE_t device; 
+// extern DEVICE_t device; 
 
 INPUT_STRUCT input;
 

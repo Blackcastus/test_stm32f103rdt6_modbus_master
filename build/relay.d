@@ -33,7 +33,7 @@ build/relay.o: Src/relay.c Inc/relay.h Inc/main.h Inc/stm32f1xx_hal.h \
  /home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
  /home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
  /home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
- User/System/control_system.h Inc/main.h User/Modbus/modbus_data.h
+ User/Modbus/modbus_data.h Inc/main.h
 Inc/relay.h:
 Inc/main.h:
 Inc/stm32f1xx_hal.h:
@@ -71,6 +71,5 @@ Inc/stm32f1xx_hal.h:
 /home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h:
 /home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h:
 /home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:
-User/System/control_system.h:
-Inc/main.h:
 User/Modbus/modbus_data.h:
+Inc/main.h:

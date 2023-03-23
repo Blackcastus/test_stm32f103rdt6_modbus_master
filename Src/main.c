@@ -1,5 +1,5 @@
 /*
-* @Author: nhantt
+* @Author: nhantt 
 * @Date:   2020-07-01
 * @Last Modified by:   nhantt
 * @Last Modified time: 2020-07-01
@@ -9,20 +9,17 @@
 #include "stm32f1xx_it.h"
 #include "usb_device.h"
 #include "gpio.h"
-#include "config.h"
-#include "input.h"
-#include "relay.h"
-#include "control_system.h"
 
 #include "usart.h"
-#include "sht_sensor.h"
 #include "modbus_data.h"
 
+#define REQUEST_SLAVE  1000
 
 int _write(int file, char *data, int len);
 void SystemClock_Config(void);
 uint32_t tick_;
-extern DMA_Event_t        dma_uart1_rx, dma_uart2_rx;
+uint32_t time_reqest_slave;
+// extern DMA_Event_t        dma_uart1_rx, dma_uart2_rx;
 
 int main(void)
 {
@@ -30,41 +27,29 @@ int main(void)
   SystemClock_Config();
   MX_GPIO_Init();
   MX_USB_DEVICE_Init();
+  HAL_Delay(4000);
 
-  HAL_Delay(5000);
-  
-  CFG_Load();
+  /* init modbus master */
+  Modbus_Master_DMA_Init(&huart2, 9600);
 
-  Uart1_Init();
-  Uart2_Init();
+  // uint8_t slave_stt = ;
 
-  Input_Init();
-  RELAY_Init();
-
-  Ctrl_System_Init_Load();
 
   while (1)
   {
-
-    Input_Manage();
-    RELAY_Manage();
-
-    /* Process UART1 - Raspi */
-    if (dma_uart1_rx.state) 
-    {
-      Modbus_Uart1_Data_Process(1, dma_uart1_rx.data, dma_uart1_rx.length);
-      /* Reset */
-      dma_uart1_rx.state = 0;
-      dma_uart1_rx.length = 0;
-    }
-
-    // Truyen nhan cam bien SHT
-    SHT_Read_Process();
-
-    /* Process UART2 - NHan data tu UART2 */
-    Modbus_Uart2_Process();
+    /* Process UART2 - Modbus Master */
     
-    Ctrl_System_Device_Manage();
+    Modbus_Master_DMA_Process();
+    if(HAL_GetTick() - time_reqest_slave > REQUEST_SLAVE)
+    {
+      Modbus_Master_Read_HoldRegs(1, 0, 2, 100);
+      time_reqest_slave = HAL_GetTick();
+    }
+    if(HAL_GetTick() - tick_ > 1000)
+    {
+      printf("Temp: %d | humi: %d\n", modbus_master_hold_buf[0][0], modbus_master_hold_buf[0][1]);
+      tick_ = HAL_GetTick();
+    }
   }
 }
 

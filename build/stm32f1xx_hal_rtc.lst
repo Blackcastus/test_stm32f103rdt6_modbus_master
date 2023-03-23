@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccQZzZ6b.s 			page 1
+ARM GAS  /tmp/ccOYnL5G.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
   30:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   *** Alarm configuration ***
   31:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   ===========================
   32:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   [..]
-ARM GAS  /tmp/ccQZzZ6b.s 			page 2
+ARM GAS  /tmp/ccOYnL5G.s 			page 2
 
 
   33:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     (+) To configure the RTC Alarm use the HAL_RTC_SetAlarm() function.
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
   87:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   [..] When the backup domain is supplied by VBAT (analog switch connected to VBAT
   88:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****        because VDD is not present), the following pins are available:
   89:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     (+) PC13 can be used as the Tamper pin
-ARM GAS  /tmp/ccQZzZ6b.s 			page 3
+ARM GAS  /tmp/ccOYnL5G.s 			page 3
 
 
   90:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  144:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   This function allows to reset following callbacks:
  145:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     (+) AlarmAEventCallback          : RTC Alarm A Event callback.
  146:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     (+) Tamper1EventCallback         : RTC Tamper 1 Event callback.
-ARM GAS  /tmp/ccQZzZ6b.s 			page 4
+ARM GAS  /tmp/ccOYnL5G.s 			page 4
 
 
  147:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     (+) MspInitCallback              : RTC MspInit callback.
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  201:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** /** @defgroup RTC_Private_Constants RTC Private Constants
  202:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   * @{
  203:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   */
-ARM GAS  /tmp/ccQZzZ6b.s 			page 5
+ARM GAS  /tmp/ccOYnL5G.s 			page 5
 
 
  204:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** #define RTC_ALARM_RESETVALUE_REGISTER    (uint16_t)0xFFFF
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  258:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****              is enabled by setting the CNF bit in the RTC_CRL register.
  259:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****          (#) To read the calendar after wakeup from low power modes (Standby or Stop)
  260:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****              the software must first wait for the RSF bit (Register Synchronized Flag)
-ARM GAS  /tmp/ccQZzZ6b.s 			page 6
+ARM GAS  /tmp/ccOYnL5G.s 			page 6
 
 
  261:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****              in the RTC_CRL register to be set by hardware.
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  315:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  316:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     /* Initialize RTC MSP */
  317:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     HAL_RTC_MspInit(hrtc);
-ARM GAS  /tmp/ccQZzZ6b.s 			page 7
+ARM GAS  /tmp/ccOYnL5G.s 			page 7
 
 
  318:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  372:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       }
  373:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       else
  374:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       {
-ARM GAS  /tmp/ccQZzZ6b.s 			page 8
+ARM GAS  /tmp/ccOYnL5G.s 			page 8
 
 
  375:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         /* RTC period = RTCCLK/(RTC_PR + 1) */
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  429:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     hrtc->State = HAL_RTC_STATE_ERROR;
  430:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  431:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     /* Release Lock */
-ARM GAS  /tmp/ccQZzZ6b.s 			page 9
+ARM GAS  /tmp/ccOYnL5G.s 			page 9
 
 
  432:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     __HAL_UNLOCK(hrtc);
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  486:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** #if (USE_HAL_RTC_REGISTER_CALLBACKS == 1)
  487:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** /**
  488:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   * @brief  Register a User RTC Callback
-ARM GAS  /tmp/ccQZzZ6b.s 			page 10
+ARM GAS  /tmp/ccOYnL5G.s 			page 10
 
 
  489:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   *         To be used instead of the weak predefined callback
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  543:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         hrtc->MspInitCallback = pCallback;
  544:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         break;
  545:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 11
+ARM GAS  /tmp/ccOYnL5G.s 			page 11
 
 
  546:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       case HAL_RTC_MSPDEINIT_CB_ID :
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  600:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         hrtc->MspInitCallback = HAL_RTC_MspInit;
  601:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         break;
  602:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 12
+ARM GAS  /tmp/ccOYnL5G.s 			page 12
 
 
  603:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       case HAL_RTC_MSPDEINIT_CB_ID :
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  657:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** }
  658:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  659:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** /**
-ARM GAS  /tmp/ccQZzZ6b.s 			page 13
+ARM GAS  /tmp/ccOYnL5G.s 			page 13
 
 
  660:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   * @brief  DeInitializes the RTC MSP.
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  714:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   assert_param(IS_RTC_FORMAT(Format));
  715:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  716:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   /* Process Locked */
-ARM GAS  /tmp/ccQZzZ6b.s 			page 14
+ARM GAS  /tmp/ccOYnL5G.s 			page 14
 
 
  717:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   __HAL_LOCK(hrtc);
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  771:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         {
  772:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****           /* Set RTC state */
  773:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****           hrtc->State = HAL_RTC_STATE_ERROR;
-ARM GAS  /tmp/ccQZzZ6b.s 			page 15
+ARM GAS  /tmp/ccOYnL5G.s 			page 15
 
 
  774:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  828:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  829:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   if (hours >= 24U)
  830:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
-ARM GAS  /tmp/ccQZzZ6b.s 			page 16
+ARM GAS  /tmp/ccOYnL5G.s 			page 16
 
 
  831:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     /* Get number of days elapsed from last calculation */
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  885:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
  886:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     sTime->Hours = hours;
  887:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
-ARM GAS  /tmp/ccQZzZ6b.s 			page 17
+ARM GAS  /tmp/ccOYnL5G.s 			page 17
 
 
  888:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  942:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   else
  943:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
  944:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     assert_param(IS_RTC_YEAR(RTC_Bcd2ToByte(sDate->Year)));
-ARM GAS  /tmp/ccQZzZ6b.s 			page 18
+ARM GAS  /tmp/ccOYnL5G.s 			page 18
 
 
  945:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     assert_param(IS_RTC_MONTH(RTC_Bcd2ToByte(sDate->Month)));
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  999:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
 1000:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****           return HAL_ERROR;
 1001:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         }
-ARM GAS  /tmp/ccQZzZ6b.s 			page 19
+ARM GAS  /tmp/ccOYnL5G.s 			page 19
 
 
 1002:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       }
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1056:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     sDate->Year   = (uint8_t)RTC_ByteToBcd2(sDate->Year);
 1057:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     sDate->Month  = (uint8_t)RTC_ByteToBcd2(sDate->Month);
 1058:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     sDate->Date   = (uint8_t)RTC_ByteToBcd2(sDate->Date);
-ARM GAS  /tmp/ccQZzZ6b.s 			page 20
+ARM GAS  /tmp/ccOYnL5G.s 			page 20
 
 
 1059:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1113:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   if (HAL_RTC_GetTime(hrtc, &stime, RTC_FORMAT_BIN) != HAL_OK)
 1114:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
 1115:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     return HAL_ERROR;
-ARM GAS  /tmp/ccQZzZ6b.s 			page 21
+ARM GAS  /tmp/ccOYnL5G.s 			page 21
 
 
 1116:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1170:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** }
 1171:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
 1172:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** /**
-ARM GAS  /tmp/ccQZzZ6b.s 			page 22
+ARM GAS  /tmp/ccOYnL5G.s 			page 22
 
 
 1173:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   * @brief  Sets the specified RTC Alarm with Interrupt
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1227:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     assert_param(IS_RTC_HOUR24(RTC_Bcd2ToByte(sAlarm->AlarmTime.Hours)));
 1228:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     assert_param(IS_RTC_MINUTES(RTC_Bcd2ToByte(sAlarm->AlarmTime.Minutes)));
 1229:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     assert_param(IS_RTC_SECONDS(RTC_Bcd2ToByte(sAlarm->AlarmTime.Seconds)));
-ARM GAS  /tmp/ccQZzZ6b.s 			page 23
+ARM GAS  /tmp/ccOYnL5G.s 			page 23
 
 
 1230:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1284:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   *          This parameter can be one of the following values:
 1285:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   *             @arg RTC_FORMAT_BIN: Binary data format
 1286:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   *             @arg RTC_FORMAT_BCD: BCD data format
-ARM GAS  /tmp/ccQZzZ6b.s 			page 24
+ARM GAS  /tmp/ccOYnL5G.s 			page 24
 
 
 1287:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   * @retval HAL status
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1341:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
 1342:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   /* Check input parameters */
 1343:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   if (hrtc == NULL)
-ARM GAS  /tmp/ccQZzZ6b.s 			page 25
+ARM GAS  /tmp/ccOYnL5G.s 			page 25
 
 
 1344:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1398:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** /**
 1399:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   * @brief  This function handles Alarm interrupt request.
 1400:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   * @param  hrtc   pointer to a RTC_HandleTypeDef structure that contains
-ARM GAS  /tmp/ccQZzZ6b.s 			page 26
+ARM GAS  /tmp/ccOYnL5G.s 			page 26
 
 
 1401:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   *                the configuration information for RTC.
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1455:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
 1456:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   /* Check input parameters */
 1457:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   if (hrtc == NULL)
-ARM GAS  /tmp/ccQZzZ6b.s 			page 27
+ARM GAS  /tmp/ccOYnL5G.s 			page 27
 
 
 1458:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1512:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** /**
 1513:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   * @}
 1514:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   */
-ARM GAS  /tmp/ccQZzZ6b.s 			page 28
+ARM GAS  /tmp/ccOYnL5G.s 			page 28
 
 
 1515:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1569:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   */
 1570:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
 1571:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 29
+ARM GAS  /tmp/ccOYnL5G.s 			page 29
 
 
 1572:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** /**
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1596:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   if (high1 != high2)
   57              		.loc 1 1596 3 is_stmt 1 view .LVU12
   58              		.loc 1 1596 6 is_stmt 0 view .LVU13
-ARM GAS  /tmp/ccQZzZ6b.s 			page 30
+ARM GAS  /tmp/ccOYnL5G.s 			page 30
 
 
   59 0010 8445     		cmp	ip, r0
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
   95              		.section	.text.RTC_ReadAlarmCounter,"ax",%progbits
   96              		.align	1
   97              		.syntax unified
-ARM GAS  /tmp/ccQZzZ6b.s 			page 31
+ARM GAS  /tmp/ccOYnL5G.s 			page 31
 
 
   98              		.thumb
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  110              		.loc 1 1653 3 view .LVU25
 1654:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
 1655:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   high1 = READ_REG(hrtc->Instance->ALRH & RTC_CNTH_RTC_CNT);
-ARM GAS  /tmp/ccQZzZ6b.s 			page 32
+ARM GAS  /tmp/ccOYnL5G.s 			page 32
 
 
  111              		.loc 1 1655 3 view .LVU26
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1682:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     WRITE_REG(hrtc->Instance->ALRL, (AlarmCounter & RTC_ALRL_RTC_ALR));
 1683:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
 1684:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     /* Wait for synchro */
-ARM GAS  /tmp/ccQZzZ6b.s 			page 33
+ARM GAS  /tmp/ccOYnL5G.s 			page 33
 
 
 1685:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     if (RTC_ExitInitMode(hrtc) != HAL_OK)
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1739:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     {
 1740:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       return HAL_TIMEOUT;
 1741:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     }
-ARM GAS  /tmp/ccQZzZ6b.s 			page 34
+ARM GAS  /tmp/ccOYnL5G.s 			page 34
 
 
 1742:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  172              	.LVL19:
  173              		.loc 1 1762 11 view .LVU47
  174 0010 DBB2     		uxtb	r3, r3
-ARM GAS  /tmp/ccQZzZ6b.s 			page 35
+ARM GAS  /tmp/ccOYnL5G.s 			page 35
 
 
 1763:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** }
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  219              		.syntax unified
  220              		.thumb
  221              		.thumb_func
-ARM GAS  /tmp/ccQZzZ6b.s 			page 36
+ARM GAS  /tmp/ccOYnL5G.s 			page 36
 
 
  222              		.fpu softvfp
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1826:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         day++;
 1827:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       }
 1828:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       /* Date structure member: day = 30 */
-ARM GAS  /tmp/ccQZzZ6b.s 			page 37
+ARM GAS  /tmp/ccOYnL5G.s 			page 37
 
 
 1829:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       else
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  229              		@ args = 0, pretend = 0, frame = 0
  230              		@ frame_needed = 0, uses_anonymous_args = 0
  231              		@ link register save eliminated.
-ARM GAS  /tmp/ccQZzZ6b.s 			page 38
+ARM GAS  /tmp/ccOYnL5G.s 			page 38
 
 
 1881:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   if ((nYear % 4U) != 0U)
@@ -2278,7 +2278,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  270              		.loc 1 1888 12 view .LVU72
  271 0034 0120     		movs	r0, #1
  272              	.LVL29:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 39
+ARM GAS  /tmp/ccOYnL5G.s 			page 39
 
 
 1888:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
@@ -2338,7 +2338,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1919:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
 1920:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   year = 2000U + nYear;
  303              		.loc 1 1920 3 view .LVU78
-ARM GAS  /tmp/ccQZzZ6b.s 			page 40
+ARM GAS  /tmp/ccOYnL5G.s 			page 40
 
 
  304              		.loc 1 1920 8 is_stmt 0 view .LVU79
@@ -2398,7 +2398,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1930:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     weekday = (((23U * nMonth) / 9U) + nDay + 4U + year + (year / 4U) - (year / 100U) + (year / 400
 1931:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
 1932:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 41
+ARM GAS  /tmp/ccOYnL5G.s 			page 41
 
 
 1933:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   return (uint8_t)weekday;
@@ -2458,7 +2458,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  388 007a 1A1A     		subs	r2, r3, r0
  389 007c 00EB5200 		add	r0, r0, r2, lsr #1
  390 0080 8008     		lsrs	r0, r0, #2
-ARM GAS  /tmp/ccQZzZ6b.s 			page 42
+ARM GAS  /tmp/ccOYnL5G.s 			page 42
 
 
  391 0082 C0EBC000 		rsb	r0, r0, r0, lsl #3
@@ -2518,7 +2518,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1793:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   day = hrtc->DateToUpdate.Date;
  440              		.loc 1 1793 3 is_stmt 1 view .LVU117
 1793:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   day = hrtc->DateToUpdate.Date;
-ARM GAS  /tmp/ccQZzZ6b.s 			page 43
+ARM GAS  /tmp/ccOYnL5G.s 			page 43
 
 
  441              		.loc 1 1793 29 is_stmt 0 view .LVU118
@@ -2578,7 +2578,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  479 0026 F5D0     		beq	.L24
 1798:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         (month == 8U) || (month == 10U) || (month == 12U))
  480              		.loc 1 1798 40 discriminator 2 view .LVU135
-ARM GAS  /tmp/ccQZzZ6b.s 			page 44
+ARM GAS  /tmp/ccOYnL5G.s 			page 44
 
 
  481 0028 052C     		cmp	r4, #5
@@ -2638,7 +2638,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1839:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       }
  520              		.loc 1 1839 12 view .LVU151
  521 0056 E0E7     		b	.L27
-ARM GAS  /tmp/ccQZzZ6b.s 			page 45
+ARM GAS  /tmp/ccOYnL5G.s 			page 45
 
 
  522              	.L26:
@@ -2698,7 +2698,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  559 0072 D2E7     		b	.L27
  560              	.L31:
 1831:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         day = 1U;
-ARM GAS  /tmp/ccQZzZ6b.s 			page 46
+ARM GAS  /tmp/ccOYnL5G.s 			page 46
 
 
  561              		.loc 1 1831 9 is_stmt 1 view .LVU169
@@ -2758,7 +2758,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  599              	.LVL63:
 1846:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         }
  600              		.loc 1 1846 14 view .LVU186
-ARM GAS  /tmp/ccQZzZ6b.s 			page 47
+ARM GAS  /tmp/ccOYnL5G.s 			page 47
 
 
  601 0094 C1E7     		b	.L27
@@ -2818,7 +2818,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  641              		.thumb_func
  642              		.fpu softvfp
  644              	RTC_EnterInitMode:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 48
+ARM GAS  /tmp/ccOYnL5G.s 			page 48
 
 
  645              	.LVL67:
@@ -2878,7 +2878,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1708:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     {
  685              		.loc 1 1708 8 view .LVU216
  686 001a B0F57A7F 		cmp	r0, #1000
-ARM GAS  /tmp/ccQZzZ6b.s 			page 49
+ARM GAS  /tmp/ccOYnL5G.s 			page 49
 
 
  687 001e F4D9     		bls	.L40
@@ -2938,7 +2938,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  733 0006 5368     		ldr	r3, [r2, #4]
  734 0008 23F01003 		bic	r3, r3, #16
  735 000c 5360     		str	r3, [r2, #4]
-ARM GAS  /tmp/ccQZzZ6b.s 			page 50
+ARM GAS  /tmp/ccOYnL5G.s 			page 50
 
 
 1734:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   /* Wait till RTC is in INIT state and if Time out is reached exit */
@@ -2998,7 +2998,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  775              		.section	.text.RTC_WriteTimeCounter,"ax",%progbits
  776              		.align	1
  777              		.syntax unified
-ARM GAS  /tmp/ccQZzZ6b.s 			page 51
+ARM GAS  /tmp/ccOYnL5G.s 			page 51
 
 
  778              		.thumb
@@ -3058,7 +3058,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  822 0018 A4B2     		uxth	r4, r4
  823              	.LVL82:
 1633:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 52
+ARM GAS  /tmp/ccOYnL5G.s 			page 52
 
 
  824              		.loc 1 1633 5 is_stmt 0 view .LVU254
@@ -3118,7 +3118,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  870              		.loc 1 1673 6 view .LVU264
  871 000a 08B1     		cbz	r0, .L64
 1675:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
-ARM GAS  /tmp/ccQZzZ6b.s 			page 53
+ARM GAS  /tmp/ccOYnL5G.s 			page 53
 
 
  872              		.loc 1 1675 12 view .LVU265
@@ -3178,7 +3178,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  918              		@ args = 0, pretend = 0, frame = 0
  919              		@ frame_needed = 0, uses_anonymous_args = 0
  920              		@ link register save eliminated.
-ARM GAS  /tmp/ccQZzZ6b.s 			page 54
+ARM GAS  /tmp/ccOYnL5G.s 			page 54
 
 
  653:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
@@ -3238,7 +3238,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  705:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  972              		.loc 1 705 3 is_stmt 1 view .LVU283
  973              	.LVL94:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 55
+ARM GAS  /tmp/ccOYnL5G.s 			page 55
 
 
  708:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
@@ -3298,7 +3298,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1009              		.loc 1 728 57 view .LVU302
  1010 0022 C3EB0313 		rsb	r3, r3, r3, lsl #4
  1011 0026 9C00     		lsls	r4, r3, #2
-ARM GAS  /tmp/ccQZzZ6b.s 			page 56
+ARM GAS  /tmp/ccOYnL5G.s 			page 56
 
 
  727:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****                               ((uint32_t)sTime->Minutes * 60U) + \
@@ -3358,7 +3358,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  733:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     assert_param(IS_RTC_MINUTES(RTC_Bcd2ToByte(sTime->Minutes)));
  1051              		.loc 1 733 5 is_stmt 1 view .LVU318
  734:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     assert_param(IS_RTC_SECONDS(RTC_Bcd2ToByte(sTime->Seconds)));
-ARM GAS  /tmp/ccQZzZ6b.s 			page 57
+ARM GAS  /tmp/ccOYnL5G.s 			page 57
 
 
  1052              		.loc 1 734 5 view .LVU319
@@ -3418,7 +3418,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1092              	.LVL107:
  762:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     {
  1093              		.loc 1 762 5 is_stmt 1 view .LVU334
-ARM GAS  /tmp/ccQZzZ6b.s 			page 58
+ARM GAS  /tmp/ccOYnL5G.s 			page 58
 
 
  762:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     {
@@ -3478,7 +3478,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1131              		.loc 1 773 23 is_stmt 0 view .LVU351
  1132 00aa 0423     		movs	r3, #4
  1133 00ac 7374     		strb	r3, [r6, #17]
-ARM GAS  /tmp/ccQZzZ6b.s 			page 59
+ARM GAS  /tmp/ccOYnL5G.s 			page 59
 
 
  776:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
@@ -3538,7 +3538,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1178 0002 6FD0     		beq	.L85
  803:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   uint32_t counter_time = 0U, counter_alarm = 0U, days_elapsed = 0U, hours = 0U;
  1179              		.loc 1 803 1 discriminator 1 view .LVU364
-ARM GAS  /tmp/ccQZzZ6b.s 			page 60
+ARM GAS  /tmp/ccOYnL5G.s 			page 60
 
 
  1180 0004 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
@@ -3598,7 +3598,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1222 0028 334B     		ldr	r3, .L100
  1223 002a A3FB0023 		umull	r2, r3, r3, r0
  1224 002e DB0A     		lsrs	r3, r3, #11
-ARM GAS  /tmp/ccQZzZ6b.s 			page 61
+ARM GAS  /tmp/ccOYnL5G.s 			page 61
 
 
  1225              	.LVL118:
@@ -3658,7 +3658,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1262 005c 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
  1263 005e FFF7FEFF 		bl	RTC_ByteToBcd2
  1264              	.LVL121:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 62
+ARM GAS  /tmp/ccOYnL5G.s 			page 62
 
 
  893:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     sTime->Minutes  = (uint8_t)RTC_ByteToBcd2(sTime->Minutes);
@@ -3718,7 +3718,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1304 0092 8146     		mov	r9, r0
  1305              	.LVL128:
  841:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     {
-ARM GAS  /tmp/ccQZzZ6b.s 			page 63
+ARM GAS  /tmp/ccOYnL5G.s 			page 63
 
 
  1306              		.loc 1 841 5 is_stmt 1 view .LVU409
@@ -3778,7 +3778,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  867:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       {
  1345              		.loc 1 867 11 is_stmt 0 view .LVU425
  1346 00be 09EB0601 		add	r1, r9, r6
-ARM GAS  /tmp/ccQZzZ6b.s 			page 64
+ARM GAS  /tmp/ccOYnL5G.s 			page 64
 
 
  1347              	.LVL135:
@@ -3838,7 +3838,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1392 00e6 7047     		bx	lr
  1393              	.LVL143:
  1394              	.L86:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 65
+ARM GAS  /tmp/ccOYnL5G.s 			page 65
 
 
  1395              	.LCFI11:
@@ -3898,7 +3898,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1446              	.LFB71:
  914:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   uint32_t counter_time = 0U, counter_alarm = 0U, hours = 0U;
  1447              		.loc 1 914 1 is_stmt 1 view -0
-ARM GAS  /tmp/ccQZzZ6b.s 			page 66
+ARM GAS  /tmp/ccOYnL5G.s 			page 66
 
 
  1448              		.cfi_startproc
@@ -3958,7 +3958,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  934:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     assert_param(IS_RTC_DATE(sDate->Date));
  1487              		.loc 1 934 5 view .LVU456
  935:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 67
+ARM GAS  /tmp/ccOYnL5G.s 			page 67
 
 
  1488              		.loc 1 935 5 view .LVU457
@@ -4018,7 +4018,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1524              		.loc 1 964 3 view .LVU475
  964:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
  1525              		.loc 1 964 6 is_stmt 0 view .LVU476
-ARM GAS  /tmp/ccQZzZ6b.s 			page 68
+ARM GAS  /tmp/ccOYnL5G.s 			page 68
 
 
  1526 003e 224B     		ldr	r3, .L116
@@ -4078,7 +4078,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1563              		.loc 1 950 30 view .LVU493
  1564 005c 6073     		strb	r0, [r4, #13]
  951:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
-ARM GAS  /tmp/ccQZzZ6b.s 			page 69
+ARM GAS  /tmp/ccOYnL5G.s 			page 69
 
 
  1565              		.loc 1 951 5 is_stmt 1 view .LVU494
@@ -4138,7 +4138,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1604              		.loc 1 977 14 is_stmt 0 view .LVU509
  1605 0088 0120     		movs	r0, #1
  1606 008a DFE7     		b	.L103
-ARM GAS  /tmp/ccQZzZ6b.s 			page 70
+ARM GAS  /tmp/ccOYnL5G.s 			page 70
 
 
  1607              	.L107:
@@ -4198,7 +4198,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1644              		.loc 1 1000 11 view .LVU526
 1000:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         }
  1645              		.loc 1 1000 18 is_stmt 0 view .LVU527
-ARM GAS  /tmp/ccQZzZ6b.s 			page 71
+ARM GAS  /tmp/ccOYnL5G.s 			page 71
 
 
  1646 00b6 0120     		movs	r0, #1
@@ -4258,7 +4258,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1695              		.thumb_func
  1696              		.fpu softvfp
  1698              	HAL_RTC_GetDate:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 72
+ARM GAS  /tmp/ccOYnL5G.s 			page 72
 
 
  1699              	.LVL173:
@@ -4318,7 +4318,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1741              	.LVL176:
 1041:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
  1742              		.loc 1 1041 6 view .LVU546
-ARM GAS  /tmp/ccQZzZ6b.s 			page 73
+ARM GAS  /tmp/ccOYnL5G.s 			page 73
 
 
  1743 0022 0646     		mov	r6, r0
@@ -4378,7 +4378,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1778 0044 FFF7FEFF 		bl	RTC_ByteToBcd2
  1779              	.LVL179:
 1057:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     sDate->Date   = (uint8_t)RTC_ByteToBcd2(sDate->Date);
-ARM GAS  /tmp/ccQZzZ6b.s 			page 74
+ARM GAS  /tmp/ccOYnL5G.s 			page 74
 
 
  1780              		.loc 1 1057 19 view .LVU566
@@ -4438,7 +4438,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1093:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   uint32_t counter_alarm = 0U, counter_time;
  1829              		.loc 1 1093 1 is_stmt 1 view -0
  1830              		.cfi_startproc
-ARM GAS  /tmp/ccQZzZ6b.s 			page 75
+ARM GAS  /tmp/ccOYnL5G.s 			page 75
 
 
  1831              		@ args = 0, pretend = 0, frame = 8
@@ -4498,7 +4498,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1872              		.loc 1 1108 3 discriminator 2 view .LVU587
 1110:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  1873              		.loc 1 1110 3 discriminator 2 view .LVU588
-ARM GAS  /tmp/ccQZzZ6b.s 			page 76
+ARM GAS  /tmp/ccOYnL5G.s 			page 76
 
 
 1110:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
@@ -4558,7 +4558,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1127:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  1911              		.loc 1 1127 5 view .LVU606
 1129:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****                                ((uint32_t)sAlarm->AlarmTime.Minutes * 60U) + \
-ARM GAS  /tmp/ccQZzZ6b.s 			page 77
+ARM GAS  /tmp/ccOYnL5G.s 			page 77
 
 
  1912              		.loc 1 1129 5 view .LVU607
@@ -4618,7 +4618,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1950 007e 0423     		movs	r3, #4
  1951 0080 7374     		strb	r3, [r6, #17]
 1158:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 78
+ARM GAS  /tmp/ccOYnL5G.s 			page 78
 
 
  1952              		.loc 1 1158 5 is_stmt 1 view .LVU624
@@ -4678,7 +4678,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  1990              	.LVL199:
 1139:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****                      ((uint32_t)(RTC_Bcd2ToByte(sAlarm->AlarmTime.Minutes)) * 60U) + \
  1991              		.loc 1 1139 19 view .LVU641
-ARM GAS  /tmp/ccQZzZ6b.s 			page 79
+ARM GAS  /tmp/ccOYnL5G.s 			page 79
 
 
  1992 00ae DCE7     		b	.L127
@@ -4738,7 +4738,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1108:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  2034              		.loc 1 1108 3 view .LVU654
  2035 00c6 F9E7     		b	.L125
-ARM GAS  /tmp/ccQZzZ6b.s 			page 80
+ARM GAS  /tmp/ccOYnL5G.s 			page 80
 
 
  2036              	.LVL207:
@@ -4798,7 +4798,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2084 0016 0546     		mov	r5, r0
 1190:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
  2085              		.loc 1 1190 22 discriminator 1 view .LVU663
-ARM GAS  /tmp/ccQZzZ6b.s 			page 81
+ARM GAS  /tmp/ccOYnL5G.s 			page 81
 
 
  2086 0018 0029     		cmp	r1, #0
@@ -4858,7 +4858,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2123 0042 9F00     		lsls	r7, r3, #2
 1211:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****                             ((uint32_t)stime.Minutes * 60U) + \
  2124              		.loc 1 1211 61 view .LVU681
-ARM GAS  /tmp/ccQZzZ6b.s 			page 82
+ARM GAS  /tmp/ccOYnL5G.s 			page 82
 
 
  2125 0044 4FF46163 		mov	r3, #3600
@@ -4918,7 +4918,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2161 006e 01F5A831 		add	r1, r1, #86016
  2162              	.LVL215:
 1240:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
-ARM GAS  /tmp/ccQZzZ6b.s 			page 83
+ARM GAS  /tmp/ccOYnL5G.s 			page 83
 
 
  2163              		.loc 1 1240 19 view .LVU700
@@ -4978,7 +4978,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2200              		.loc 1 1231 75 view .LVU717
  2201 0094 00FB06F6 		mul	r6, r0, r6
 1232:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****                      ((uint32_t)RTC_Bcd2ToByte(sAlarm->AlarmTime.Seconds)));
-ARM GAS  /tmp/ccQZzZ6b.s 			page 84
+ARM GAS  /tmp/ccOYnL5G.s 			page 84
 
 
  2202              		.loc 1 1232 34 view .LVU718
@@ -5038,7 +5038,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2244              		.loc 1 1269 5 is_stmt 1 view .LVU730
 1269:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  2245              		.loc 1 1269 5 view .LVU731
-ARM GAS  /tmp/ccQZzZ6b.s 			page 85
+ARM GAS  /tmp/ccOYnL5G.s 			page 85
 
 
  2246 00da 0023     		movs	r3, #0
@@ -5098,7 +5098,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2290              		.cfi_endproc
  2291              	.LFE74:
  2293              		.section	.text.HAL_RTC_GetAlarm,"ax",%progbits
-ARM GAS  /tmp/ccQZzZ6b.s 			page 86
+ARM GAS  /tmp/ccOYnL5G.s 			page 86
 
 
  2294              		.align	1
@@ -5158,7 +5158,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2336              		.loc 1 1311 3 is_stmt 1 view .LVU754
 1311:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   sAlarm->AlarmTime.Minutes = (uint32_t)((counter_alarm % 3600U) / 60U);
  2337              		.loc 1 1311 57 is_stmt 0 view .LVU755
-ARM GAS  /tmp/ccQZzZ6b.s 			page 87
+ARM GAS  /tmp/ccOYnL5G.s 			page 87
 
 
  2338 0010 194A     		ldr	r2, .L157
@@ -5218,7 +5218,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2377 0050 FFF7FEFF 		bl	RTC_ByteToBcd2
  2378              	.LVL237:
 1317:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     sAlarm->AlarmTime.Minutes = RTC_ByteToBcd2(sAlarm->AlarmTime.Minutes);
-ARM GAS  /tmp/ccQZzZ6b.s 			page 88
+ARM GAS  /tmp/ccOYnL5G.s 			page 88
 
 
  2379              		.loc 1 1317 31 view .LVU771
@@ -5278,7 +5278,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2423              		.loc 1 1299 12 view .LVU781
  2424 006e 0120     		movs	r0, #1
  2425              	.LVL243:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 89
+ARM GAS  /tmp/ccOYnL5G.s 			page 89
 
 
 1299:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
@@ -5338,7 +5338,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2472              		.cfi_offset 14, -4
  2473 0006 0446     		mov	r4, r0
 1349:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 90
+ARM GAS  /tmp/ccOYnL5G.s 			page 90
 
 
  2474              		.loc 1 1349 3 is_stmt 1 view .LVU792
@@ -5398,7 +5398,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2511              		.loc 1 1396 1 view .LVU809
  2512 0030 10BD     		pop	{r4, pc}
  2513              	.LVL248:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 91
+ARM GAS  /tmp/ccOYnL5G.s 			page 91
 
 
  2514              	.L161:
@@ -5458,7 +5458,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1382:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  2553              		.loc 1 1382 19 is_stmt 0 view .LVU825
  2554 0064 0423     		movs	r3, #4
-ARM GAS  /tmp/ccQZzZ6b.s 			page 92
+ARM GAS  /tmp/ccOYnL5G.s 			page 92
 
 
  2555 0066 6374     		strb	r3, [r4, #17]
@@ -5518,7 +5518,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2602              	HAL_RTC_AlarmAEventCallback:
  2603              	.LVL254:
  2604              	.LFB78:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 93
+ARM GAS  /tmp/ccOYnL5G.s 			page 93
 
 
 1437:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   /* Prevent unused argument(s) compilation warning */
@@ -5578,7 +5578,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2650 0014 06D1     		bne	.L176
  2651              	.LVL256:
  2652              	.L174:
-ARM GAS  /tmp/ccQZzZ6b.s 			page 94
+ARM GAS  /tmp/ccOYnL5G.s 			page 94
 
 
 1424:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
@@ -5638,7 +5638,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2701              		.cfi_offset 5, -12
  2702              		.cfi_offset 6, -8
  2703              		.cfi_offset 14, -4
-ARM GAS  /tmp/ccQZzZ6b.s 			page 95
+ARM GAS  /tmp/ccOYnL5G.s 			page 95
 
 
  2704 0002 0446     		mov	r4, r0
@@ -5698,7 +5698,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1468:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****         return HAL_TIMEOUT;
  2742              		.loc 1 1468 21 is_stmt 0 view .LVU870
  2743 002a 0320     		movs	r0, #3
-ARM GAS  /tmp/ccQZzZ6b.s 			page 96
+ARM GAS  /tmp/ccOYnL5G.s 			page 96
 
 
  2744 002c 6074     		strb	r0, [r4, #17]
@@ -5758,7 +5758,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
 1509:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** }
  2789              		.loc 1 1509 3 view .LVU882
 1509:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** }
-ARM GAS  /tmp/ccQZzZ6b.s 			page 97
+ARM GAS  /tmp/ccOYnL5G.s 			page 97
 
 
  2790              		.loc 1 1509 14 is_stmt 0 view .LVU883
@@ -5818,7 +5818,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2836 0014 0446     		mov	r4, r0
  2837              	.LVL270:
 1556:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
-ARM GAS  /tmp/ccQZzZ6b.s 			page 98
+ARM GAS  /tmp/ccOYnL5G.s 			page 98
 
 
  2838              		.loc 1 1556 3 is_stmt 1 view .LVU894
@@ -5878,7 +5878,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  2879              		.cfi_endproc
  2880              	.LFE81:
  2882              		.section	.text.HAL_RTC_Init,"ax",%progbits
-ARM GAS  /tmp/ccQZzZ6b.s 			page 99
+ARM GAS  /tmp/ccOYnL5G.s 			page 99
 
 
  2883              		.align	1
@@ -5938,7 +5938,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  325:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   {
  2924              		.loc 1 325 7 is_stmt 0 view .LVU922
  2925 0010 2046     		mov	r0, r4
-ARM GAS  /tmp/ccQZzZ6b.s 			page 100
+ARM GAS  /tmp/ccOYnL5G.s 			page 100
 
 
  2926 0012 FFF7FEFF 		bl	HAL_RTC_WaitForSynchro
@@ -5998,7 +5998,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  346:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     {
  2965              		.loc 1 346 19 is_stmt 0 view .LVU938
  2966 003a A368     		ldr	r3, [r4, #8]
-ARM GAS  /tmp/ccQZzZ6b.s 			page 101
+ARM GAS  /tmp/ccOYnL5G.s 			page 101
 
 
  346:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     {
@@ -6058,7 +6058,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  3010              	.LVL283:
  385:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****     {
  3011              		.loc 1 385 8 view .LVU950
-ARM GAS  /tmp/ccQZzZ6b.s 			page 102
+ARM GAS  /tmp/ccOYnL5G.s 			page 102
 
 
  3012 0080 88B1     		cbz	r0, .L209
@@ -6118,7 +6118,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  3049              		.loc 1 370 21 is_stmt 0 view .LVU967
  3050 009e 0423     		movs	r3, #4
  3051 00a0 6374     		strb	r3, [r4, #17]
-ARM GAS  /tmp/ccQZzZ6b.s 			page 103
+ARM GAS  /tmp/ccOYnL5G.s 			page 103
 
 
  371:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****       }
@@ -6178,7 +6178,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  3091              		.cfi_endproc
  3092              	.LFE65:
  3094              		.section	.text.HAL_RTC_DeInit,"ax",%progbits
-ARM GAS  /tmp/ccQZzZ6b.s 			page 104
+ARM GAS  /tmp/ccOYnL5G.s 			page 104
 
 
  3095              		.align	1
@@ -6238,7 +6238,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  3137              		.loc 1 432 5 is_stmt 1 view .LVU995
  432:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  3138              		.loc 1 432 5 view .LVU996
-ARM GAS  /tmp/ccQZzZ6b.s 			page 105
+ARM GAS  /tmp/ccOYnL5G.s 			page 105
 
 
  3139 0016 0023     		movs	r3, #0
@@ -6298,7 +6298,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  449:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
  3180              		.loc 1 449 7 is_stmt 1 view .LVU1010
  449:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c **** 
-ARM GAS  /tmp/ccQZzZ6b.s 			page 106
+ARM GAS  /tmp/ccOYnL5G.s 			page 106
 
 
  3181              		.loc 1 449 19 is_stmt 0 view .LVU1011
@@ -6358,7 +6358,7 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  416:/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c ****   }
  3220              		.loc 1 416 12 view .LVU1027
  3221 0072 0125     		movs	r5, #1
-ARM GAS  /tmp/ccQZzZ6b.s 			page 107
+ARM GAS  /tmp/ccOYnL5G.s 			page 107
 
 
  3222 0074 D2E7     		b	.L222
@@ -6373,79 +6373,79 @@ ARM GAS  /tmp/ccQZzZ6b.s 			page 1
  3232              		.file 6 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
  3233              		.file 7 "Inc/stm32f1xx_hal.h"
  3234              		.file 8 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
-ARM GAS  /tmp/ccQZzZ6b.s 			page 108
+ARM GAS  /tmp/ccOYnL5G.s 			page 108
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f1xx_hal_rtc.c
-     /tmp/ccQZzZ6b.s:16     .text.RTC_ReadTimeCounter:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:23     .text.RTC_ReadTimeCounter:0000000000000000 RTC_ReadTimeCounter
-     /tmp/ccQZzZ6b.s:96     .text.RTC_ReadAlarmCounter:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:102    .text.RTC_ReadAlarmCounter:0000000000000000 RTC_ReadAlarmCounter
-     /tmp/ccQZzZ6b.s:132    .text.RTC_ByteToBcd2:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:138    .text.RTC_ByteToBcd2:0000000000000000 RTC_ByteToBcd2
-     /tmp/ccQZzZ6b.s:184    .text.RTC_Bcd2ToByte:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:190    .text.RTC_Bcd2ToByte:0000000000000000 RTC_Bcd2ToByte
-     /tmp/ccQZzZ6b.s:218    .text.RTC_IsLeapYear:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:224    .text.RTC_IsLeapYear:0000000000000000 RTC_IsLeapYear
-     /tmp/ccQZzZ6b.s:283    .text.RTC_IsLeapYear:000000000000003c $d
-     /tmp/ccQZzZ6b.s:288    .text.RTC_WeekDayNum:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:294    .text.RTC_WeekDayNum:0000000000000000 RTC_WeekDayNum
-     /tmp/ccQZzZ6b.s:399    .text.RTC_WeekDayNum:000000000000008c $d
-     /tmp/ccQZzZ6b.s:406    .text.RTC_DateUpdate:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:412    .text.RTC_DateUpdate:0000000000000000 RTC_DateUpdate
-     /tmp/ccQZzZ6b.s:638    .text.RTC_EnterInitMode:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:644    .text.RTC_EnterInitMode:0000000000000000 RTC_EnterInitMode
-     /tmp/ccQZzZ6b.s:707    .text.RTC_ExitInitMode:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:713    .text.RTC_ExitInitMode:0000000000000000 RTC_ExitInitMode
-     /tmp/ccQZzZ6b.s:776    .text.RTC_WriteTimeCounter:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:782    .text.RTC_WriteTimeCounter:0000000000000000 RTC_WriteTimeCounter
-     /tmp/ccQZzZ6b.s:841    .text.RTC_WriteAlarmCounter:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:847    .text.RTC_WriteAlarmCounter:0000000000000000 RTC_WriteAlarmCounter
-     /tmp/ccQZzZ6b.s:906    .text.HAL_RTC_MspInit:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:913    .text.HAL_RTC_MspInit:0000000000000000 HAL_RTC_MspInit
-     /tmp/ccQZzZ6b.s:928    .text.HAL_RTC_MspDeInit:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:935    .text.HAL_RTC_MspDeInit:0000000000000000 HAL_RTC_MspDeInit
-     /tmp/ccQZzZ6b.s:950    .text.HAL_RTC_SetTime:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:957    .text.HAL_RTC_SetTime:0000000000000000 HAL_RTC_SetTime
-     /tmp/ccQZzZ6b.s:1160   .text.HAL_RTC_GetTime:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:1167   .text.HAL_RTC_GetTime:0000000000000000 HAL_RTC_GetTime
-     /tmp/ccQZzZ6b.s:1428   .text.HAL_RTC_GetTime:00000000000000f8 $d
-     /tmp/ccQZzZ6b.s:1437   .text.HAL_RTC_SetDate:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:1444   .text.HAL_RTC_SetDate:0000000000000000 HAL_RTC_SetDate
-     /tmp/ccQZzZ6b.s:1684   .text.HAL_RTC_SetDate:00000000000000c8 $d
-     /tmp/ccQZzZ6b.s:1691   .text.HAL_RTC_GetDate:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:1698   .text.HAL_RTC_GetDate:0000000000000000 HAL_RTC_GetDate
-     /tmp/ccQZzZ6b.s:1819   .text.HAL_RTC_SetAlarm:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:1826   .text.HAL_RTC_SetAlarm:0000000000000000 HAL_RTC_SetAlarm
-     /tmp/ccQZzZ6b.s:2045   .text.HAL_RTC_SetAlarm_IT:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:2052   .text.HAL_RTC_SetAlarm_IT:0000000000000000 HAL_RTC_SetAlarm_IT
-     /tmp/ccQZzZ6b.s:2289   .text.HAL_RTC_SetAlarm_IT:00000000000000f4 $d
-     /tmp/ccQZzZ6b.s:2294   .text.HAL_RTC_GetAlarm:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:2301   .text.HAL_RTC_GetAlarm:0000000000000000 HAL_RTC_GetAlarm
-     /tmp/ccQZzZ6b.s:2440   .text.HAL_RTC_GetAlarm:0000000000000078 $d
-     /tmp/ccQZzZ6b.s:2447   .text.HAL_RTC_DeactivateAlarm:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:2454   .text.HAL_RTC_DeactivateAlarm:0000000000000000 HAL_RTC_DeactivateAlarm
-     /tmp/ccQZzZ6b.s:2590   .text.HAL_RTC_DeactivateAlarm:0000000000000078 $d
-     /tmp/ccQZzZ6b.s:2595   .text.HAL_RTC_AlarmAEventCallback:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:2602   .text.HAL_RTC_AlarmAEventCallback:0000000000000000 HAL_RTC_AlarmAEventCallback
-     /tmp/ccQZzZ6b.s:2617   .text.HAL_RTC_AlarmIRQHandler:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:2624   .text.HAL_RTC_AlarmIRQHandler:0000000000000000 HAL_RTC_AlarmIRQHandler
-     /tmp/ccQZzZ6b.s:2677   .text.HAL_RTC_AlarmIRQHandler:0000000000000034 $d
-     /tmp/ccQZzZ6b.s:2682   .text.HAL_RTC_PollForAlarmAEvent:0000000000000000 $t
-ARM GAS  /tmp/ccQZzZ6b.s 			page 109
+     /tmp/ccOYnL5G.s:16     .text.RTC_ReadTimeCounter:0000000000000000 $t
+     /tmp/ccOYnL5G.s:23     .text.RTC_ReadTimeCounter:0000000000000000 RTC_ReadTimeCounter
+     /tmp/ccOYnL5G.s:96     .text.RTC_ReadAlarmCounter:0000000000000000 $t
+     /tmp/ccOYnL5G.s:102    .text.RTC_ReadAlarmCounter:0000000000000000 RTC_ReadAlarmCounter
+     /tmp/ccOYnL5G.s:132    .text.RTC_ByteToBcd2:0000000000000000 $t
+     /tmp/ccOYnL5G.s:138    .text.RTC_ByteToBcd2:0000000000000000 RTC_ByteToBcd2
+     /tmp/ccOYnL5G.s:184    .text.RTC_Bcd2ToByte:0000000000000000 $t
+     /tmp/ccOYnL5G.s:190    .text.RTC_Bcd2ToByte:0000000000000000 RTC_Bcd2ToByte
+     /tmp/ccOYnL5G.s:218    .text.RTC_IsLeapYear:0000000000000000 $t
+     /tmp/ccOYnL5G.s:224    .text.RTC_IsLeapYear:0000000000000000 RTC_IsLeapYear
+     /tmp/ccOYnL5G.s:283    .text.RTC_IsLeapYear:000000000000003c $d
+     /tmp/ccOYnL5G.s:288    .text.RTC_WeekDayNum:0000000000000000 $t
+     /tmp/ccOYnL5G.s:294    .text.RTC_WeekDayNum:0000000000000000 RTC_WeekDayNum
+     /tmp/ccOYnL5G.s:399    .text.RTC_WeekDayNum:000000000000008c $d
+     /tmp/ccOYnL5G.s:406    .text.RTC_DateUpdate:0000000000000000 $t
+     /tmp/ccOYnL5G.s:412    .text.RTC_DateUpdate:0000000000000000 RTC_DateUpdate
+     /tmp/ccOYnL5G.s:638    .text.RTC_EnterInitMode:0000000000000000 $t
+     /tmp/ccOYnL5G.s:644    .text.RTC_EnterInitMode:0000000000000000 RTC_EnterInitMode
+     /tmp/ccOYnL5G.s:707    .text.RTC_ExitInitMode:0000000000000000 $t
+     /tmp/ccOYnL5G.s:713    .text.RTC_ExitInitMode:0000000000000000 RTC_ExitInitMode
+     /tmp/ccOYnL5G.s:776    .text.RTC_WriteTimeCounter:0000000000000000 $t
+     /tmp/ccOYnL5G.s:782    .text.RTC_WriteTimeCounter:0000000000000000 RTC_WriteTimeCounter
+     /tmp/ccOYnL5G.s:841    .text.RTC_WriteAlarmCounter:0000000000000000 $t
+     /tmp/ccOYnL5G.s:847    .text.RTC_WriteAlarmCounter:0000000000000000 RTC_WriteAlarmCounter
+     /tmp/ccOYnL5G.s:906    .text.HAL_RTC_MspInit:0000000000000000 $t
+     /tmp/ccOYnL5G.s:913    .text.HAL_RTC_MspInit:0000000000000000 HAL_RTC_MspInit
+     /tmp/ccOYnL5G.s:928    .text.HAL_RTC_MspDeInit:0000000000000000 $t
+     /tmp/ccOYnL5G.s:935    .text.HAL_RTC_MspDeInit:0000000000000000 HAL_RTC_MspDeInit
+     /tmp/ccOYnL5G.s:950    .text.HAL_RTC_SetTime:0000000000000000 $t
+     /tmp/ccOYnL5G.s:957    .text.HAL_RTC_SetTime:0000000000000000 HAL_RTC_SetTime
+     /tmp/ccOYnL5G.s:1160   .text.HAL_RTC_GetTime:0000000000000000 $t
+     /tmp/ccOYnL5G.s:1167   .text.HAL_RTC_GetTime:0000000000000000 HAL_RTC_GetTime
+     /tmp/ccOYnL5G.s:1428   .text.HAL_RTC_GetTime:00000000000000f8 $d
+     /tmp/ccOYnL5G.s:1437   .text.HAL_RTC_SetDate:0000000000000000 $t
+     /tmp/ccOYnL5G.s:1444   .text.HAL_RTC_SetDate:0000000000000000 HAL_RTC_SetDate
+     /tmp/ccOYnL5G.s:1684   .text.HAL_RTC_SetDate:00000000000000c8 $d
+     /tmp/ccOYnL5G.s:1691   .text.HAL_RTC_GetDate:0000000000000000 $t
+     /tmp/ccOYnL5G.s:1698   .text.HAL_RTC_GetDate:0000000000000000 HAL_RTC_GetDate
+     /tmp/ccOYnL5G.s:1819   .text.HAL_RTC_SetAlarm:0000000000000000 $t
+     /tmp/ccOYnL5G.s:1826   .text.HAL_RTC_SetAlarm:0000000000000000 HAL_RTC_SetAlarm
+     /tmp/ccOYnL5G.s:2045   .text.HAL_RTC_SetAlarm_IT:0000000000000000 $t
+     /tmp/ccOYnL5G.s:2052   .text.HAL_RTC_SetAlarm_IT:0000000000000000 HAL_RTC_SetAlarm_IT
+     /tmp/ccOYnL5G.s:2289   .text.HAL_RTC_SetAlarm_IT:00000000000000f4 $d
+     /tmp/ccOYnL5G.s:2294   .text.HAL_RTC_GetAlarm:0000000000000000 $t
+     /tmp/ccOYnL5G.s:2301   .text.HAL_RTC_GetAlarm:0000000000000000 HAL_RTC_GetAlarm
+     /tmp/ccOYnL5G.s:2440   .text.HAL_RTC_GetAlarm:0000000000000078 $d
+     /tmp/ccOYnL5G.s:2447   .text.HAL_RTC_DeactivateAlarm:0000000000000000 $t
+     /tmp/ccOYnL5G.s:2454   .text.HAL_RTC_DeactivateAlarm:0000000000000000 HAL_RTC_DeactivateAlarm
+     /tmp/ccOYnL5G.s:2590   .text.HAL_RTC_DeactivateAlarm:0000000000000078 $d
+     /tmp/ccOYnL5G.s:2595   .text.HAL_RTC_AlarmAEventCallback:0000000000000000 $t
+     /tmp/ccOYnL5G.s:2602   .text.HAL_RTC_AlarmAEventCallback:0000000000000000 HAL_RTC_AlarmAEventCallback
+     /tmp/ccOYnL5G.s:2617   .text.HAL_RTC_AlarmIRQHandler:0000000000000000 $t
+     /tmp/ccOYnL5G.s:2624   .text.HAL_RTC_AlarmIRQHandler:0000000000000000 HAL_RTC_AlarmIRQHandler
+     /tmp/ccOYnL5G.s:2677   .text.HAL_RTC_AlarmIRQHandler:0000000000000034 $d
+     /tmp/ccOYnL5G.s:2682   .text.HAL_RTC_PollForAlarmAEvent:0000000000000000 $t
+ARM GAS  /tmp/ccOYnL5G.s 			page 109
 
 
-     /tmp/ccQZzZ6b.s:2689   .text.HAL_RTC_PollForAlarmAEvent:0000000000000000 HAL_RTC_PollForAlarmAEvent
-     /tmp/ccQZzZ6b.s:2774   .text.HAL_RTC_GetState:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:2781   .text.HAL_RTC_GetState:0000000000000000 HAL_RTC_GetState
-     /tmp/ccQZzZ6b.s:2799   .text.HAL_RTC_WaitForSynchro:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:2806   .text.HAL_RTC_WaitForSynchro:0000000000000000 HAL_RTC_WaitForSynchro
-     /tmp/ccQZzZ6b.s:2883   .text.HAL_RTC_Init:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:2890   .text.HAL_RTC_Init:0000000000000000 HAL_RTC_Init
-     /tmp/ccQZzZ6b.s:3090   .text.HAL_RTC_Init:00000000000000b8 $d
-     /tmp/ccQZzZ6b.s:3095   .text.HAL_RTC_DeInit:0000000000000000 $t
-     /tmp/ccQZzZ6b.s:3102   .text.HAL_RTC_DeInit:0000000000000000 HAL_RTC_DeInit
+     /tmp/ccOYnL5G.s:2689   .text.HAL_RTC_PollForAlarmAEvent:0000000000000000 HAL_RTC_PollForAlarmAEvent
+     /tmp/ccOYnL5G.s:2774   .text.HAL_RTC_GetState:0000000000000000 $t
+     /tmp/ccOYnL5G.s:2781   .text.HAL_RTC_GetState:0000000000000000 HAL_RTC_GetState
+     /tmp/ccOYnL5G.s:2799   .text.HAL_RTC_WaitForSynchro:0000000000000000 $t
+     /tmp/ccOYnL5G.s:2806   .text.HAL_RTC_WaitForSynchro:0000000000000000 HAL_RTC_WaitForSynchro
+     /tmp/ccOYnL5G.s:2883   .text.HAL_RTC_Init:0000000000000000 $t
+     /tmp/ccOYnL5G.s:2890   .text.HAL_RTC_Init:0000000000000000 HAL_RTC_Init
+     /tmp/ccOYnL5G.s:3090   .text.HAL_RTC_Init:00000000000000b8 $d
+     /tmp/ccOYnL5G.s:3095   .text.HAL_RTC_DeInit:0000000000000000 $t
+     /tmp/ccOYnL5G.s:3102   .text.HAL_RTC_DeInit:0000000000000000 HAL_RTC_DeInit
 
 UNDEFINED SYMBOLS
 HAL_GetTick

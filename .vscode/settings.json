@@ -3,6 +3,8 @@
     "files.associations": {
         "usart.h": "c",
         "syringe.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "modbus_data.h": "c",
+        "fifo.h": "c"
     }
 }

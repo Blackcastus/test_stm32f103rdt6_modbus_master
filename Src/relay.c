@@ -1,9 +1,8 @@
 #include "relay.h"
-#include "control_system.h"
 #include "modbus_data.h"
 
 RL_STRUCT_T *relayFlag;
-extern DEVICE_t device;
+// extern DEVICE_t device;
 
 uint32_t blink_tick;
 
@@ -298,17 +297,17 @@ void RELAY16(uint8_t status)
 
 void RELAY_Manage(void)
 {
-    RELAY1(device.valve_fan);                   // quat hut
-    RELAY2(device.light);                       // den chieu sang
-    RELAY3(device.warning_red);                 // den bao do
-    RELAY4(device.warning_green);               // den bao xanh
-    RELAY5(device.warning_yellow);              // den bao vang
-    RELAY6(device.door);                        // khoa cua
-    RELAY7(device.thermistor3);                 // dien tro nhiet 3
-    RELAY8(device.thermistor1);                 // dien tro nhiet 1
-    RELAY9(device.thermistor2);                 // dien tro nhiet 2
-    RELAY10(device.moise.stt_rl);               // may tao am
-    RELAY11(device.humidify.stt_rl);            // may hut am
-    RELAY12(device.valve_heater);               // van khi nong
-    RELAY13(device.valve_cooler);               // van khi lanh 
+    // RELAY1(device.valve_fan);                   // quat hut
+    // RELAY2(device.light);                       // den chieu sang
+    // RELAY3(device.warning_red);                 // den bao do
+    // RELAY4(device.warning_green);               // den bao xanh
+    // RELAY5(device.warning_yellow);              // den bao vang
+    // RELAY6(device.door);                        // khoa cua
+    // RELAY7(device.thermistor3);                 // dien tro nhiet 3
+    // RELAY8(device.thermistor1);                 // dien tro nhiet 1
+    // RELAY9(device.thermistor2);                 // dien tro nhiet 2
+    // RELAY10(device.moise.stt_rl);               // may tao am
+    // RELAY11(device.humidify.stt_rl);            // may hut am
+    // RELAY12(device.valve_heater);               // van khi nong
+    // RELAY13(device.valve_cooler);               // van khi lanh 
 }

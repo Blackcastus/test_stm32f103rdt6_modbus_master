@@ -35,9 +35,8 @@ build/main.o: Src/main.c Inc/main.h Inc/stm32f1xx_hal.h \
  /home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
  Inc/stm32f1xx_it.h User/USB/usb_device.h \
  /home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
- User/USB/usbd_conf.h Inc/gpio.h Inc/main.h User/System/config.h \
- Inc/input.h Inc/relay.h User/System/control_system.h User/Modbus/usart.h \
- User/Peripherals/sht_sensor.h User/Modbus/modbus_data.h
+ User/USB/usbd_conf.h Inc/gpio.h Inc/main.h User/Modbus/usart.h \
+ User/Modbus/modbus_data.h
 Inc/main.h:
 Inc/stm32f1xx_hal.h:
 Inc/stm32f1xx_hal_conf.h:
@@ -80,10 +79,5 @@ User/USB/usb_device.h:
 User/USB/usbd_conf.h:
 Inc/gpio.h:
 Inc/main.h:
-User/System/config.h:
-Inc/input.h:
-Inc/relay.h:
-User/System/control_system.h:
 User/Modbus/usart.h:
-User/Peripherals/sht_sensor.h:
 User/Modbus/modbus_data.h:
