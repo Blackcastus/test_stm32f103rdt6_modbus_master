@@ -168,7 +168,6 @@ C_INCLUDES =  \
 -I$(LIB_DIR)/Drivers/CMSIS/Device/ST/STM32F1xx/Include \
 -I$(LIB_DIR)/Drivers/CMSIS/Include \
 -IUser/Modbus \
--IUser/Peripherals \
 -IUser/USB	\
 
 

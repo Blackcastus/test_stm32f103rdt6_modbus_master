@@ -61,6 +61,8 @@ extern uint16_t modbus_holding_buf[NoB_HOLDING_REGISTER],
 		modbus_input_buf[NoB_INPUT_REGISTER];
 extern uint16_t modbus_master_hold_buf[MB_MASTER_SLAVE_NUM][NoB_HOLDING_REGISTER];
 
+extern Modbus_State_t slave;
+
 /*
 * dHUART Seting uart connect with master
 * ulBaudRate Setting baudrate

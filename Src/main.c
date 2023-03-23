@@ -19,7 +19,6 @@ int _write(int file, char *data, int len);
 void SystemClock_Config(void);
 uint32_t tick_;
 uint32_t time_reqest_slave;
-// extern DMA_Event_t        dma_uart1_rx, dma_uart2_rx;
 
 int main(void)
 {
@@ -31,9 +30,6 @@ int main(void)
 
   /* init modbus master */
   Modbus_Master_DMA_Init(&huart2, 9600);
-
-  // uint8_t slave_stt = ;
-
 
   while (1)
   {
@@ -47,7 +43,12 @@ int main(void)
     }
     if(HAL_GetTick() - tick_ > 1000)
     {
-      printf("Temp: %d | humi: %d\n", modbus_master_hold_buf[0][0], modbus_master_hold_buf[0][1]);
+      if(slave.status == 0)
+      {
+        printf("Temp: %d | humi: %d\n", modbus_master_hold_buf[0][0], modbus_master_hold_buf[0][1]);
+      }
+      else
+        printf("error code %d @@\n", slave.status);
       tick_ = HAL_GetTick();
     }
   }

@@ -11,7 +11,8 @@ uint32_t modbus_tick_timeout;
 
 void Modbus_Master_DMA_Init(void *dHUART, uint32_t ulBaudRate)
 {
-    Uart2_Init(ulBaudRate);
+    // init uart connect with slaver
+    MX_USART2_UART_Init(ulBaudRate);
 }
 
 
@@ -89,7 +90,7 @@ MB_Error_Code_t Modbus_Master_Read_HoldRegs(uint8_t id, uint16_t start_reg, uint
             {
                     slave.status = MB_ETIMEDOUT;
                     slave.index = slave.wait = NOWAIT;
-                    printf("error time out\n");
+                    // printf("error time out\n");
                     return mbStatus;
             }
             break;
