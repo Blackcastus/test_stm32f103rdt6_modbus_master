@@ -27,10 +27,9 @@ MB_Error_Code_t Modbus_Master_DMA_Process(void)
 {
     // id | fc | reg_addH | reg_addL | reg_dataH | reg_dataL | crcH | crcL
 
-    /* code */
     if (dma_uart2_rx.state) // da nhan xong frame modbus => xu ly
     {
-        if (Modbus_Check_Crc16(dma_uart2_rx.data, dma_uart2_rx.length)) // check crc is OK
+        if (dma_uart2_rx.data[0] == slave.id && Modbus_Check_Crc16(dma_uart2_rx.data, dma_uart2_rx.length)) // check crc is OK
         {
             switch (dma_uart2_rx.data[1])       // Check Function code
             {
@@ -60,7 +59,7 @@ MB_Error_Code_t Modbus_Master_DMA_Process(void)
         else
         {
             printf("Check CRC Error @@\n");
-            return MC_CRCERR;
+            return MC_IDERR;
         }
         /* Reset */
         slave.index = WATTING_OK;

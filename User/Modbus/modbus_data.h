@@ -52,7 +52,7 @@ typedef enum
 {
 	MB_ENOERR = 0,              /*!< no error. */
 	MB_TX_UART_ERR,				/*!< not transmit */
-	MC_CRCERR,					/*!< crc error */
+	MC_IDERR,					/*!< ID error */
     MB_ETIMEDOUT                /*!< timeout error. */
 }MB_Error_Code_t;
 
