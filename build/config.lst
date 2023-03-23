@@ -1,0 +1,480 @@
+ARM GAS  /tmp/ccYhtSGG.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"config.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.CFG_Save,"ax",%progbits
+  16              		.align	1
+  17              		.global	CFG_Save
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	CFG_Save:
+  25              	.LFB197:
+  26              		.file 1 "User/System/config.c"
+   1:User/System/config.c **** /*
+   2:User/System/config.c **** * @Author: nhantt
+   3:User/System/config.c **** * @Date:   2019-12-13
+   4:User/System/config.c **** * @Last Modified by:   nhantt
+   5:User/System/config.c **** * @Last Modified time: 2019-12-13
+   6:User/System/config.c **** */
+   7:User/System/config.c **** 
+   8:User/System/config.c **** #include "config.h"
+   9:User/System/config.c **** #include <string.h>
+  10:User/System/config.c **** #include <stdio.h>
+  11:User/System/config.c **** CFG_STRUCT sys_cfg;
+  12:User/System/config.c **** #define DATA_32                 ((uint32_t)0x12345678)
+  13:User/System/config.c **** 
+  14:User/System/config.c **** uint32_t Address = 0, PAGEError = 0;
+  15:User/System/config.c **** __IO uint32_t data32 = 0 , MemoryProgramStatus = 0;
+  16:User/System/config.c **** 
+  17:User/System/config.c **** /*Variable used for Erase procedure*/
+  18:User/System/config.c **** static FLASH_EraseInitTypeDef EraseInitStruct;
+  19:User/System/config.c **** 
+  20:User/System/config.c **** void CFG_Save(void)
+  21:User/System/config.c **** {
+  27              		.loc 1 21 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 24
+  34              		.cfi_offset 3, -24
+  35              		.cfi_offset 4, -20
+  36              		.cfi_offset 5, -16
+  37              		.cfi_offset 6, -12
+ARM GAS  /tmp/ccYhtSGG.s 			page 2
+
+
+  38              		.cfi_offset 7, -8
+  39              		.cfi_offset 14, -4
+  22:User/System/config.c **** 	uint32_t *cfgdest, i;
+  40              		.loc 1 22 2 view .LVU1
+  23:User/System/config.c **** 	cfgdest = (uint32_t*)&sys_cfg;
+  41              		.loc 1 23 2 view .LVU2
+  42              	.LVL0:
+  24:User/System/config.c **** 	HAL_FLASH_Unlock();
+  43              		.loc 1 24 2 view .LVU3
+  44 0002 FFF7FEFF 		bl	HAL_FLASH_Unlock
+  45              	.LVL1:
+  25:User/System/config.c **** 	EraseInitStruct.TypeErase = FLASH_TYPEERASE_PAGES;
+  46              		.loc 1 25 2 view .LVU4
+  47              		.loc 1 25 28 is_stmt 0 view .LVU5
+  48 0006 144B     		ldr	r3, .L9
+  49 0008 0024     		movs	r4, #0
+  50 000a 1C60     		str	r4, [r3]
+  26:User/System/config.c **** 	EraseInitStruct.PageAddress = CONFIG_AREA_START;
+  51              		.loc 1 26 2 is_stmt 1 view .LVU6
+  52              		.loc 1 26 30 is_stmt 0 view .LVU7
+  53 000c 134A     		ldr	r2, .L9+4
+  54 000e 9A60     		str	r2, [r3, #8]
+  27:User/System/config.c **** 	EraseInitStruct.NbPages = 2;
+  55              		.loc 1 27 2 is_stmt 1 view .LVU8
+  56              		.loc 1 27 26 is_stmt 0 view .LVU9
+  57 0010 0222     		movs	r2, #2
+  58 0012 DA60     		str	r2, [r3, #12]
+  28:User/System/config.c **** 	// printf("sizeof cfg: %d\n", sizeof(CFG_STRUCT));
+  29:User/System/config.c **** 	// for(i = 0; i <= sizeof(CFG_STRUCT); i+=4)
+  30:User/System/config.c **** 	// {
+  31:User/System/config.c **** 	// 	printf("%d: 0x%.8x\n", i, *(uint32_t*)(cfgdest + i/4));
+  32:User/System/config.c **** 	// }
+  33:User/System/config.c **** 	for(i = 0; i <= sizeof(CFG_STRUCT)/PAGE_SIZE; i++)
+  59              		.loc 1 33 2 is_stmt 1 view .LVU10
+  60              	.LVL2:
+  61              	.L2:
+  62              		.loc 1 33 13 discriminator 1 view .LVU11
+  63              		.loc 1 33 2 is_stmt 0 discriminator 1 view .LVU12
+  64 0014 BCB1     		cbz	r4, .L3
+  34:User/System/config.c **** 	{
+  35:User/System/config.c **** 		if (HAL_FLASHEx_Erase(&EraseInitStruct, &PAGEError) != HAL_OK)
+  36:User/System/config.c **** 	  	{
+  37:User/System/config.c **** 	  	}
+  38:User/System/config.c **** 	}
+  39:User/System/config.c **** 	Address = CONFIG_AREA_START;
+  65              		.loc 1 39 2 is_stmt 1 view .LVU13
+  66              		.loc 1 39 10 is_stmt 0 view .LVU14
+  67 0016 124B     		ldr	r3, .L9+8
+  68 0018 104A     		ldr	r2, .L9+4
+  69 001a 1A60     		str	r2, [r3]
+  40:User/System/config.c **** 	for(i = 0; i < sizeof(CFG_STRUCT); i+= 4)
+  70              		.loc 1 40 2 is_stmt 1 view .LVU15
+  71              	.LVL3:
+  72              		.loc 1 40 8 is_stmt 0 view .LVU16
+  73 001c 0024     		movs	r4, #0
+  74              	.LVL4:
+  75              	.L4:
+ARM GAS  /tmp/ccYhtSGG.s 			page 3
+
+
+  76              		.loc 1 40 13 is_stmt 1 discriminator 1 view .LVU17
+  77              		.loc 1 40 2 is_stmt 0 discriminator 1 view .LVU18
+  78 001e AF2C     		cmp	r4, #175
+  79 0020 17D8     		bhi	.L8
+  41:User/System/config.c **** 	{
+  42:User/System/config.c **** 		//printf("%d: 0x%.8x\n", i, *(uint32_t*)(cfgdest+i/4));
+  43:User/System/config.c **** 		if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, Address + i, *(uint32_t*)(cfgdest + i/4)) == HAL_OK
+  80              		.loc 1 43 3 is_stmt 1 view .LVU19
+  81              		.loc 1 43 83 is_stmt 0 view .LVU20
+  82 0022 24F00305 		bic	r5, r4, #3
+  83              		.loc 1 43 63 view .LVU21
+  84 0026 0F4F     		ldr	r7, .L9+12
+  85              		.loc 1 43 7 view .LVU22
+  86 0028 0D4E     		ldr	r6, .L9+8
+  87 002a 3168     		ldr	r1, [r6]
+  88 002c 7A59     		ldr	r2, [r7, r5]
+  89 002e 0023     		movs	r3, #0
+  90 0030 2144     		add	r1, r1, r4
+  91 0032 0220     		movs	r0, #2
+  92 0034 FFF7FEFF 		bl	HAL_FLASH_Program
+  93              	.LVL5:
+  44:User/System/config.c **** 		if(*(uint32_t*)(cfgdest + i/4) != *(uint32_t*)(Address + i))
+  94              		.loc 1 44 3 is_stmt 1 view .LVU23
+  95              		.loc 1 44 6 is_stmt 0 view .LVU24
+  96 0038 7A59     		ldr	r2, [r7, r5]
+  97              		.loc 1 44 58 view .LVU25
+  98 003a 3368     		ldr	r3, [r6]
+  99              		.loc 1 44 37 view .LVU26
+ 100 003c E358     		ldr	r3, [r4, r3]
+ 101              		.loc 1 44 5 view .LVU27
+ 102 003e 9A42     		cmp	r2, r3
+ 103 0040 09D1     		bne	.L1
+  40:User/System/config.c **** 	for(i = 0; i < sizeof(CFG_STRUCT); i+= 4)
+ 104              		.loc 1 40 37 is_stmt 1 discriminator 2 view .LVU28
+  40:User/System/config.c **** 	for(i = 0; i < sizeof(CFG_STRUCT); i+= 4)
+ 105              		.loc 1 40 38 is_stmt 0 discriminator 2 view .LVU29
+ 106 0042 0434     		adds	r4, r4, #4
+ 107              	.LVL6:
+  40:User/System/config.c **** 	for(i = 0; i < sizeof(CFG_STRUCT); i+= 4)
+ 108              		.loc 1 40 38 discriminator 2 view .LVU30
+ 109 0044 EBE7     		b	.L4
+ 110              	.L3:
+  35:User/System/config.c **** 	  	{
+ 111              		.loc 1 35 3 is_stmt 1 view .LVU31
+  35:User/System/config.c **** 	  	{
+ 112              		.loc 1 35 7 is_stmt 0 view .LVU32
+ 113 0046 0849     		ldr	r1, .L9+16
+ 114 0048 0348     		ldr	r0, .L9
+ 115 004a FFF7FEFF 		bl	HAL_FLASHEx_Erase
+ 116              	.LVL7:
+  37:User/System/config.c **** 	}
+ 117              		.loc 1 37 5 is_stmt 1 view .LVU33
+  33:User/System/config.c **** 	{
+ 118              		.loc 1 33 48 view .LVU34
+  33:User/System/config.c **** 	{
+ 119              		.loc 1 33 49 is_stmt 0 view .LVU35
+ 120 004e 0134     		adds	r4, r4, #1
+ARM GAS  /tmp/ccYhtSGG.s 			page 4
+
+
+ 121              	.LVL8:
+  33:User/System/config.c **** 	{
+ 122              		.loc 1 33 49 view .LVU36
+ 123 0050 E0E7     		b	.L2
+ 124              	.L8:
+  45:User/System/config.c **** 			return;
+  46:User/System/config.c **** 	}
+  47:User/System/config.c **** 	HAL_FLASH_Lock();
+ 125              		.loc 1 47 2 is_stmt 1 view .LVU37
+ 126 0052 FFF7FEFF 		bl	HAL_FLASH_Lock
+ 127              	.LVL9:
+ 128              	.L1:
+  48:User/System/config.c **** }
+ 129              		.loc 1 48 1 is_stmt 0 view .LVU38
+ 130 0056 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 131              	.LVL10:
+ 132              	.L10:
+ 133              		.loc 1 48 1 view .LVU39
+ 134              		.align	2
+ 135              	.L9:
+ 136 0058 00000000 		.word	.LANCHOR0
+ 137 005c 00F80508 		.word	134608896
+ 138 0060 00000000 		.word	.LANCHOR2
+ 139 0064 00000000 		.word	.LANCHOR3
+ 140 0068 00000000 		.word	.LANCHOR1
+ 141              		.cfi_endproc
+ 142              	.LFE197:
+ 144              		.section	.text.CFG_Load,"ax",%progbits
+ 145              		.align	1
+ 146              		.global	CFG_Load
+ 147              		.syntax unified
+ 148              		.thumb
+ 149              		.thumb_func
+ 150              		.fpu softvfp
+ 152              	CFG_Load:
+ 153              	.LFB198:
+  49:User/System/config.c **** 
+  50:User/System/config.c **** void CFG_Load(void)
+  51:User/System/config.c **** {
+ 154              		.loc 1 51 1 is_stmt 1 view -0
+ 155              		.cfi_startproc
+ 156              		@ args = 0, pretend = 0, frame = 0
+ 157              		@ frame_needed = 0, uses_anonymous_args = 0
+ 158 0000 10B5     		push	{r4, lr}
+ 159              	.LCFI1:
+ 160              		.cfi_def_cfa_offset 8
+ 161              		.cfi_offset 4, -8
+ 162              		.cfi_offset 14, -4
+  52:User/System/config.c **** 	memcpy(&sys_cfg, (void*)CONFIG_AREA_START, sizeof(CFG_STRUCT));
+ 163              		.loc 1 52 2 view .LVU41
+ 164 0002 1F4C     		ldr	r4, .L17
+ 165 0004 B022     		movs	r2, #176
+ 166 0006 1F49     		ldr	r1, .L17+4
+ 167 0008 2046     		mov	r0, r4
+ 168 000a FFF7FEFF 		bl	memcpy
+ 169              	.LVL11:
+  53:User/System/config.c **** 
+ARM GAS  /tmp/ccYhtSGG.s 			page 5
+
+
+  54:User/System/config.c **** 	if(sys_cfg.cfg_holder != CFG_HOLDER)
+ 170              		.loc 1 54 2 view .LVU42
+ 171              		.loc 1 54 12 is_stmt 0 view .LVU43
+ 172 000e D4F8AC20 		ldr	r2, [r4, #172]
+ 173              		.loc 1 54 4 view .LVU44
+ 174 0012 1D4B     		ldr	r3, .L17+8
+ 175 0014 9A42     		cmp	r2, r3
+ 176 0016 00D1     		bne	.L16
+ 177              	.L11:
+  55:User/System/config.c **** 	{
+  56:User/System/config.c **** 		memset(&sys_cfg, 0x00, sizeof sys_cfg);
+  57:User/System/config.c **** 		sys_cfg.mbAddr = 0x01;
+  58:User/System/config.c **** 		sys_cfg.mbBaud = 0;
+  59:User/System/config.c **** 		
+  60:User/System/config.c **** 		sys_cfg.settemp = 30.0;
+  61:User/System/config.c **** 		sys_cfg.sethumi = 25.0;
+  62:User/System/config.c **** 		sys_cfg.mode_Daikin = 3;
+  63:User/System/config.c **** 		
+  64:User/System/config.c **** 		for(int i=0;i<10;i++) {
+  65:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+  66:User/System/config.c **** 			sys_cfg.calib_Tb[i] = 0.0;
+  67:User/System/config.c **** 			sys_cfg.calib_Ha[i] = 1.0;
+  68:User/System/config.c **** 			sys_cfg.calib_Hb[i] = 0.0;
+  69:User/System/config.c **** 		}
+  70:User/System/config.c **** 		sys_cfg.cfg_holder = CFG_HOLDER;
+  71:User/System/config.c **** 
+  72:User/System/config.c **** 		CFG_Save();
+  73:User/System/config.c **** 	}
+  74:User/System/config.c **** }
+ 178              		.loc 1 74 1 view .LVU45
+ 179 0018 10BD     		pop	{r4, pc}
+ 180              	.L16:
+  56:User/System/config.c **** 		sys_cfg.mbAddr = 0x01;
+ 181              		.loc 1 56 3 is_stmt 1 view .LVU46
+ 182 001a B022     		movs	r2, #176
+ 183 001c 0021     		movs	r1, #0
+ 184 001e 2046     		mov	r0, r4
+ 185 0020 FFF7FEFF 		bl	memset
+ 186              	.LVL12:
+  57:User/System/config.c **** 		sys_cfg.mbBaud = 0;
+ 187              		.loc 1 57 3 view .LVU47
+  57:User/System/config.c **** 		sys_cfg.mbBaud = 0;
+ 188              		.loc 1 57 18 is_stmt 0 view .LVU48
+ 189 0024 0123     		movs	r3, #1
+ 190 0026 2370     		strb	r3, [r4]
+  58:User/System/config.c **** 		
+ 191              		.loc 1 58 3 is_stmt 1 view .LVU49
+  60:User/System/config.c **** 		sys_cfg.sethumi = 25.0;
+ 192              		.loc 1 60 3 view .LVU50
+  60:User/System/config.c **** 		sys_cfg.sethumi = 25.0;
+ 193              		.loc 1 60 19 is_stmt 0 view .LVU51
+ 194 0028 184B     		ldr	r3, .L17+12
+ 195 002a C4F8A430 		str	r3, [r4, #164]	@ float
+  61:User/System/config.c **** 		sys_cfg.mode_Daikin = 3;
+ 196              		.loc 1 61 3 is_stmt 1 view .LVU52
+  61:User/System/config.c **** 		sys_cfg.mode_Daikin = 3;
+ 197              		.loc 1 61 19 is_stmt 0 view .LVU53
+ARM GAS  /tmp/ccYhtSGG.s 			page 6
+
+
+ 198 002e 184B     		ldr	r3, .L17+16
+ 199 0030 C4F8A830 		str	r3, [r4, #168]	@ float
+  62:User/System/config.c **** 		
+ 200              		.loc 1 62 3 is_stmt 1 view .LVU54
+  62:User/System/config.c **** 		
+ 201              		.loc 1 62 23 is_stmt 0 view .LVU55
+ 202 0034 0323     		movs	r3, #3
+ 203 0036 A370     		strb	r3, [r4, #2]
+  64:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+ 204              		.loc 1 64 3 is_stmt 1 view .LVU56
+ 205              	.LBB2:
+  64:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+ 206              		.loc 1 64 7 view .LVU57
+ 207              	.LVL13:
+  64:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+ 208              		.loc 1 64 11 is_stmt 0 view .LVU58
+ 209 0038 0023     		movs	r3, #0
+  64:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+ 210              		.loc 1 64 3 view .LVU59
+ 211 003a 18E0     		b	.L13
+ 212              	.LVL14:
+ 213              	.L14:
+  65:User/System/config.c **** 			sys_cfg.calib_Tb[i] = 0.0;
+ 214              		.loc 1 65 4 is_stmt 1 discriminator 3 view .LVU60
+  65:User/System/config.c **** 			sys_cfg.calib_Tb[i] = 0.0;
+ 215              		.loc 1 65 24 is_stmt 0 discriminator 3 view .LVU61
+ 216 003c 104A     		ldr	r2, .L17
+ 217 003e 02EB8301 		add	r1, r2, r3, lsl #2
+ 218 0042 4FF07E5C 		mov	ip, #1065353216
+ 219 0046 C1F804C0 		str	ip, [r1, #4]	@ float
+  66:User/System/config.c **** 			sys_cfg.calib_Ha[i] = 1.0;
+ 220              		.loc 1 66 4 is_stmt 1 discriminator 3 view .LVU62
+  66:User/System/config.c **** 			sys_cfg.calib_Ha[i] = 1.0;
+ 221              		.loc 1 66 24 is_stmt 0 discriminator 3 view .LVU63
+ 222 004a 03F10A01 		add	r1, r3, #10
+ 223 004e 02EB8101 		add	r1, r2, r1, lsl #2
+ 224 0052 0020     		movs	r0, #0
+ 225 0054 4860     		str	r0, [r1, #4]	@ float
+  67:User/System/config.c **** 			sys_cfg.calib_Hb[i] = 0.0;
+ 226              		.loc 1 67 4 is_stmt 1 discriminator 3 view .LVU64
+  67:User/System/config.c **** 			sys_cfg.calib_Hb[i] = 0.0;
+ 227              		.loc 1 67 24 is_stmt 0 discriminator 3 view .LVU65
+ 228 0056 03F11401 		add	r1, r3, #20
+ 229 005a 02EB8101 		add	r1, r2, r1, lsl #2
+ 230 005e C1F804C0 		str	ip, [r1, #4]	@ float
+  68:User/System/config.c **** 		}
+ 231              		.loc 1 68 4 is_stmt 1 discriminator 3 view .LVU66
+  68:User/System/config.c **** 		}
+ 232              		.loc 1 68 24 is_stmt 0 discriminator 3 view .LVU67
+ 233 0062 03F11E01 		add	r1, r3, #30
+ 234 0066 02EB8102 		add	r2, r2, r1, lsl #2
+ 235 006a 5060     		str	r0, [r2, #4]	@ float
+  64:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+ 236              		.loc 1 64 20 is_stmt 1 discriminator 3 view .LVU68
+  64:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+ 237              		.loc 1 64 21 is_stmt 0 discriminator 3 view .LVU69
+ 238 006c 0133     		adds	r3, r3, #1
+ARM GAS  /tmp/ccYhtSGG.s 			page 7
+
+
+ 239              	.LVL15:
+ 240              	.L13:
+  64:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+ 241              		.loc 1 64 15 is_stmt 1 discriminator 1 view .LVU70
+  64:User/System/config.c **** 			sys_cfg.calib_Ta[i] = 1.0;
+ 242              		.loc 1 64 3 is_stmt 0 discriminator 1 view .LVU71
+ 243 006e 092B     		cmp	r3, #9
+ 244 0070 E4DD     		ble	.L14
+ 245              	.LBE2:
+  70:User/System/config.c **** 
+ 246              		.loc 1 70 3 is_stmt 1 view .LVU72
+  70:User/System/config.c **** 
+ 247              		.loc 1 70 22 is_stmt 0 view .LVU73
+ 248 0072 034B     		ldr	r3, .L17
+ 249              	.LVL16:
+  70:User/System/config.c **** 
+ 250              		.loc 1 70 22 view .LVU74
+ 251 0074 044A     		ldr	r2, .L17+8
+ 252 0076 C3F8AC20 		str	r2, [r3, #172]
+  72:User/System/config.c **** 	}
+ 253              		.loc 1 72 3 is_stmt 1 view .LVU75
+ 254 007a FFF7FEFF 		bl	CFG_Save
+ 255              	.LVL17:
+ 256              		.loc 1 74 1 is_stmt 0 view .LVU76
+ 257 007e CBE7     		b	.L11
+ 258              	.L18:
+ 259              		.align	2
+ 260              	.L17:
+ 261 0080 00000000 		.word	.LANCHOR3
+ 262 0084 00F80508 		.word	134608896
+ 263 0088 AB55FF00 		.word	16733611
+ 264 008c 0000F041 		.word	1106247680
+ 265 0090 0000C841 		.word	1103626240
+ 266              		.cfi_endproc
+ 267              	.LFE198:
+ 269              		.global	MemoryProgramStatus
+ 270              		.global	data32
+ 271              		.global	PAGEError
+ 272              		.global	Address
+ 273              		.global	sys_cfg
+ 274              		.section	.bss.Address,"aw",%nobits
+ 275              		.align	2
+ 276              		.set	.LANCHOR2,. + 0
+ 279              	Address:
+ 280 0000 00000000 		.space	4
+ 281              		.section	.bss.EraseInitStruct,"aw",%nobits
+ 282              		.align	2
+ 283              		.set	.LANCHOR0,. + 0
+ 286              	EraseInitStruct:
+ 287 0000 00000000 		.space	16
+ 287      00000000 
+ 287      00000000 
+ 287      00000000 
+ 288              		.section	.bss.MemoryProgramStatus,"aw",%nobits
+ 289              		.align	2
+ 292              	MemoryProgramStatus:
+ 293 0000 00000000 		.space	4
+ARM GAS  /tmp/ccYhtSGG.s 			page 8
+
+
+ 294              		.section	.bss.PAGEError,"aw",%nobits
+ 295              		.align	2
+ 296              		.set	.LANCHOR1,. + 0
+ 299              	PAGEError:
+ 300 0000 00000000 		.space	4
+ 301              		.section	.bss.data32,"aw",%nobits
+ 302              		.align	2
+ 305              	data32:
+ 306 0000 00000000 		.space	4
+ 307              		.section	.bss.sys_cfg,"aw",%nobits
+ 308              		.align	2
+ 309              		.set	.LANCHOR3,. + 0
+ 312              	sys_cfg:
+ 313 0000 00000000 		.space	176
+ 313      00000000 
+ 313      00000000 
+ 313      00000000 
+ 313      00000000 
+ 314              		.text
+ 315              	.Letext0:
+ 316              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 317              		.file 3 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
+ 318              		.file 4 "User/System/config.h"
+ 319              		.file 5 "<built-in>"
+ 320              		.file 6 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
+ 321              		.file 7 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
+ARM GAS  /tmp/ccYhtSGG.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 config.c
+     /tmp/ccYhtSGG.s:16     .text.CFG_Save:0000000000000000 $t
+     /tmp/ccYhtSGG.s:24     .text.CFG_Save:0000000000000000 CFG_Save
+     /tmp/ccYhtSGG.s:136    .text.CFG_Save:0000000000000058 $d
+     /tmp/ccYhtSGG.s:145    .text.CFG_Load:0000000000000000 $t
+     /tmp/ccYhtSGG.s:152    .text.CFG_Load:0000000000000000 CFG_Load
+     /tmp/ccYhtSGG.s:261    .text.CFG_Load:0000000000000080 $d
+     /tmp/ccYhtSGG.s:292    .bss.MemoryProgramStatus:0000000000000000 MemoryProgramStatus
+     /tmp/ccYhtSGG.s:305    .bss.data32:0000000000000000 data32
+     /tmp/ccYhtSGG.s:299    .bss.PAGEError:0000000000000000 PAGEError
+     /tmp/ccYhtSGG.s:279    .bss.Address:0000000000000000 Address
+     /tmp/ccYhtSGG.s:312    .bss.sys_cfg:0000000000000000 sys_cfg
+     /tmp/ccYhtSGG.s:275    .bss.Address:0000000000000000 $d
+     /tmp/ccYhtSGG.s:282    .bss.EraseInitStruct:0000000000000000 $d
+     /tmp/ccYhtSGG.s:286    .bss.EraseInitStruct:0000000000000000 EraseInitStruct
+     /tmp/ccYhtSGG.s:289    .bss.MemoryProgramStatus:0000000000000000 $d
+     /tmp/ccYhtSGG.s:295    .bss.PAGEError:0000000000000000 $d
+     /tmp/ccYhtSGG.s:302    .bss.data32:0000000000000000 $d
+     /tmp/ccYhtSGG.s:308    .bss.sys_cfg:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_FLASH_Unlock
+HAL_FLASH_Program
+HAL_FLASHEx_Erase
+HAL_FLASH_Lock
+memcpy
+memset

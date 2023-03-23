@@ -54,8 +54,15 @@ void MBmaster_Timeout(void)
 	if ((++counter_m) >= timeout_m){
 		pxMBMasterPortCBTimerExpired();
 	}
-	// printf("b\n");
 }
 
+// void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+// {
+// 	if(htim->Instance == tim_m->Instance)
+// 	{
+// 		if((++counter_m) >= timeout_m)
+// 			pxMBMasterPortCBTimerExpired();
+// 	}
+// }
 
 #endif

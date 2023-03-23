@@ -1,0 +1,1492 @@
+ARM GAS  /tmp/ccghhMdm.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"input.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.Input_Init,"ax",%progbits
+  16              		.align	1
+  17              		.global	Input_Init
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	Input_Init:
+  25              	.LFB197:
+  26              		.file 1 "Src/input.c"
+   1:Src/input.c   **** /*
+   2:Src/input.c   **** * @Author: nhantt
+   3:Src/input.c   **** * @Date:   2019-12-13
+   4:Src/input.c   **** * @Last Modified by:   nhantt
+   5:Src/input.c   **** * @Last Modified time: 2019-12-13
+   6:Src/input.c   **** */
+   7:Src/input.c   **** 
+   8:Src/input.c   **** #include "input.h"
+   9:Src/input.c   **** #include "relay.h"
+  10:Src/input.c   **** 
+  11:Src/input.c   **** #include "config.h"
+  12:Src/input.c   **** #include "modbus_data.h"
+  13:Src/input.c   **** 
+  14:Src/input.c   **** #include "control_system.h"
+  15:Src/input.c   **** 
+  16:Src/input.c   **** extern DEVICE_t device; 
+  17:Src/input.c   **** 
+  18:Src/input.c   **** INPUT_STRUCT input;
+  19:Src/input.c   **** 
+  20:Src/input.c   **** void Input_Init(void)
+  21:Src/input.c   **** {
+  27              		.loc 1 21 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 16
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 30B5     		push	{r4, r5, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 12
+  34              		.cfi_offset 4, -12
+  35              		.cfi_offset 5, -8
+  36              		.cfi_offset 14, -4
+  37 0002 85B0     		sub	sp, sp, #20
+ARM GAS  /tmp/ccghhMdm.s 			page 2
+
+
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 32
+  22:Src/input.c   ****     GPIO_InitTypeDef GPIO_InitStruct = {0};
+  40              		.loc 1 22 5 view .LVU1
+  41              		.loc 1 22 22 is_stmt 0 view .LVU2
+  42 0004 0024     		movs	r4, #0
+  43 0006 0094     		str	r4, [sp]
+  44 0008 0194     		str	r4, [sp, #4]
+  45 000a 0294     		str	r4, [sp, #8]
+  46 000c 0394     		str	r4, [sp, #12]
+  23:Src/input.c   ****     GPIO_InitStruct.Pin = IN1_PIN | IN2_PIN | IN6_PIN | IN7_PIN | IN8_PIN | IN9_PIN | IN10_PIN | IN
+  47              		.loc 1 23 5 is_stmt 1 view .LVU3
+  48              		.loc 1 23 25 is_stmt 0 view .LVU4
+  49 000e 41F23E33 		movw	r3, #4926
+  50 0012 0093     		str	r3, [sp]
+  24:Src/input.c   ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  51              		.loc 1 24 5 is_stmt 1 view .LVU5
+  25:Src/input.c   ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+  52              		.loc 1 25 5 view .LVU6
+  53              		.loc 1 25 26 is_stmt 0 view .LVU7
+  54 0014 0125     		movs	r5, #1
+  55 0016 0295     		str	r5, [sp, #8]
+  26:Src/input.c   ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  56              		.loc 1 26 5 is_stmt 1 view .LVU8
+  57 0018 6946     		mov	r1, sp
+  58 001a 1948     		ldr	r0, .L5
+  59 001c FFF7FEFF 		bl	HAL_GPIO_Init
+  60              	.LVL0:
+  27:Src/input.c   **** 
+  28:Src/input.c   ****     GPIO_InitStruct.Pin = IN13_PIN | IN14_PIN | IN15_PIN | IN16_PIN;
+  61              		.loc 1 28 5 view .LVU9
+  62              		.loc 1 28 25 is_stmt 0 view .LVU10
+  63 0020 3323     		movs	r3, #51
+  64 0022 0093     		str	r3, [sp]
+  29:Src/input.c   ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  65              		.loc 1 29 5 is_stmt 1 view .LVU11
+  66              		.loc 1 29 26 is_stmt 0 view .LVU12
+  67 0024 0194     		str	r4, [sp, #4]
+  30:Src/input.c   ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+  68              		.loc 1 30 5 is_stmt 1 view .LVU13
+  69              		.loc 1 30 26 is_stmt 0 view .LVU14
+  70 0026 0295     		str	r5, [sp, #8]
+  31:Src/input.c   ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  71              		.loc 1 31 5 is_stmt 1 view .LVU15
+  72 0028 6946     		mov	r1, sp
+  73 002a 1648     		ldr	r0, .L5+4
+  74 002c FFF7FEFF 		bl	HAL_GPIO_Init
+  75              	.LVL1:
+  32:Src/input.c   **** 
+  33:Src/input.c   ****     GPIO_InitStruct.Pin = IN3_PIN;
+  76              		.loc 1 33 5 view .LVU16
+  77              		.loc 1 33 25 is_stmt 0 view .LVU17
+  78 0030 0423     		movs	r3, #4
+  79 0032 0093     		str	r3, [sp]
+  34:Src/input.c   ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  80              		.loc 1 34 5 is_stmt 1 view .LVU18
+  81              		.loc 1 34 26 is_stmt 0 view .LVU19
+ARM GAS  /tmp/ccghhMdm.s 			page 3
+
+
+  82 0034 0194     		str	r4, [sp, #4]
+  35:Src/input.c   ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+  83              		.loc 1 35 5 is_stmt 1 view .LVU20
+  84              		.loc 1 35 26 is_stmt 0 view .LVU21
+  85 0036 0295     		str	r5, [sp, #8]
+  36:Src/input.c   ****     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  86              		.loc 1 36 5 is_stmt 1 view .LVU22
+  87 0038 6946     		mov	r1, sp
+  88 003a 1348     		ldr	r0, .L5+8
+  89 003c FFF7FEFF 		bl	HAL_GPIO_Init
+  90              	.LVL2:
+  37:Src/input.c   **** 
+  38:Src/input.c   ****     GPIO_InitStruct.Pin = IN4_PIN | IN5_PIN;
+  91              		.loc 1 38 5 view .LVU23
+  92              		.loc 1 38 25 is_stmt 0 view .LVU24
+  93 0040 4FF44053 		mov	r3, #12288
+  94 0044 0093     		str	r3, [sp]
+  39:Src/input.c   ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  95              		.loc 1 39 5 is_stmt 1 view .LVU25
+  96              		.loc 1 39 26 is_stmt 0 view .LVU26
+  97 0046 0194     		str	r4, [sp, #4]
+  40:Src/input.c   ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+  98              		.loc 1 40 5 is_stmt 1 view .LVU27
+  99              		.loc 1 40 26 is_stmt 0 view .LVU28
+ 100 0048 0295     		str	r5, [sp, #8]
+  41:Src/input.c   ****     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 101              		.loc 1 41 5 is_stmt 1 view .LVU29
+ 102 004a 6946     		mov	r1, sp
+ 103 004c 0F48     		ldr	r0, .L5+12
+ 104 004e FFF7FEFF 		bl	HAL_GPIO_Init
+ 105              	.LVL3:
+  42:Src/input.c   **** 
+  43:Src/input.c   ****     for (input.name = 0; input.name < NUM_INPUT; input.name++)
+ 106              		.loc 1 43 5 view .LVU30
+ 107              		.loc 1 43 21 is_stmt 0 view .LVU31
+ 108 0052 0F4B     		ldr	r3, .L5+16
+ 109 0054 1C70     		strb	r4, [r3]
+ 110              		.loc 1 43 5 view .LVU32
+ 111 0056 09E0     		b	.L2
+ 112              	.L3:
+  44:Src/input.c   ****     {
+  45:Src/input.c   ****         input.ext[input.name].active = input.ext[input.name].actived = IN_RELEASE;
+ 113              		.loc 1 45 9 is_stmt 1 discriminator 3 view .LVU33
+ 114              		.loc 1 45 70 is_stmt 0 discriminator 3 view .LVU34
+ 115 0058 0D48     		ldr	r0, .L5+16
+ 116 005a 00EB8302 		add	r2, r0, r3, lsl #2
+ 117 005e 0021     		movs	r1, #0
+ 118 0060 5170     		strb	r1, [r2, #1]
+ 119              		.loc 1 45 38 discriminator 3 view .LVU35
+ 120 0062 9170     		strb	r1, [r2, #2]
+  46:Src/input.c   ****         input.ext[input.name].waitRelease = 0;
+ 121              		.loc 1 46 9 is_stmt 1 discriminator 3 view .LVU36
+ 122              		.loc 1 46 43 is_stmt 0 discriminator 3 view .LVU37
+ 123 0064 D170     		strb	r1, [r2, #3]
+  47:Src/input.c   ****         input.ext[input.name].cnt = 0;
+ 124              		.loc 1 47 9 is_stmt 1 discriminator 3 view .LVU38
+ 125              		.loc 1 47 35 is_stmt 0 discriminator 3 view .LVU39
+ARM GAS  /tmp/ccghhMdm.s 			page 4
+
+
+ 126 0066 1171     		strb	r1, [r2, #4]
+  43:Src/input.c   ****     {
+ 127              		.loc 1 43 50 is_stmt 1 discriminator 3 view .LVU40
+  43:Src/input.c   ****     {
+ 128              		.loc 1 43 60 is_stmt 0 discriminator 3 view .LVU41
+ 129 0068 0133     		adds	r3, r3, #1
+ 130 006a 0370     		strb	r3, [r0]
+ 131              	.L2:
+  43:Src/input.c   ****     {
+ 132              		.loc 1 43 26 is_stmt 1 discriminator 1 view .LVU42
+  43:Src/input.c   ****     {
+ 133              		.loc 1 43 31 is_stmt 0 discriminator 1 view .LVU43
+ 134 006c 084B     		ldr	r3, .L5+16
+ 135 006e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  43:Src/input.c   ****     {
+ 136              		.loc 1 43 5 discriminator 1 view .LVU44
+ 137 0070 0F2B     		cmp	r3, #15
+ 138 0072 F1D9     		bls	.L3
+  48:Src/input.c   ****     }
+  49:Src/input.c   ****     input.tick = HAL_GetTick();
+ 139              		.loc 1 49 5 is_stmt 1 view .LVU45
+ 140              		.loc 1 49 18 is_stmt 0 view .LVU46
+ 141 0074 FFF7FEFF 		bl	HAL_GetTick
+ 142              	.LVL4:
+ 143              		.loc 1 49 16 view .LVU47
+ 144 0078 054B     		ldr	r3, .L5+16
+ 145 007a 5864     		str	r0, [r3, #68]
+  50:Src/input.c   **** }
+ 146              		.loc 1 50 1 view .LVU48
+ 147 007c 05B0     		add	sp, sp, #20
+ 148              	.LCFI2:
+ 149              		.cfi_def_cfa_offset 12
+ 150              		@ sp needed
+ 151 007e 30BD     		pop	{r4, r5, pc}
+ 152              	.L6:
+ 153              		.align	2
+ 154              	.L5:
+ 155 0080 000C0140 		.word	1073810432
+ 156 0084 00080140 		.word	1073809408
+ 157 0088 00140140 		.word	1073812480
+ 158 008c 00100140 		.word	1073811456
+ 159 0090 00000000 		.word	.LANCHOR0
+ 160              		.cfi_endproc
+ 161              	.LFE197:
+ 163              		.section	.text.Input_Get,"ax",%progbits
+ 164              		.align	1
+ 165              		.global	Input_Get
+ 166              		.syntax unified
+ 167              		.thumb
+ 168              		.thumb_func
+ 169              		.fpu softvfp
+ 171              	Input_Get:
+ 172              	.LVL5:
+ 173              	.LFB198:
+  51:Src/input.c   **** 
+  52:Src/input.c   **** void Input_Get(uint8_t port_id)
+  53:Src/input.c   **** {
+ARM GAS  /tmp/ccghhMdm.s 			page 5
+
+
+ 174              		.loc 1 53 1 is_stmt 1 view -0
+ 175              		.cfi_startproc
+ 176              		@ args = 0, pretend = 0, frame = 0
+ 177              		@ frame_needed = 0, uses_anonymous_args = 0
+ 178              		.loc 1 53 1 is_stmt 0 view .LVU50
+ 179 0000 10B5     		push	{r4, lr}
+ 180              	.LCFI3:
+ 181              		.cfi_def_cfa_offset 8
+ 182              		.cfi_offset 4, -8
+ 183              		.cfi_offset 14, -4
+ 184 0002 0446     		mov	r4, r0
+  54:Src/input.c   ****     uint16_t inputGet;
+ 185              		.loc 1 54 5 is_stmt 1 view .LVU51
+  55:Src/input.c   ****     switch (port_id)
+ 186              		.loc 1 55 5 view .LVU52
+ 187 0004 0F28     		cmp	r0, #15
+ 188 0006 1BD8     		bhi	.L8
+ 189 0008 DFE810F0 		tbh	[pc, r0, lsl #1]
+ 190              	.L10:
+ 191 000c 1000     		.2byte	(.L25-.L10)/2
+ 192 000e 3300     		.2byte	(.L24-.L10)/2
+ 193 0010 4400     		.2byte	(.L23-.L10)/2
+ 194 0012 5500     		.2byte	(.L22-.L10)/2
+ 195 0014 6700     		.2byte	(.L21-.L10)/2
+ 196 0016 7900     		.2byte	(.L20-.L10)/2
+ 197 0018 8B00     		.2byte	(.L19-.L10)/2
+ 198 001a 9D00     		.2byte	(.L18-.L10)/2
+ 199 001c AE00     		.2byte	(.L17-.L10)/2
+ 200 001e C000     		.2byte	(.L16-.L10)/2
+ 201 0020 D100     		.2byte	(.L15-.L10)/2
+ 202 0022 E200     		.2byte	(.L14-.L10)/2
+ 203 0024 F300     		.2byte	(.L13-.L10)/2
+ 204 0026 0401     		.2byte	(.L12-.L10)/2
+ 205 0028 1501     		.2byte	(.L11-.L10)/2
+ 206 002a 2601     		.2byte	(.L9-.L10)/2
+ 207              		.p2align 1
+ 208              	.L25:
+  56:Src/input.c   ****     {
+  57:Src/input.c   ****     case 0:
+  58:Src/input.c   ****         inputGet = In1();
+ 209              		.loc 1 58 9 view .LVU53
+ 210              		.loc 1 58 20 is_stmt 0 view .LVU54
+ 211 002c 1021     		movs	r1, #16
+ 212 002e 9848     		ldr	r0, .L46
+ 213              	.LVL6:
+ 214              		.loc 1 58 20 view .LVU55
+ 215 0030 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 216              	.LVL7:
+  59:Src/input.c   ****         if (inputGet == !IN1_PIN)
+ 217              		.loc 1 59 9 is_stmt 1 view .LVU56
+ 218              		.loc 1 59 12 is_stmt 0 view .LVU57
+ 219 0034 B8B9     		cbnz	r0, .L26
+  60:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 220              		.loc 1 60 13 is_stmt 1 view .LVU58
+ 221              		.loc 1 60 39 is_stmt 0 view .LVU59
+ 222 0036 974B     		ldr	r3, .L46+4
+ 223 0038 03EB8403 		add	r3, r3, r4, lsl #2
+ARM GAS  /tmp/ccghhMdm.s 			page 6
+
+
+ 224 003c 0122     		movs	r2, #1
+ 225 003e 9A70     		strb	r2, [r3, #2]
+ 226              	.LVL8:
+ 227              	.L8:
+  61:Src/input.c   ****         else
+  62:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+  63:Src/input.c   ****         break;
+  64:Src/input.c   ****     case 1:
+  65:Src/input.c   ****         inputGet = In2();
+  66:Src/input.c   ****         if (inputGet == !IN2_PIN)
+  67:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+  68:Src/input.c   ****         else
+  69:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+  70:Src/input.c   ****         break;
+  71:Src/input.c   ****     case 2:
+  72:Src/input.c   ****         inputGet = In3();
+  73:Src/input.c   ****         if (inputGet == !IN3_PIN)
+  74:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+  75:Src/input.c   ****         else
+  76:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+  77:Src/input.c   ****         break;
+  78:Src/input.c   ****     case 3:
+  79:Src/input.c   ****         inputGet = In4();
+  80:Src/input.c   ****         if (inputGet == !IN4_PIN)
+  81:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+  82:Src/input.c   ****         else
+  83:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+  84:Src/input.c   ****         break;
+  85:Src/input.c   ****     case 4:
+  86:Src/input.c   ****         inputGet = In5();
+  87:Src/input.c   ****         if (inputGet == !IN5_PIN)
+  88:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+  89:Src/input.c   ****         else
+  90:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+  91:Src/input.c   ****         break;
+  92:Src/input.c   ****     case 5:
+  93:Src/input.c   ****         inputGet = In6();
+  94:Src/input.c   ****         if (inputGet == !IN6_PIN)
+  95:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+  96:Src/input.c   ****         else
+  97:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+  98:Src/input.c   ****         break;
+  99:Src/input.c   ****     case 6:
+ 100:Src/input.c   ****         inputGet = In7();
+ 101:Src/input.c   ****         if (inputGet == !IN7_PIN)
+ 102:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 103:Src/input.c   ****         else
+ 104:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 105:Src/input.c   ****         break;
+ 106:Src/input.c   ****     case 7:
+ 107:Src/input.c   ****         inputGet = In8();
+ 108:Src/input.c   ****         if (inputGet == !IN8_PIN)
+ 109:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 110:Src/input.c   ****         else
+ 111:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 112:Src/input.c   ****         break;
+ 113:Src/input.c   ****     case 8:
+ARM GAS  /tmp/ccghhMdm.s 			page 7
+
+
+ 114:Src/input.c   ****         inputGet = In9();
+ 115:Src/input.c   ****         if (inputGet == !IN9_PIN)
+ 116:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 117:Src/input.c   ****         else
+ 118:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 119:Src/input.c   ****         break;
+ 120:Src/input.c   ****     case 9:
+ 121:Src/input.c   ****         inputGet = In10();
+ 122:Src/input.c   ****         if (inputGet == !IN10_PIN)
+ 123:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 124:Src/input.c   ****         else
+ 125:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 126:Src/input.c   ****         break;
+ 127:Src/input.c   ****     case 10:
+ 128:Src/input.c   ****         inputGet = In11();
+ 129:Src/input.c   ****         if (inputGet == !IN11_PIN)
+ 130:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 131:Src/input.c   ****         else
+ 132:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 133:Src/input.c   ****         break;
+ 134:Src/input.c   ****     case 11:
+ 135:Src/input.c   ****         inputGet = In12();
+ 136:Src/input.c   ****         if (inputGet == !IN12_PIN)
+ 137:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 138:Src/input.c   ****         else
+ 139:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 140:Src/input.c   ****         break;
+ 141:Src/input.c   ****     case 12:
+ 142:Src/input.c   ****         inputGet = In13();
+ 143:Src/input.c   ****         if (inputGet == !IN13_PIN)
+ 144:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 145:Src/input.c   ****         else
+ 146:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 147:Src/input.c   ****         break;
+ 148:Src/input.c   ****      case 13:
+ 149:Src/input.c   ****         inputGet = In14();
+ 150:Src/input.c   ****         if (inputGet == !IN14_PIN)
+ 151:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 152:Src/input.c   ****         else
+ 153:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 154:Src/input.c   ****         break;
+ 155:Src/input.c   ****      case 14:
+ 156:Src/input.c   ****         inputGet = In15();
+ 157:Src/input.c   ****         if (inputGet == !IN15_PIN)
+ 158:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 159:Src/input.c   ****         else
+ 160:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 161:Src/input.c   ****         break;
+ 162:Src/input.c   ****     case 15:
+ 163:Src/input.c   ****         inputGet = In16();
+ 164:Src/input.c   ****         if (inputGet == !IN16_PIN)
+ 165:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 166:Src/input.c   ****         else
+ 167:Src/input.c   ****             input.ext[port_id].active = IN_RELEASE;
+ 168:Src/input.c   ****         break;
+ 169:Src/input.c   ****     }
+ 170:Src/input.c   **** 
+ARM GAS  /tmp/ccghhMdm.s 			page 8
+
+
+ 171:Src/input.c   ****     if (input.ext[port_id].active != input.ext[port_id].actived)
+ 228              		.loc 1 171 5 is_stmt 1 view .LVU60
+ 229              		.loc 1 171 27 is_stmt 0 view .LVU61
+ 230 0040 944B     		ldr	r3, .L46+4
+ 231 0042 03EB8403 		add	r3, r3, r4, lsl #2
+ 232 0046 9978     		ldrb	r1, [r3, #2]	@ zero_extendqisi2
+ 233              		.loc 1 171 56 view .LVU62
+ 234 0048 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 235              		.loc 1 171 8 view .LVU63
+ 236 004a 9942     		cmp	r1, r3
+ 237 004c 00F01981 		beq	.L42
+ 172:Src/input.c   ****     {
+ 173:Src/input.c   ****         ++(input.ext[port_id].cnt);
+ 238              		.loc 1 173 9 is_stmt 1 view .LVU64
+ 239              		.loc 1 173 30 is_stmt 0 view .LVU65
+ 240 0050 904A     		ldr	r2, .L46+4
+ 241 0052 02EB8402 		add	r2, r2, r4, lsl #2
+ 242 0056 1379     		ldrb	r3, [r2, #4]	@ zero_extendqisi2
+ 243              		.loc 1 173 9 view .LVU66
+ 244 0058 0133     		adds	r3, r3, #1
+ 245 005a DBB2     		uxtb	r3, r3
+ 246 005c 1371     		strb	r3, [r2, #4]
+ 174:Src/input.c   ****         if (input.ext[port_id].cnt == NUM_OF_SAMPLE_INPUT)
+ 247              		.loc 1 174 9 is_stmt 1 view .LVU67
+ 248              		.loc 1 174 12 is_stmt 0 view .LVU68
+ 249 005e 052B     		cmp	r3, #5
+ 250 0060 00F00B81 		beq	.L45
+ 251              	.L7:
+ 175:Src/input.c   ****         {
+ 176:Src/input.c   ****             input.ext[port_id].actived = input.ext[port_id].active;
+ 177:Src/input.c   ****             input.ext[port_id].cnt = 0;
+ 178:Src/input.c   ****         }
+ 179:Src/input.c   ****     }
+ 180:Src/input.c   ****     else
+ 181:Src/input.c   ****     {
+ 182:Src/input.c   ****         input.ext[port_id].cnt = 0;
+ 183:Src/input.c   ****     }
+ 184:Src/input.c   **** }
+ 252              		.loc 1 184 1 view .LVU69
+ 253 0064 10BD     		pop	{r4, pc}
+ 254              	.LVL9:
+ 255              	.L26:
+  62:Src/input.c   ****         break;
+ 256              		.loc 1 62 13 is_stmt 1 view .LVU70
+  62:Src/input.c   ****         break;
+ 257              		.loc 1 62 39 is_stmt 0 view .LVU71
+ 258 0066 8B4B     		ldr	r3, .L46+4
+ 259 0068 03EB8403 		add	r3, r3, r4, lsl #2
+ 260 006c 0022     		movs	r2, #0
+ 261 006e 9A70     		strb	r2, [r3, #2]
+ 262 0070 E6E7     		b	.L8
+ 263              	.LVL10:
+ 264              	.L24:
+  65:Src/input.c   ****         if (inputGet == !IN2_PIN)
+ 265              		.loc 1 65 9 is_stmt 1 view .LVU72
+  65:Src/input.c   ****         if (inputGet == !IN2_PIN)
+ 266              		.loc 1 65 20 is_stmt 0 view .LVU73
+ARM GAS  /tmp/ccghhMdm.s 			page 9
+
+
+ 267 0072 0821     		movs	r1, #8
+ 268 0074 8648     		ldr	r0, .L46
+ 269              	.LVL11:
+  65:Src/input.c   ****         if (inputGet == !IN2_PIN)
+ 270              		.loc 1 65 20 view .LVU74
+ 271 0076 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 272              	.LVL12:
+  66:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 273              		.loc 1 66 9 is_stmt 1 view .LVU75
+  66:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 274              		.loc 1 66 12 is_stmt 0 view .LVU76
+ 275 007a 28B9     		cbnz	r0, .L27
+  67:Src/input.c   ****         else
+ 276              		.loc 1 67 13 is_stmt 1 view .LVU77
+  67:Src/input.c   ****         else
+ 277              		.loc 1 67 39 is_stmt 0 view .LVU78
+ 278 007c 854B     		ldr	r3, .L46+4
+ 279 007e 03EB8403 		add	r3, r3, r4, lsl #2
+ 280 0082 0122     		movs	r2, #1
+ 281 0084 9A70     		strb	r2, [r3, #2]
+ 282 0086 DBE7     		b	.L8
+ 283              	.L27:
+  69:Src/input.c   ****         break;
+ 284              		.loc 1 69 13 is_stmt 1 view .LVU79
+  69:Src/input.c   ****         break;
+ 285              		.loc 1 69 39 is_stmt 0 view .LVU80
+ 286 0088 824B     		ldr	r3, .L46+4
+ 287 008a 03EB8403 		add	r3, r3, r4, lsl #2
+ 288 008e 0022     		movs	r2, #0
+ 289 0090 9A70     		strb	r2, [r3, #2]
+ 290 0092 D5E7     		b	.L8
+ 291              	.LVL13:
+ 292              	.L23:
+  72:Src/input.c   ****         if (inputGet == !IN3_PIN)
+ 293              		.loc 1 72 9 is_stmt 1 view .LVU81
+  72:Src/input.c   ****         if (inputGet == !IN3_PIN)
+ 294              		.loc 1 72 20 is_stmt 0 view .LVU82
+ 295 0094 0421     		movs	r1, #4
+ 296 0096 8048     		ldr	r0, .L46+8
+ 297              	.LVL14:
+  72:Src/input.c   ****         if (inputGet == !IN3_PIN)
+ 298              		.loc 1 72 20 view .LVU83
+ 299 0098 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 300              	.LVL15:
+  73:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 301              		.loc 1 73 9 is_stmt 1 view .LVU84
+  73:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 302              		.loc 1 73 12 is_stmt 0 view .LVU85
+ 303 009c 28B9     		cbnz	r0, .L28
+  74:Src/input.c   ****         else
+ 304              		.loc 1 74 13 is_stmt 1 view .LVU86
+  74:Src/input.c   ****         else
+ 305              		.loc 1 74 39 is_stmt 0 view .LVU87
+ 306 009e 7D4B     		ldr	r3, .L46+4
+ 307 00a0 03EB8403 		add	r3, r3, r4, lsl #2
+ 308 00a4 0122     		movs	r2, #1
+ 309 00a6 9A70     		strb	r2, [r3, #2]
+ARM GAS  /tmp/ccghhMdm.s 			page 10
+
+
+ 310 00a8 CAE7     		b	.L8
+ 311              	.L28:
+  76:Src/input.c   ****         break;
+ 312              		.loc 1 76 13 is_stmt 1 view .LVU88
+  76:Src/input.c   ****         break;
+ 313              		.loc 1 76 39 is_stmt 0 view .LVU89
+ 314 00aa 7A4B     		ldr	r3, .L46+4
+ 315 00ac 03EB8403 		add	r3, r3, r4, lsl #2
+ 316 00b0 0022     		movs	r2, #0
+ 317 00b2 9A70     		strb	r2, [r3, #2]
+ 318 00b4 C4E7     		b	.L8
+ 319              	.LVL16:
+ 320              	.L22:
+  79:Src/input.c   ****         if (inputGet == !IN4_PIN)
+ 321              		.loc 1 79 9 is_stmt 1 view .LVU90
+  79:Src/input.c   ****         if (inputGet == !IN4_PIN)
+ 322              		.loc 1 79 20 is_stmt 0 view .LVU91
+ 323 00b6 4FF48051 		mov	r1, #4096
+ 324 00ba 7848     		ldr	r0, .L46+12
+ 325              	.LVL17:
+  79:Src/input.c   ****         if (inputGet == !IN4_PIN)
+ 326              		.loc 1 79 20 view .LVU92
+ 327 00bc FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 328              	.LVL18:
+  80:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 329              		.loc 1 80 9 is_stmt 1 view .LVU93
+  80:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 330              		.loc 1 80 12 is_stmt 0 view .LVU94
+ 331 00c0 28B9     		cbnz	r0, .L29
+  81:Src/input.c   ****         else
+ 332              		.loc 1 81 13 is_stmt 1 view .LVU95
+  81:Src/input.c   ****         else
+ 333              		.loc 1 81 39 is_stmt 0 view .LVU96
+ 334 00c2 744B     		ldr	r3, .L46+4
+ 335 00c4 03EB8403 		add	r3, r3, r4, lsl #2
+ 336 00c8 0122     		movs	r2, #1
+ 337 00ca 9A70     		strb	r2, [r3, #2]
+ 338 00cc B8E7     		b	.L8
+ 339              	.L29:
+  83:Src/input.c   ****         break;
+ 340              		.loc 1 83 13 is_stmt 1 view .LVU97
+  83:Src/input.c   ****         break;
+ 341              		.loc 1 83 39 is_stmt 0 view .LVU98
+ 342 00ce 714B     		ldr	r3, .L46+4
+ 343 00d0 03EB8403 		add	r3, r3, r4, lsl #2
+ 344 00d4 0022     		movs	r2, #0
+ 345 00d6 9A70     		strb	r2, [r3, #2]
+ 346 00d8 B2E7     		b	.L8
+ 347              	.LVL19:
+ 348              	.L21:
+  86:Src/input.c   ****         if (inputGet == !IN5_PIN)
+ 349              		.loc 1 86 9 is_stmt 1 view .LVU99
+  86:Src/input.c   ****         if (inputGet == !IN5_PIN)
+ 350              		.loc 1 86 20 is_stmt 0 view .LVU100
+ 351 00da 4FF40051 		mov	r1, #8192
+ 352 00de 6F48     		ldr	r0, .L46+12
+ 353              	.LVL20:
+ARM GAS  /tmp/ccghhMdm.s 			page 11
+
+
+  86:Src/input.c   ****         if (inputGet == !IN5_PIN)
+ 354              		.loc 1 86 20 view .LVU101
+ 355 00e0 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 356              	.LVL21:
+  87:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 357              		.loc 1 87 9 is_stmt 1 view .LVU102
+  87:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 358              		.loc 1 87 12 is_stmt 0 view .LVU103
+ 359 00e4 28B9     		cbnz	r0, .L30
+  88:Src/input.c   ****         else
+ 360              		.loc 1 88 13 is_stmt 1 view .LVU104
+  88:Src/input.c   ****         else
+ 361              		.loc 1 88 39 is_stmt 0 view .LVU105
+ 362 00e6 6B4B     		ldr	r3, .L46+4
+ 363 00e8 03EB8403 		add	r3, r3, r4, lsl #2
+ 364 00ec 0122     		movs	r2, #1
+ 365 00ee 9A70     		strb	r2, [r3, #2]
+ 366 00f0 A6E7     		b	.L8
+ 367              	.L30:
+  90:Src/input.c   ****         break;
+ 368              		.loc 1 90 13 is_stmt 1 view .LVU106
+  90:Src/input.c   ****         break;
+ 369              		.loc 1 90 39 is_stmt 0 view .LVU107
+ 370 00f2 684B     		ldr	r3, .L46+4
+ 371 00f4 03EB8403 		add	r3, r3, r4, lsl #2
+ 372 00f8 0022     		movs	r2, #0
+ 373 00fa 9A70     		strb	r2, [r3, #2]
+ 374 00fc A0E7     		b	.L8
+ 375              	.LVL22:
+ 376              	.L20:
+  93:Src/input.c   ****         if (inputGet == !IN6_PIN)
+ 377              		.loc 1 93 9 is_stmt 1 view .LVU108
+  93:Src/input.c   ****         if (inputGet == !IN6_PIN)
+ 378              		.loc 1 93 20 is_stmt 0 view .LVU109
+ 379 00fe 4FF40071 		mov	r1, #512
+ 380 0102 6348     		ldr	r0, .L46
+ 381              	.LVL23:
+  93:Src/input.c   ****         if (inputGet == !IN6_PIN)
+ 382              		.loc 1 93 20 view .LVU110
+ 383 0104 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 384              	.LVL24:
+  94:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 385              		.loc 1 94 9 is_stmt 1 view .LVU111
+  94:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 386              		.loc 1 94 12 is_stmt 0 view .LVU112
+ 387 0108 28B9     		cbnz	r0, .L31
+  95:Src/input.c   ****         else
+ 388              		.loc 1 95 13 is_stmt 1 view .LVU113
+  95:Src/input.c   ****         else
+ 389              		.loc 1 95 39 is_stmt 0 view .LVU114
+ 390 010a 624B     		ldr	r3, .L46+4
+ 391 010c 03EB8403 		add	r3, r3, r4, lsl #2
+ 392 0110 0122     		movs	r2, #1
+ 393 0112 9A70     		strb	r2, [r3, #2]
+ 394 0114 94E7     		b	.L8
+ 395              	.L31:
+  97:Src/input.c   ****         break;
+ARM GAS  /tmp/ccghhMdm.s 			page 12
+
+
+ 396              		.loc 1 97 13 is_stmt 1 view .LVU115
+  97:Src/input.c   ****         break;
+ 397              		.loc 1 97 39 is_stmt 0 view .LVU116
+ 398 0116 5F4B     		ldr	r3, .L46+4
+ 399 0118 03EB8403 		add	r3, r3, r4, lsl #2
+ 400 011c 0022     		movs	r2, #0
+ 401 011e 9A70     		strb	r2, [r3, #2]
+ 402 0120 8EE7     		b	.L8
+ 403              	.LVL25:
+ 404              	.L19:
+ 100:Src/input.c   ****         if (inputGet == !IN7_PIN)
+ 405              		.loc 1 100 9 is_stmt 1 view .LVU117
+ 100:Src/input.c   ****         if (inputGet == !IN7_PIN)
+ 406              		.loc 1 100 20 is_stmt 0 view .LVU118
+ 407 0122 4FF48071 		mov	r1, #256
+ 408 0126 5A48     		ldr	r0, .L46
+ 409              	.LVL26:
+ 100:Src/input.c   ****         if (inputGet == !IN7_PIN)
+ 410              		.loc 1 100 20 view .LVU119
+ 411 0128 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 412              	.LVL27:
+ 101:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 413              		.loc 1 101 9 is_stmt 1 view .LVU120
+ 101:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 414              		.loc 1 101 12 is_stmt 0 view .LVU121
+ 415 012c 28B9     		cbnz	r0, .L32
+ 102:Src/input.c   ****         else
+ 416              		.loc 1 102 13 is_stmt 1 view .LVU122
+ 102:Src/input.c   ****         else
+ 417              		.loc 1 102 39 is_stmt 0 view .LVU123
+ 418 012e 594B     		ldr	r3, .L46+4
+ 419 0130 03EB8403 		add	r3, r3, r4, lsl #2
+ 420 0134 0122     		movs	r2, #1
+ 421 0136 9A70     		strb	r2, [r3, #2]
+ 422 0138 82E7     		b	.L8
+ 423              	.L32:
+ 104:Src/input.c   ****         break;
+ 424              		.loc 1 104 13 is_stmt 1 view .LVU124
+ 104:Src/input.c   ****         break;
+ 425              		.loc 1 104 39 is_stmt 0 view .LVU125
+ 426 013a 564B     		ldr	r3, .L46+4
+ 427 013c 03EB8403 		add	r3, r3, r4, lsl #2
+ 428 0140 0022     		movs	r2, #0
+ 429 0142 9A70     		strb	r2, [r3, #2]
+ 430 0144 7CE7     		b	.L8
+ 431              	.LVL28:
+ 432              	.L18:
+ 107:Src/input.c   ****         if (inputGet == !IN8_PIN)
+ 433              		.loc 1 107 9 is_stmt 1 view .LVU126
+ 107:Src/input.c   ****         if (inputGet == !IN8_PIN)
+ 434              		.loc 1 107 20 is_stmt 0 view .LVU127
+ 435 0146 2021     		movs	r1, #32
+ 436 0148 5148     		ldr	r0, .L46
+ 437              	.LVL29:
+ 107:Src/input.c   ****         if (inputGet == !IN8_PIN)
+ 438              		.loc 1 107 20 view .LVU128
+ 439 014a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ARM GAS  /tmp/ccghhMdm.s 			page 13
+
+
+ 440              	.LVL30:
+ 108:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 441              		.loc 1 108 9 is_stmt 1 view .LVU129
+ 108:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 442              		.loc 1 108 12 is_stmt 0 view .LVU130
+ 443 014e 28B9     		cbnz	r0, .L33
+ 109:Src/input.c   ****         else
+ 444              		.loc 1 109 13 is_stmt 1 view .LVU131
+ 109:Src/input.c   ****         else
+ 445              		.loc 1 109 39 is_stmt 0 view .LVU132
+ 446 0150 504B     		ldr	r3, .L46+4
+ 447 0152 03EB8403 		add	r3, r3, r4, lsl #2
+ 448 0156 0122     		movs	r2, #1
+ 449 0158 9A70     		strb	r2, [r3, #2]
+ 450 015a 71E7     		b	.L8
+ 451              	.L33:
+ 111:Src/input.c   ****         break;
+ 452              		.loc 1 111 13 is_stmt 1 view .LVU133
+ 111:Src/input.c   ****         break;
+ 453              		.loc 1 111 39 is_stmt 0 view .LVU134
+ 454 015c 4D4B     		ldr	r3, .L46+4
+ 455 015e 03EB8403 		add	r3, r3, r4, lsl #2
+ 456 0162 0022     		movs	r2, #0
+ 457 0164 9A70     		strb	r2, [r3, #2]
+ 458 0166 6BE7     		b	.L8
+ 459              	.LVL31:
+ 460              	.L17:
+ 114:Src/input.c   ****         if (inputGet == !IN9_PIN)
+ 461              		.loc 1 114 9 is_stmt 1 view .LVU135
+ 114:Src/input.c   ****         if (inputGet == !IN9_PIN)
+ 462              		.loc 1 114 20 is_stmt 0 view .LVU136
+ 463 0168 4FF48051 		mov	r1, #4096
+ 464 016c 4848     		ldr	r0, .L46
+ 465              	.LVL32:
+ 114:Src/input.c   ****         if (inputGet == !IN9_PIN)
+ 466              		.loc 1 114 20 view .LVU137
+ 467 016e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 468              	.LVL33:
+ 115:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 469              		.loc 1 115 9 is_stmt 1 view .LVU138
+ 115:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 470              		.loc 1 115 12 is_stmt 0 view .LVU139
+ 471 0172 28B9     		cbnz	r0, .L34
+ 116:Src/input.c   ****         else
+ 472              		.loc 1 116 13 is_stmt 1 view .LVU140
+ 116:Src/input.c   ****         else
+ 473              		.loc 1 116 39 is_stmt 0 view .LVU141
+ 474 0174 474B     		ldr	r3, .L46+4
+ 475 0176 03EB8403 		add	r3, r3, r4, lsl #2
+ 476 017a 0122     		movs	r2, #1
+ 477 017c 9A70     		strb	r2, [r3, #2]
+ 478 017e 5FE7     		b	.L8
+ 479              	.L34:
+ 118:Src/input.c   ****         break;
+ 480              		.loc 1 118 13 is_stmt 1 view .LVU142
+ 118:Src/input.c   ****         break;
+ 481              		.loc 1 118 39 is_stmt 0 view .LVU143
+ARM GAS  /tmp/ccghhMdm.s 			page 14
+
+
+ 482 0180 444B     		ldr	r3, .L46+4
+ 483 0182 03EB8403 		add	r3, r3, r4, lsl #2
+ 484 0186 0022     		movs	r2, #0
+ 485 0188 9A70     		strb	r2, [r3, #2]
+ 486 018a 59E7     		b	.L8
+ 487              	.LVL34:
+ 488              	.L16:
+ 121:Src/input.c   ****         if (inputGet == !IN10_PIN)
+ 489              		.loc 1 121 9 is_stmt 1 view .LVU144
+ 121:Src/input.c   ****         if (inputGet == !IN10_PIN)
+ 490              		.loc 1 121 20 is_stmt 0 view .LVU145
+ 491 018c 0221     		movs	r1, #2
+ 492 018e 4048     		ldr	r0, .L46
+ 493              	.LVL35:
+ 121:Src/input.c   ****         if (inputGet == !IN10_PIN)
+ 494              		.loc 1 121 20 view .LVU146
+ 495 0190 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 496              	.LVL36:
+ 122:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 497              		.loc 1 122 9 is_stmt 1 view .LVU147
+ 122:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 498              		.loc 1 122 12 is_stmt 0 view .LVU148
+ 499 0194 28B9     		cbnz	r0, .L35
+ 123:Src/input.c   ****         else
+ 500              		.loc 1 123 13 is_stmt 1 view .LVU149
+ 123:Src/input.c   ****         else
+ 501              		.loc 1 123 39 is_stmt 0 view .LVU150
+ 502 0196 3F4B     		ldr	r3, .L46+4
+ 503 0198 03EB8403 		add	r3, r3, r4, lsl #2
+ 504 019c 0122     		movs	r2, #1
+ 505 019e 9A70     		strb	r2, [r3, #2]
+ 506 01a0 4EE7     		b	.L8
+ 507              	.L35:
+ 125:Src/input.c   ****         break;
+ 508              		.loc 1 125 13 is_stmt 1 view .LVU151
+ 125:Src/input.c   ****         break;
+ 509              		.loc 1 125 39 is_stmt 0 view .LVU152
+ 510 01a2 3C4B     		ldr	r3, .L46+4
+ 511 01a4 03EB8403 		add	r3, r3, r4, lsl #2
+ 512 01a8 0022     		movs	r2, #0
+ 513 01aa 9A70     		strb	r2, [r3, #2]
+ 514 01ac 48E7     		b	.L8
+ 515              	.LVL37:
+ 516              	.L15:
+ 128:Src/input.c   ****         if (inputGet == !IN11_PIN)
+ 517              		.loc 1 128 9 is_stmt 1 view .LVU153
+ 128:Src/input.c   ****         if (inputGet == !IN11_PIN)
+ 518              		.loc 1 128 20 is_stmt 0 view .LVU154
+ 519 01ae 0421     		movs	r1, #4
+ 520 01b0 3748     		ldr	r0, .L46
+ 521              	.LVL38:
+ 128:Src/input.c   ****         if (inputGet == !IN11_PIN)
+ 522              		.loc 1 128 20 view .LVU155
+ 523 01b2 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 524              	.LVL39:
+ 129:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 525              		.loc 1 129 9 is_stmt 1 view .LVU156
+ARM GAS  /tmp/ccghhMdm.s 			page 15
+
+
+ 129:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 526              		.loc 1 129 12 is_stmt 0 view .LVU157
+ 527 01b6 28B9     		cbnz	r0, .L36
+ 130:Src/input.c   ****         else
+ 528              		.loc 1 130 13 is_stmt 1 view .LVU158
+ 130:Src/input.c   ****         else
+ 529              		.loc 1 130 39 is_stmt 0 view .LVU159
+ 530 01b8 364B     		ldr	r3, .L46+4
+ 531 01ba 03EB8403 		add	r3, r3, r4, lsl #2
+ 532 01be 0122     		movs	r2, #1
+ 533 01c0 9A70     		strb	r2, [r3, #2]
+ 534 01c2 3DE7     		b	.L8
+ 535              	.L36:
+ 132:Src/input.c   ****         break;
+ 536              		.loc 1 132 13 is_stmt 1 view .LVU160
+ 132:Src/input.c   ****         break;
+ 537              		.loc 1 132 39 is_stmt 0 view .LVU161
+ 538 01c4 334B     		ldr	r3, .L46+4
+ 539 01c6 03EB8403 		add	r3, r3, r4, lsl #2
+ 540 01ca 0022     		movs	r2, #0
+ 541 01cc 9A70     		strb	r2, [r3, #2]
+ 542 01ce 37E7     		b	.L8
+ 543              	.LVL40:
+ 544              	.L14:
+ 135:Src/input.c   ****         if (inputGet == !IN12_PIN)
+ 545              		.loc 1 135 9 is_stmt 1 view .LVU162
+ 135:Src/input.c   ****         if (inputGet == !IN12_PIN)
+ 546              		.loc 1 135 20 is_stmt 0 view .LVU163
+ 547 01d0 0821     		movs	r1, #8
+ 548 01d2 2F48     		ldr	r0, .L46
+ 549              	.LVL41:
+ 135:Src/input.c   ****         if (inputGet == !IN12_PIN)
+ 550              		.loc 1 135 20 view .LVU164
+ 551 01d4 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 552              	.LVL42:
+ 136:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 553              		.loc 1 136 9 is_stmt 1 view .LVU165
+ 136:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 554              		.loc 1 136 12 is_stmt 0 view .LVU166
+ 555 01d8 28B9     		cbnz	r0, .L37
+ 137:Src/input.c   ****         else
+ 556              		.loc 1 137 13 is_stmt 1 view .LVU167
+ 137:Src/input.c   ****         else
+ 557              		.loc 1 137 39 is_stmt 0 view .LVU168
+ 558 01da 2E4B     		ldr	r3, .L46+4
+ 559 01dc 03EB8403 		add	r3, r3, r4, lsl #2
+ 560 01e0 0122     		movs	r2, #1
+ 561 01e2 9A70     		strb	r2, [r3, #2]
+ 562 01e4 2CE7     		b	.L8
+ 563              	.L37:
+ 139:Src/input.c   ****         break;
+ 564              		.loc 1 139 13 is_stmt 1 view .LVU169
+ 139:Src/input.c   ****         break;
+ 565              		.loc 1 139 39 is_stmt 0 view .LVU170
+ 566 01e6 2B4B     		ldr	r3, .L46+4
+ 567 01e8 03EB8403 		add	r3, r3, r4, lsl #2
+ 568 01ec 0022     		movs	r2, #0
+ARM GAS  /tmp/ccghhMdm.s 			page 16
+
+
+ 569 01ee 9A70     		strb	r2, [r3, #2]
+ 570 01f0 26E7     		b	.L8
+ 571              	.LVL43:
+ 572              	.L13:
+ 142:Src/input.c   ****         if (inputGet == !IN13_PIN)
+ 573              		.loc 1 142 9 is_stmt 1 view .LVU171
+ 142:Src/input.c   ****         if (inputGet == !IN13_PIN)
+ 574              		.loc 1 142 20 is_stmt 0 view .LVU172
+ 575 01f2 2021     		movs	r1, #32
+ 576 01f4 2A48     		ldr	r0, .L46+16
+ 577              	.LVL44:
+ 142:Src/input.c   ****         if (inputGet == !IN13_PIN)
+ 578              		.loc 1 142 20 view .LVU173
+ 579 01f6 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 580              	.LVL45:
+ 143:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 581              		.loc 1 143 9 is_stmt 1 view .LVU174
+ 143:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 582              		.loc 1 143 12 is_stmt 0 view .LVU175
+ 583 01fa 28B9     		cbnz	r0, .L38
+ 144:Src/input.c   ****         else
+ 584              		.loc 1 144 13 is_stmt 1 view .LVU176
+ 144:Src/input.c   ****         else
+ 585              		.loc 1 144 39 is_stmt 0 view .LVU177
+ 586 01fc 254B     		ldr	r3, .L46+4
+ 587 01fe 03EB8403 		add	r3, r3, r4, lsl #2
+ 588 0202 0122     		movs	r2, #1
+ 589 0204 9A70     		strb	r2, [r3, #2]
+ 590 0206 1BE7     		b	.L8
+ 591              	.L38:
+ 146:Src/input.c   ****         break;
+ 592              		.loc 1 146 13 is_stmt 1 view .LVU178
+ 146:Src/input.c   ****         break;
+ 593              		.loc 1 146 39 is_stmt 0 view .LVU179
+ 594 0208 224B     		ldr	r3, .L46+4
+ 595 020a 03EB8403 		add	r3, r3, r4, lsl #2
+ 596 020e 0022     		movs	r2, #0
+ 597 0210 9A70     		strb	r2, [r3, #2]
+ 598 0212 15E7     		b	.L8
+ 599              	.LVL46:
+ 600              	.L12:
+ 149:Src/input.c   ****         if (inputGet == !IN14_PIN)
+ 601              		.loc 1 149 9 is_stmt 1 view .LVU180
+ 149:Src/input.c   ****         if (inputGet == !IN14_PIN)
+ 602              		.loc 1 149 20 is_stmt 0 view .LVU181
+ 603 0214 1021     		movs	r1, #16
+ 604 0216 2248     		ldr	r0, .L46+16
+ 605              	.LVL47:
+ 149:Src/input.c   ****         if (inputGet == !IN14_PIN)
+ 606              		.loc 1 149 20 view .LVU182
+ 607 0218 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 608              	.LVL48:
+ 150:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 609              		.loc 1 150 9 is_stmt 1 view .LVU183
+ 150:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 610              		.loc 1 150 12 is_stmt 0 view .LVU184
+ 611 021c 28B9     		cbnz	r0, .L39
+ARM GAS  /tmp/ccghhMdm.s 			page 17
+
+
+ 151:Src/input.c   ****         else
+ 612              		.loc 1 151 13 is_stmt 1 view .LVU185
+ 151:Src/input.c   ****         else
+ 613              		.loc 1 151 39 is_stmt 0 view .LVU186
+ 614 021e 1D4B     		ldr	r3, .L46+4
+ 615 0220 03EB8403 		add	r3, r3, r4, lsl #2
+ 616 0224 0122     		movs	r2, #1
+ 617 0226 9A70     		strb	r2, [r3, #2]
+ 618 0228 0AE7     		b	.L8
+ 619              	.L39:
+ 153:Src/input.c   ****         break;
+ 620              		.loc 1 153 13 is_stmt 1 view .LVU187
+ 153:Src/input.c   ****         break;
+ 621              		.loc 1 153 39 is_stmt 0 view .LVU188
+ 622 022a 1A4B     		ldr	r3, .L46+4
+ 623 022c 03EB8403 		add	r3, r3, r4, lsl #2
+ 624 0230 0022     		movs	r2, #0
+ 625 0232 9A70     		strb	r2, [r3, #2]
+ 626 0234 04E7     		b	.L8
+ 627              	.LVL49:
+ 628              	.L11:
+ 156:Src/input.c   ****         if (inputGet == !IN15_PIN)
+ 629              		.loc 1 156 9 is_stmt 1 view .LVU189
+ 156:Src/input.c   ****         if (inputGet == !IN15_PIN)
+ 630              		.loc 1 156 20 is_stmt 0 view .LVU190
+ 631 0236 0221     		movs	r1, #2
+ 632 0238 1948     		ldr	r0, .L46+16
+ 633              	.LVL50:
+ 156:Src/input.c   ****         if (inputGet == !IN15_PIN)
+ 634              		.loc 1 156 20 view .LVU191
+ 635 023a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 636              	.LVL51:
+ 157:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 637              		.loc 1 157 9 is_stmt 1 view .LVU192
+ 157:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 638              		.loc 1 157 12 is_stmt 0 view .LVU193
+ 639 023e 28B9     		cbnz	r0, .L40
+ 158:Src/input.c   ****         else
+ 640              		.loc 1 158 13 is_stmt 1 view .LVU194
+ 158:Src/input.c   ****         else
+ 641              		.loc 1 158 39 is_stmt 0 view .LVU195
+ 642 0240 144B     		ldr	r3, .L46+4
+ 643 0242 03EB8403 		add	r3, r3, r4, lsl #2
+ 644 0246 0122     		movs	r2, #1
+ 645 0248 9A70     		strb	r2, [r3, #2]
+ 646 024a F9E6     		b	.L8
+ 647              	.L40:
+ 160:Src/input.c   ****         break;
+ 648              		.loc 1 160 13 is_stmt 1 view .LVU196
+ 160:Src/input.c   ****         break;
+ 649              		.loc 1 160 39 is_stmt 0 view .LVU197
+ 650 024c 114B     		ldr	r3, .L46+4
+ 651 024e 03EB8403 		add	r3, r3, r4, lsl #2
+ 652 0252 0022     		movs	r2, #0
+ 653 0254 9A70     		strb	r2, [r3, #2]
+ 654 0256 F3E6     		b	.L8
+ 655              	.LVL52:
+ARM GAS  /tmp/ccghhMdm.s 			page 18
+
+
+ 656              	.L9:
+ 163:Src/input.c   ****         if (inputGet == !IN16_PIN)
+ 657              		.loc 1 163 9 is_stmt 1 view .LVU198
+ 163:Src/input.c   ****         if (inputGet == !IN16_PIN)
+ 658              		.loc 1 163 20 is_stmt 0 view .LVU199
+ 659 0258 0121     		movs	r1, #1
+ 660 025a 1148     		ldr	r0, .L46+16
+ 661              	.LVL53:
+ 163:Src/input.c   ****         if (inputGet == !IN16_PIN)
+ 662              		.loc 1 163 20 view .LVU200
+ 663 025c FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 664              	.LVL54:
+ 164:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 665              		.loc 1 164 9 is_stmt 1 view .LVU201
+ 164:Src/input.c   ****             input.ext[port_id].active = IN_ACTIVE;
+ 666              		.loc 1 164 12 is_stmt 0 view .LVU202
+ 667 0260 28B9     		cbnz	r0, .L41
+ 165:Src/input.c   ****         else
+ 668              		.loc 1 165 13 is_stmt 1 view .LVU203
+ 165:Src/input.c   ****         else
+ 669              		.loc 1 165 39 is_stmt 0 view .LVU204
+ 670 0262 0C4B     		ldr	r3, .L46+4
+ 671 0264 03EB8403 		add	r3, r3, r4, lsl #2
+ 672 0268 0122     		movs	r2, #1
+ 673 026a 9A70     		strb	r2, [r3, #2]
+ 674 026c E8E6     		b	.L8
+ 675              	.L41:
+ 167:Src/input.c   ****         break;
+ 676              		.loc 1 167 13 is_stmt 1 view .LVU205
+ 167:Src/input.c   ****         break;
+ 677              		.loc 1 167 39 is_stmt 0 view .LVU206
+ 678 026e 094B     		ldr	r3, .L46+4
+ 679 0270 03EB8403 		add	r3, r3, r4, lsl #2
+ 680 0274 0022     		movs	r2, #0
+ 681 0276 9A70     		strb	r2, [r3, #2]
+ 682 0278 E2E6     		b	.L8
+ 683              	.LVL55:
+ 684              	.L45:
+ 176:Src/input.c   ****             input.ext[port_id].cnt = 0;
+ 685              		.loc 1 176 13 is_stmt 1 view .LVU207
+ 176:Src/input.c   ****             input.ext[port_id].cnt = 0;
+ 686              		.loc 1 176 40 is_stmt 0 view .LVU208
+ 687 027a 5170     		strb	r1, [r2, #1]
+ 177:Src/input.c   ****         }
+ 688              		.loc 1 177 13 is_stmt 1 view .LVU209
+ 177:Src/input.c   ****         }
+ 689              		.loc 1 177 36 is_stmt 0 view .LVU210
+ 690 027c 0023     		movs	r3, #0
+ 691 027e 1371     		strb	r3, [r2, #4]
+ 692 0280 F0E6     		b	.L7
+ 693              	.L42:
+ 182:Src/input.c   ****     }
+ 694              		.loc 1 182 9 is_stmt 1 view .LVU211
+ 182:Src/input.c   ****     }
+ 695              		.loc 1 182 32 is_stmt 0 view .LVU212
+ 696 0282 0448     		ldr	r0, .L46+4
+ 697 0284 00EB8404 		add	r4, r0, r4, lsl #2
+ARM GAS  /tmp/ccghhMdm.s 			page 19
+
+
+ 698 0288 0023     		movs	r3, #0
+ 699 028a 2371     		strb	r3, [r4, #4]
+ 700              		.loc 1 184 1 view .LVU213
+ 701 028c EAE6     		b	.L7
+ 702              	.L47:
+ 703 028e 00BF     		.align	2
+ 704              	.L46:
+ 705 0290 000C0140 		.word	1073810432
+ 706 0294 00000000 		.word	.LANCHOR0
+ 707 0298 00140140 		.word	1073812480
+ 708 029c 00100140 		.word	1073811456
+ 709 02a0 00080140 		.word	1073809408
+ 710              		.cfi_endproc
+ 711              	.LFE198:
+ 713              		.section	.rodata.Input_Process.str1.4,"aMS",%progbits,1
+ 714              		.align	2
+ 715              	.LC0:
+ 716 0000 494E5055 		.ascii	"INPUT4 ON\000"
+ 716      5434204F 
+ 716      4E00
+ 717 000a 0000     		.align	2
+ 718              	.LC1:
+ 719 000c 494E5055 		.ascii	"INPUT4 OFF\000"
+ 719      5434204F 
+ 719      464600
+ 720              		.section	.text.Input_Process,"ax",%progbits
+ 721              		.align	1
+ 722              		.global	Input_Process
+ 723              		.syntax unified
+ 724              		.thumb
+ 725              		.thumb_func
+ 726              		.fpu softvfp
+ 728              	Input_Process:
+ 729              	.LFB199:
+ 185:Src/input.c   **** 
+ 186:Src/input.c   **** uint8_t Input_Process(void)
+ 187:Src/input.c   **** {
+ 730              		.loc 1 187 1 is_stmt 1 view -0
+ 731              		.cfi_startproc
+ 732              		@ args = 0, pretend = 0, frame = 0
+ 733              		@ frame_needed = 0, uses_anonymous_args = 0
+ 734 0000 10B5     		push	{r4, lr}
+ 735              	.LCFI4:
+ 736              		.cfi_def_cfa_offset 8
+ 737              		.cfi_offset 4, -8
+ 738              		.cfi_offset 14, -4
+ 188:Src/input.c   ****     uint8_t currentState = 0;
+ 739              		.loc 1 188 5 view .LVU215
+ 740              	.LVL56:
+ 189:Src/input.c   ****     for (input.name = 0; input.name < NUM_INPUT; input.name++)
+ 741              		.loc 1 189 5 view .LVU216
+ 742              		.loc 1 189 21 is_stmt 0 view .LVU217
+ 743 0002 0024     		movs	r4, #0
+ 744 0004 264B     		ldr	r3, .L62
+ 745 0006 1C70     		strb	r4, [r3]
+ 746              		.loc 1 189 5 view .LVU218
+ 747 0008 29E0     		b	.L49
+ARM GAS  /tmp/ccghhMdm.s 			page 20
+
+
+ 748              	.LVL57:
+ 749              	.L60:
+ 190:Src/input.c   ****     {
+ 191:Src/input.c   ****         Input_Get(input.name);
+ 192:Src/input.c   **** 
+ 193:Src/input.c   ****         if (input.ext[input.name].actived == IN_ACTIVE)
+ 194:Src/input.c   ****         {
+ 195:Src/input.c   ****             if (input.ext[input.name].waitRelease == 0)
+ 750              		.loc 1 195 13 is_stmt 1 view .LVU219
+ 751              		.loc 1 195 38 is_stmt 0 view .LVU220
+ 752 000a 254B     		ldr	r3, .L62
+ 753 000c 03EB8203 		add	r3, r3, r2, lsl #2
+ 754 0010 DB78     		ldrb	r3, [r3, #3]	@ zero_extendqisi2
+ 755              		.loc 1 195 16 view .LVU221
+ 756 0012 13B9     		cbnz	r3, .L51
+ 196:Src/input.c   ****             {
+ 197:Src/input.c   ****                 switch (input.name)
+ 757              		.loc 1 197 17 is_stmt 1 view .LVU222
+ 758 0014 032A     		cmp	r2, #3
+ 759 0016 07D0     		beq	.L58
+ 198:Src/input.c   ****                 {
+ 199:Src/input.c   ****                 
+ 200:Src/input.c   ****                     case IN4:
+ 201:Src/input.c   ****                         currentState = IN4_ON;
+ 202:Src/input.c   ****                         printf("INPUT4 ON\n");
+ 203:Src/input.c   ****                         device.sensor_door = 0;
+ 204:Src/input.c   ****                         // device.light = 0;
+ 205:Src/input.c   **** 
+ 206:Src/input.c   ****                         break;
+ 207:Src/input.c   ****                 
+ 208:Src/input.c   ****                 default:
+ 209:Src/input.c   ****                     currentState = NO_INPUT;
+ 760              		.loc 1 209 34 is_stmt 0 view .LVU223
+ 761 0018 1C46     		mov	r4, r3
+ 762              	.LVL58:
+ 763              	.L51:
+ 210:Src/input.c   ****                     break;
+ 211:Src/input.c   ****                 }
+ 212:Src/input.c   ****             }
+ 213:Src/input.c   ****             input.ext[input.name].waitRelease = 1;
+ 764              		.loc 1 213 13 is_stmt 1 view .LVU224
+ 765              		.loc 1 213 28 is_stmt 0 view .LVU225
+ 766 001a 214B     		ldr	r3, .L62
+ 767 001c 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 768              		.loc 1 213 47 view .LVU226
+ 769 001e 03EB8203 		add	r3, r3, r2, lsl #2
+ 770 0022 0122     		movs	r2, #1
+ 771 0024 DA70     		strb	r2, [r3, #3]
+ 772 0026 27E0     		b	.L50
+ 773              	.L58:
+ 201:Src/input.c   ****                         printf("INPUT4 ON\n");
+ 774              		.loc 1 201 25 is_stmt 1 view .LVU227
+ 775              	.LVL59:
+ 202:Src/input.c   ****                         device.sensor_door = 0;
+ 776              		.loc 1 202 25 view .LVU228
+ 777 0028 1E48     		ldr	r0, .L62+4
+ 778 002a FFF7FEFF 		bl	puts
+ARM GAS  /tmp/ccghhMdm.s 			page 21
+
+
+ 779              	.LVL60:
+ 203:Src/input.c   ****                         // device.light = 0;
+ 780              		.loc 1 203 25 view .LVU229
+ 203:Src/input.c   ****                         // device.light = 0;
+ 781              		.loc 1 203 44 is_stmt 0 view .LVU230
+ 782 002e 1E4B     		ldr	r3, .L62+8
+ 783 0030 0022     		movs	r2, #0
+ 784 0032 83F83F20 		strb	r2, [r3, #63]
+ 206:Src/input.c   ****                 
+ 785              		.loc 1 206 25 is_stmt 1 view .LVU231
+ 201:Src/input.c   ****                         printf("INPUT4 ON\n");
+ 786              		.loc 1 201 38 is_stmt 0 view .LVU232
+ 787 0036 0724     		movs	r4, #7
+ 206:Src/input.c   ****                 
+ 788              		.loc 1 206 25 view .LVU233
+ 789 0038 EFE7     		b	.L51
+ 790              	.LVL61:
+ 791              	.L61:
+ 214:Src/input.c   ****         }
+ 215:Src/input.c   ****         if (input.ext[input.name].actived == IN_RELEASE)
+ 216:Src/input.c   ****         {
+ 217:Src/input.c   ****             if (input.ext[input.name].waitRelease == 1)
+ 218:Src/input.c   ****             {
+ 219:Src/input.c   ****                 switch (input.name)
+ 220:Src/input.c   ****                 {
+ 221:Src/input.c   ****                     
+ 222:Src/input.c   ****                     case IN4:
+ 223:Src/input.c   ****                         currentState = IN4_OFF;
+ 792              		.loc 1 223 25 is_stmt 1 view .LVU234
+ 224:Src/input.c   ****                         printf("INPUT4 OFF\n");
+ 793              		.loc 1 224 25 view .LVU235
+ 794 003a 1C48     		ldr	r0, .L62+12
+ 795 003c FFF7FEFF 		bl	puts
+ 796              	.LVL62:
+ 225:Src/input.c   ****                         device.sensor_door = 1;
+ 797              		.loc 1 225 25 view .LVU236
+ 798              		.loc 1 225 44 is_stmt 0 view .LVU237
+ 799 0040 194B     		ldr	r3, .L62+8
+ 800 0042 0122     		movs	r2, #1
+ 801 0044 83F83F20 		strb	r2, [r3, #63]
+ 226:Src/input.c   ****                         // device.light = 1;
+ 227:Src/input.c   **** 
+ 228:Src/input.c   ****                         break;
+ 802              		.loc 1 228 25 is_stmt 1 view .LVU238
+ 223:Src/input.c   ****                         printf("INPUT4 OFF\n");
+ 803              		.loc 1 223 38 is_stmt 0 view .LVU239
+ 804 0048 0824     		movs	r4, #8
+ 805              	.LVL63:
+ 806              	.L53:
+ 229:Src/input.c   ****                 
+ 230:Src/input.c   ****                 default:
+ 231:Src/input.c   ****                     currentState = NO_INPUT;
+ 232:Src/input.c   ****                     break;
+ 233:Src/input.c   ****                 }
+ 234:Src/input.c   ****             }
+ 235:Src/input.c   ****             input.ext[input.name].waitRelease = 0;
+ 807              		.loc 1 235 13 is_stmt 1 view .LVU240
+ARM GAS  /tmp/ccghhMdm.s 			page 22
+
+
+ 808              		.loc 1 235 28 is_stmt 0 view .LVU241
+ 809 004a 154B     		ldr	r3, .L62
+ 810 004c 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 811              		.loc 1 235 47 view .LVU242
+ 812 004e 03EB8203 		add	r3, r3, r2, lsl #2
+ 813 0052 0022     		movs	r2, #0
+ 814 0054 DA70     		strb	r2, [r3, #3]
+ 815              	.L52:
+ 189:Src/input.c   ****     {
+ 816              		.loc 1 189 50 is_stmt 1 discriminator 2 view .LVU243
+ 189:Src/input.c   ****     {
+ 817              		.loc 1 189 55 is_stmt 0 discriminator 2 view .LVU244
+ 818 0056 124A     		ldr	r2, .L62
+ 819 0058 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 189:Src/input.c   ****     {
+ 820              		.loc 1 189 60 discriminator 2 view .LVU245
+ 821 005a 0133     		adds	r3, r3, #1
+ 822 005c 1370     		strb	r3, [r2]
+ 823              	.LVL64:
+ 824              	.L49:
+ 189:Src/input.c   ****     {
+ 825              		.loc 1 189 26 is_stmt 1 discriminator 1 view .LVU246
+ 189:Src/input.c   ****     {
+ 826              		.loc 1 189 31 is_stmt 0 discriminator 1 view .LVU247
+ 827 005e 104B     		ldr	r3, .L62
+ 828 0060 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 189:Src/input.c   ****     {
+ 829              		.loc 1 189 5 discriminator 1 view .LVU248
+ 830 0062 0F28     		cmp	r0, #15
+ 831 0064 19D8     		bhi	.L59
+ 191:Src/input.c   **** 
+ 832              		.loc 1 191 9 is_stmt 1 view .LVU249
+ 833 0066 FFF7FEFF 		bl	Input_Get
+ 834              	.LVL65:
+ 193:Src/input.c   ****         {
+ 835              		.loc 1 193 9 view .LVU250
+ 193:Src/input.c   ****         {
+ 836              		.loc 1 193 28 is_stmt 0 view .LVU251
+ 837 006a 0D4B     		ldr	r3, .L62
+ 838 006c 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 193:Src/input.c   ****         {
+ 839              		.loc 1 193 34 view .LVU252
+ 840 006e 03EB8203 		add	r3, r3, r2, lsl #2
+ 841 0072 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 193:Src/input.c   ****         {
+ 842              		.loc 1 193 12 view .LVU253
+ 843 0074 012B     		cmp	r3, #1
+ 844 0076 C8D0     		beq	.L60
+ 845              	.L50:
+ 215:Src/input.c   ****         {
+ 846              		.loc 1 215 9 is_stmt 1 view .LVU254
+ 215:Src/input.c   ****         {
+ 847              		.loc 1 215 28 is_stmt 0 view .LVU255
+ 848 0078 094B     		ldr	r3, .L62
+ 849 007a 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 215:Src/input.c   ****         {
+ 850              		.loc 1 215 34 view .LVU256
+ARM GAS  /tmp/ccghhMdm.s 			page 23
+
+
+ 851 007c 03EB8203 		add	r3, r3, r2, lsl #2
+ 852 0080 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 215:Src/input.c   ****         {
+ 853              		.loc 1 215 12 view .LVU257
+ 854 0082 002B     		cmp	r3, #0
+ 855 0084 E7D1     		bne	.L52
+ 217:Src/input.c   ****             {
+ 856              		.loc 1 217 13 is_stmt 1 view .LVU258
+ 217:Src/input.c   ****             {
+ 857              		.loc 1 217 38 is_stmt 0 view .LVU259
+ 858 0086 0649     		ldr	r1, .L62
+ 859 0088 01EB8201 		add	r1, r1, r2, lsl #2
+ 860 008c C978     		ldrb	r1, [r1, #3]	@ zero_extendqisi2
+ 217:Src/input.c   ****             {
+ 861              		.loc 1 217 16 view .LVU260
+ 862 008e 0129     		cmp	r1, #1
+ 863 0090 DBD1     		bne	.L53
+ 219:Src/input.c   ****                 {
+ 864              		.loc 1 219 17 is_stmt 1 view .LVU261
+ 865 0092 032A     		cmp	r2, #3
+ 866 0094 D1D0     		beq	.L61
+ 231:Src/input.c   ****                     break;
+ 867              		.loc 1 231 34 is_stmt 0 view .LVU262
+ 868 0096 1C46     		mov	r4, r3
+ 869              	.LVL66:
+ 231:Src/input.c   ****                     break;
+ 870              		.loc 1 231 34 view .LVU263
+ 871 0098 D7E7     		b	.L53
+ 872              	.LVL67:
+ 873              	.L59:
+ 236:Src/input.c   ****         }
+ 237:Src/input.c   ****     }
+ 238:Src/input.c   ****     return currentState;
+ 874              		.loc 1 238 5 is_stmt 1 view .LVU264
+ 239:Src/input.c   **** }
+ 875              		.loc 1 239 1 is_stmt 0 view .LVU265
+ 876 009a 2046     		mov	r0, r4
+ 877 009c 10BD     		pop	{r4, pc}
+ 878              	.LVL68:
+ 879              	.L63:
+ 880              		.loc 1 239 1 view .LVU266
+ 881 009e 00BF     		.align	2
+ 882              	.L62:
+ 883 00a0 00000000 		.word	.LANCHOR0
+ 884 00a4 00000000 		.word	.LC0
+ 885 00a8 00000000 		.word	device
+ 886 00ac 0C000000 		.word	.LC1
+ 887              		.cfi_endproc
+ 888              	.LFE199:
+ 890              		.section	.text.Input_Manage,"ax",%progbits
+ 891              		.align	1
+ 892              		.global	Input_Manage
+ 893              		.syntax unified
+ 894              		.thumb
+ 895              		.thumb_func
+ 896              		.fpu softvfp
+ 898              	Input_Manage:
+ARM GAS  /tmp/ccghhMdm.s 			page 24
+
+
+ 899              	.LFB200:
+ 240:Src/input.c   **** 
+ 241:Src/input.c   **** void Input_Manage(void)
+ 242:Src/input.c   **** {
+ 900              		.loc 1 242 1 is_stmt 1 view -0
+ 901              		.cfi_startproc
+ 902              		@ args = 0, pretend = 0, frame = 0
+ 903              		@ frame_needed = 0, uses_anonymous_args = 0
+ 904 0000 08B5     		push	{r3, lr}
+ 905              	.LCFI5:
+ 906              		.cfi_def_cfa_offset 8
+ 907              		.cfi_offset 3, -8
+ 908              		.cfi_offset 14, -4
+ 243:Src/input.c   ****     if (HAL_GetTick() - input.tick > 10)
+ 909              		.loc 1 243 5 view .LVU268
+ 910              		.loc 1 243 9 is_stmt 0 view .LVU269
+ 911 0002 FFF7FEFF 		bl	HAL_GetTick
+ 912              	.LVL69:
+ 913              		.loc 1 243 30 view .LVU270
+ 914 0006 064B     		ldr	r3, .L68
+ 915 0008 5B6C     		ldr	r3, [r3, #68]
+ 916              		.loc 1 243 23 view .LVU271
+ 917 000a C01A     		subs	r0, r0, r3
+ 918              		.loc 1 243 8 view .LVU272
+ 919 000c 0A28     		cmp	r0, #10
+ 920 000e 00D8     		bhi	.L67
+ 921              	.L64:
+ 244:Src/input.c   ****     {
+ 245:Src/input.c   ****         Input_Process();
+ 246:Src/input.c   ****         
+ 247:Src/input.c   ****         input.tick = HAL_GetTick();
+ 248:Src/input.c   ****     }
+ 249:Src/input.c   **** }
+ 922              		.loc 1 249 1 view .LVU273
+ 923 0010 08BD     		pop	{r3, pc}
+ 924              	.L67:
+ 245:Src/input.c   ****         
+ 925              		.loc 1 245 9 is_stmt 1 view .LVU274
+ 926 0012 FFF7FEFF 		bl	Input_Process
+ 927              	.LVL70:
+ 247:Src/input.c   ****     }
+ 928              		.loc 1 247 9 view .LVU275
+ 247:Src/input.c   ****     }
+ 929              		.loc 1 247 22 is_stmt 0 view .LVU276
+ 930 0016 FFF7FEFF 		bl	HAL_GetTick
+ 931              	.LVL71:
+ 247:Src/input.c   ****     }
+ 932              		.loc 1 247 20 view .LVU277
+ 933 001a 014B     		ldr	r3, .L68
+ 934 001c 5864     		str	r0, [r3, #68]
+ 935              		.loc 1 249 1 view .LVU278
+ 936 001e F7E7     		b	.L64
+ 937              	.L69:
+ 938              		.align	2
+ 939              	.L68:
+ 940 0020 00000000 		.word	.LANCHOR0
+ 941              		.cfi_endproc
+ARM GAS  /tmp/ccghhMdm.s 			page 25
+
+
+ 942              	.LFE200:
+ 944              		.global	input
+ 945              		.section	.bss.input,"aw",%nobits
+ 946              		.align	2
+ 947              		.set	.LANCHOR0,. + 0
+ 950              	input:
+ 951 0000 00000000 		.space	72
+ 951      00000000 
+ 951      00000000 
+ 951      00000000 
+ 951      00000000 
+ 952              		.text
+ 953              	.Letext0:
+ 954              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 955              		.file 3 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/CMSIS/Device/ST/STM32F
+ 956              		.file 4 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
+ 957              		.file 5 "Inc/input.h"
+ 958              		.file 6 "User/System/control_system.h"
+ 959              		.file 7 "Inc/stm32f1xx_hal.h"
+ 960              		.file 8 "<built-in>"
+ARM GAS  /tmp/ccghhMdm.s 			page 26
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 input.c
+     /tmp/ccghhMdm.s:16     .text.Input_Init:0000000000000000 $t
+     /tmp/ccghhMdm.s:24     .text.Input_Init:0000000000000000 Input_Init
+     /tmp/ccghhMdm.s:155    .text.Input_Init:0000000000000080 $d
+     /tmp/ccghhMdm.s:164    .text.Input_Get:0000000000000000 $t
+     /tmp/ccghhMdm.s:171    .text.Input_Get:0000000000000000 Input_Get
+     /tmp/ccghhMdm.s:191    .text.Input_Get:000000000000000c $d
+     /tmp/ccghhMdm.s:207    .text.Input_Get:000000000000002c $t
+     /tmp/ccghhMdm.s:705    .text.Input_Get:0000000000000290 $d
+     /tmp/ccghhMdm.s:714    .rodata.Input_Process.str1.4:0000000000000000 $d
+     /tmp/ccghhMdm.s:721    .text.Input_Process:0000000000000000 $t
+     /tmp/ccghhMdm.s:728    .text.Input_Process:0000000000000000 Input_Process
+     /tmp/ccghhMdm.s:883    .text.Input_Process:00000000000000a0 $d
+     /tmp/ccghhMdm.s:891    .text.Input_Manage:0000000000000000 $t
+     /tmp/ccghhMdm.s:898    .text.Input_Manage:0000000000000000 Input_Manage
+     /tmp/ccghhMdm.s:940    .text.Input_Manage:0000000000000020 $d
+     /tmp/ccghhMdm.s:950    .bss.input:0000000000000000 input
+     /tmp/ccghhMdm.s:946    .bss.input:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_GetTick
+HAL_GPIO_ReadPin
+puts
+device

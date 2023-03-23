@@ -78,8 +78,22 @@ void Mbslave_uart_rx_handler(void)
 void Mbslave_uart_tx_handler(void)
 {
 	pxMBFrameCBTransmitterEmpty();
-
 }
+// void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+// {
+// 	if(huart->Instance == uart->Instance)
+// 	{
+// 		pxMBFrameCBByteReceived();
+// 		HAL_UART_Receive_IT(uart, &singlechar, 1);
+// 	}
+// }
 
+// void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+// {
+// 	if(huart->Instance == uart->Instance)
+// 	{
+// 		pxMBFrameCBTransmitterEmpty();
+// 	}
+// }
 
 #endif

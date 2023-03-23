@@ -161,6 +161,7 @@ eMBMasterReqErrCode eMBMasterWaitRequestFinish(LONG timeout) {
         }
       }
       if((timeout == 0U)||((HAL_GetTick() - tickstart ) > timeout)){
+        
         return MB_MRE_TIMEDOUT;
       }  
     }
@@ -181,33 +182,5 @@ eMBMasterReqErrCode eMBMasterWaitRequestFinish(LONG timeout) {
     }
     return eErrStatus;
 }
-
-// eMBMasterReqErrCode eMBMasterWaitRequestFinish( void )
-// {
-//   eMBMasterReqErrCode eErrStatus = MB_MRE_NO_ERR;
-//   //eMBMasterEventType recvedEvent;
-
-//   //xMBMasterPortEventGet(&recvedEvent);
-
-//   switch (eQueuedEvent)
-//   {
-//     case EV_MASTER_ERROR_RESPOND_TIMEOUT:
-//       eErrStatus = MB_MRE_TIMEDOUT;
-//     break;
-
-//     case EV_MASTER_ERROR_RECEIVE_DATA:
-//       eErrStatus = MB_MRE_REV_DATA;
-//     break;
-
-//     case EV_MASTER_ERROR_EXECUTE_FUNCTION:
-//       eErrStatus = MB_MRE_EXE_FUN;
-//     break;
-
-//     default:
-//       eErrStatus = MB_MRE_NO_ERR;
-//     break;
-//   }
-//   return eErrStatus;
-// }
 
 #endif

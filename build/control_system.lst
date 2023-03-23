@@ -1,0 +1,2163 @@
+ARM GAS  /tmp/cc9uNECX.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"control_system.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.global	__aeabi_fsub
+  16              		.global	__aeabi_fcmplt
+  17              		.global	__aeabi_fcmpgt
+  18              		.section	.text.Ctrl_System_Moise,"ax",%progbits
+  19              		.align	1
+  20              		.global	Ctrl_System_Moise
+  21              		.arch armv7-m
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  25              		.fpu softvfp
+  27              	Ctrl_System_Moise:
+  28              	.LFB201:
+  29              		.file 1 "User/System/control_system.c"
+   1:User/System/control_system.c **** // - Dieu khien may tach am, tao am
+   2:User/System/control_system.c **** // - Dieu khien heater, cooler
+   3:User/System/control_system.c **** 
+   4:User/System/control_system.c **** #include "control_system.h"
+   5:User/System/control_system.c **** #include "modbus_data.h"
+   6:User/System/control_system.c **** #include "sht_sensor.h"
+   7:User/System/control_system.c **** 
+   8:User/System/control_system.c **** DEVICE_t device;
+   9:User/System/control_system.c **** 
+  10:User/System/control_system.c **** extern SHT_DEVICE_t sht_list[10];
+  11:User/System/control_system.c **** 
+  12:User/System/control_system.c **** uint32_t humidify_tick, moise_tick, thermis_tick;
+  13:User/System/control_system.c **** 
+  14:User/System/control_system.c **** void Ctrl_System_Turn_On_Daikin(void);
+  15:User/System/control_system.c **** void Ctrl_System_Turn_Off_Daikin(void);
+  16:User/System/control_system.c **** void Ctrl_System_Daikin_Set_Temp(uint8_t temp);
+  17:User/System/control_system.c **** void Ctrl_System_Cooler(void);
+  18:User/System/control_system.c **** void Ctrl_System_Valve_Air(uint8_t valve);
+  19:User/System/control_system.c **** void Ctrl_System_Heater(void);
+  20:User/System/control_system.c **** void Ctrl_System_Humidify(void);
+  21:User/System/control_system.c **** void Ctrl_System_Moise(void);
+  22:User/System/control_system.c **** void Ctrl_System_Waning_Temp_High(void);
+  23:User/System/control_system.c **** void Ctrl_System_Light_Warning(void);
+  24:User/System/control_system.c **** void Ctrl_System_Thermistor(uint8_t num);
+  25:User/System/control_system.c **** void Ctrl_System_Turn_Off_All_Device(void);
+  26:User/System/control_system.c **** // void Ctrl_System_Write_Daikin_TO_Modbus(uint8_t dk_add_reg, uint8_t dk_data); // TH calib nhieu 
+  27:User/System/control_system.c **** 
+  28:User/System/control_system.c **** 
+  29:User/System/control_system.c **** void Ctrl_System_Init_Load(void){
+ARM GAS  /tmp/cc9uNECX.s 			page 2
+
+
+  30:User/System/control_system.c ****     device.light = 1;                       // den luan luan bat
+  31:User/System/control_system.c ****     SHT_Init_Load();
+  32:User/System/control_system.c ****     Ctrl_System_Turn_Off_All_Device();
+  33:User/System/control_system.c **** }
+  34:User/System/control_system.c **** 
+  35:User/System/control_system.c **** void Ctrl_System_Device_Manage(void)
+  36:User/System/control_system.c **** {
+  37:User/System/control_system.c ****     Ctrl_System_Light_Warning();
+  38:User/System/control_system.c ****     Modbus_Refesh_Regs();
+  39:User/System/control_system.c ****     if(device.active == ACTIVE_ON)
+  40:User/System/control_system.c ****     {
+  41:User/System/control_system.c ****         Ctrl_System_Cooler();
+  42:User/System/control_system.c ****         Ctrl_System_Heater();
+  43:User/System/control_system.c ****         Ctrl_System_Moise();
+  44:User/System/control_system.c ****         Ctrl_System_Humidify();
+  45:User/System/control_system.c ****     }
+  46:User/System/control_system.c ****     else
+  47:User/System/control_system.c ****     {
+  48:User/System/control_system.c ****         Ctrl_System_Turn_Off_All_Device();
+  49:User/System/control_system.c ****     }
+  50:User/System/control_system.c **** }
+  51:User/System/control_system.c **** 
+  52:User/System/control_system.c **** void Ctrl_System_Cooler(void) 
+  53:User/System/control_system.c **** {
+  54:User/System/control_system.c ****     // dieu khien phan lam lanh
+  55:User/System/control_system.c ****     if(device.temp_set <= 28.0) 
+  56:User/System/control_system.c ****     {
+  57:User/System/control_system.c ****         Ctrl_System_Thermistor(THERMISTOR_ALL_OFF);
+  58:User/System/control_system.c ****         Ctrl_System_Turn_On_Daikin();
+  59:User/System/control_system.c ****         Ctrl_System_Daikin_Set_Temp(device.temp_set);
+  60:User/System/control_system.c ****         Ctrl_System_Valve_Air(VALVE_COOL);
+  61:User/System/control_system.c ****     }
+  62:User/System/control_system.c **** }
+  63:User/System/control_system.c **** 
+  64:User/System/control_system.c **** void Ctrl_System_Heater(void) 
+  65:User/System/control_system.c **** {
+  66:User/System/control_system.c ****     // dieu khien phan gia nhiet
+  67:User/System/control_system.c ****     // canh bao nhiet do cao, khoa cua ra vao
+  68:User/System/control_system.c **** 
+  69:User/System/control_system.c ****     Ctrl_System_Waning_Temp_High();
+  70:User/System/control_system.c **** 
+  71:User/System/control_system.c ****     if(device.temp_set > 28.0) 
+  72:User/System/control_system.c ****     {
+  73:User/System/control_system.c ****         if(device.temp_now < device.temp_set - DENTA_ERR) 
+  74:User/System/control_system.c ****         {
+  75:User/System/control_system.c ****             Ctrl_System_Turn_Off_Daikin();
+  76:User/System/control_system.c ****             Ctrl_System_Valve_Air(VALVE_HEAT);
+  77:User/System/control_system.c ****             if(HAL_GetTick() - thermis_tick > TIME_WAIT_DEVICE)
+  78:User/System/control_system.c ****             {
+  79:User/System/control_system.c ****                 Ctrl_System_Thermistor(THERMISTOR3_ON);
+  80:User/System/control_system.c ****                 if(device.heater.status == 0)
+  81:User/System/control_system.c ****                 {
+  82:User/System/control_system.c ****                     device.heater.status = 1;
+  83:User/System/control_system.c ****                     device.heater.val_sample = device.temp_now;
+  84:User/System/control_system.c ****                     device.heater.tick = HAL_GetTick();
+  85:User/System/control_system.c ****                 }
+  86:User/System/control_system.c ****             }
+ARM GAS  /tmp/cc9uNECX.s 			page 3
+
+
+  87:User/System/control_system.c ****             if(device.heater.status == 1)
+  88:User/System/control_system.c ****             {
+  89:User/System/control_system.c ****                 // neu sau 60 phut gia nhiet ma nhiet do khong tang duoc thi canh bao
+  90:User/System/control_system.c ****                 if(HAL_GetTick() - device.heater.tick > SAMPLE_TIME_60M && device.temp_now < device
+  91:User/System/control_system.c ****                 {
+  92:User/System/control_system.c ****                     if(fabs(device.temp_now - device.temp_set) > 3)
+  93:User/System/control_system.c ****                     {
+  94:User/System/control_system.c ****                         if(device.temp_now - device.heater.val_sample > -5.0)
+  95:User/System/control_system.c ****                         {
+  96:User/System/control_system.c ****                             device.heater.status = 2;
+  97:User/System/control_system.c ****                         }
+  98:User/System/control_system.c ****                     }
+  99:User/System/control_system.c ****                 }
+ 100:User/System/control_system.c ****             }
+ 101:User/System/control_system.c ****         }
+ 102:User/System/control_system.c ****         else if(device.temp_now > device.temp_set)
+ 103:User/System/control_system.c ****         {
+ 104:User/System/control_system.c ****             Ctrl_System_Thermistor(THERMISTOR_ALL_OFF);
+ 105:User/System/control_system.c ****             Ctrl_System_Valve_Air(VALVE_HEAT);
+ 106:User/System/control_system.c ****             if(device.heater.status == 1)
+ 107:User/System/control_system.c ****                 device.heater.status = 0;
+ 108:User/System/control_system.c **** 
+ 109:User/System/control_system.c ****             thermis_tick = HAL_GetTick();
+ 110:User/System/control_system.c ****         }
+ 111:User/System/control_system.c ****     }
+ 112:User/System/control_system.c **** }
+ 113:User/System/control_system.c **** 
+ 114:User/System/control_system.c **** void Ctrl_System_Moise(void)
+ 115:User/System/control_system.c **** {
+  30              		.loc 1 115 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34 0000 38B5     		push	{r3, r4, r5, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 16
+  37              		.cfi_offset 3, -16
+  38              		.cfi_offset 4, -12
+  39              		.cfi_offset 5, -8
+  40              		.cfi_offset 14, -4
+ 116:User/System/control_system.c ****     // dieu khien may tao am
+ 117:User/System/control_system.c ****     if (device.humi_now < device.humi_set - DENTA_ERR)
+  41              		.loc 1 117 5 view .LVU1
+  42              		.loc 1 117 15 is_stmt 0 view .LVU2
+  43 0002 334B     		ldr	r3, .L21
+  44 0004 5D6C     		ldr	r5, [r3, #68]	@ float
+  45              		.loc 1 117 43 view .LVU3
+  46 0006 4FF08041 		mov	r1, #1073741824
+  47 000a D86C     		ldr	r0, [r3, #76]	@ float
+  48 000c FFF7FEFF 		bl	__aeabi_fsub
+  49              	.LVL0:
+  50 0010 0446     		mov	r4, r0
+  51              		.loc 1 117 8 view .LVU4
+  52 0012 0146     		mov	r1, r0
+  53 0014 2846     		mov	r0, r5
+  54 0016 FFF7FEFF 		bl	__aeabi_fcmplt
+  55              	.LVL1:
+ARM GAS  /tmp/cc9uNECX.s 			page 4
+
+
+  56 001a 68B9     		cbnz	r0, .L18
+ 118:User/System/control_system.c ****     {
+ 119:User/System/control_system.c ****         if(HAL_GetTick() - moise_tick > TIME_WAIT_DEVICE)
+ 120:User/System/control_system.c ****         {
+ 121:User/System/control_system.c ****             if(device.moise.status == 0)
+ 122:User/System/control_system.c ****             {
+ 123:User/System/control_system.c ****                 device.moise.stt_rl = device.moise.status = 1;
+ 124:User/System/control_system.c ****                 device.moise.val_sample = device.humi_now;
+ 125:User/System/control_system.c ****                 device.moise.tick = HAL_GetTick();
+ 126:User/System/control_system.c ****             }
+ 127:User/System/control_system.c ****         }
+ 128:User/System/control_system.c ****         if(device.moise.status == 1)
+ 129:User/System/control_system.c ****         {
+ 130:User/System/control_system.c ****             if(HAL_GetTick() - device.moise.tick > SAMPLE_TIME_60M && device.humi_now < device.humi
+ 131:User/System/control_system.c ****             {
+ 132:User/System/control_system.c ****                 if(fabs(device.humi_now - device.humi_set) > 3)
+ 133:User/System/control_system.c ****                 {
+ 134:User/System/control_system.c ****                     if(device.humi_now - device.humidify.val_sample > -5.0)
+ 135:User/System/control_system.c ****                         device.humidify.status = 2;
+ 136:User/System/control_system.c ****                 }
+ 137:User/System/control_system.c ****             }
+ 138:User/System/control_system.c ****         }
+ 139:User/System/control_system.c ****     }
+ 140:User/System/control_system.c ****     else if (device.humi_now > device.humi_set - DENTA_ERR)
+  57              		.loc 1 140 10 is_stmt 1 view .LVU5
+  58              		.loc 1 140 13 is_stmt 0 view .LVU6
+  59 001c 2146     		mov	r1, r4
+  60 001e 2846     		mov	r0, r5
+  61 0020 FFF7FEFF 		bl	__aeabi_fcmpgt
+  62              	.LVL2:
+  63 0024 38B1     		cbz	r0, .L1
+ 141:User/System/control_system.c ****     {
+ 142:User/System/control_system.c ****         if (device.moise.status == 1)
+  64              		.loc 1 142 9 is_stmt 1 view .LVU7
+  65              		.loc 1 142 25 is_stmt 0 view .LVU8
+  66 0026 2A4B     		ldr	r3, .L21
+  67 0028 1B7F     		ldrb	r3, [r3, #28]	@ zero_extendqisi2
+  68              		.loc 1 142 12 view .LVU9
+  69 002a 012B     		cmp	r3, #1
+  70 002c 4AD0     		beq	.L19
+  71              	.L10:
+ 143:User/System/control_system.c ****             device.moise.stt_rl = device.moise.status = 0;
+ 144:User/System/control_system.c **** 
+ 145:User/System/control_system.c ****         moise_tick = HAL_GetTick();
+  72              		.loc 1 145 9 is_stmt 1 view .LVU10
+  73              		.loc 1 145 22 is_stmt 0 view .LVU11
+  74 002e FFF7FEFF 		bl	HAL_GetTick
+  75              	.LVL3:
+  76              		.loc 1 145 20 view .LVU12
+  77 0032 284B     		ldr	r3, .L21+4
+  78 0034 1860     		str	r0, [r3]
+  79              	.L1:
+ 146:User/System/control_system.c ****     }
+ 147:User/System/control_system.c **** }
+  80              		.loc 1 147 1 view .LVU13
+  81 0036 38BD     		pop	{r3, r4, r5, pc}
+  82              	.L18:
+ARM GAS  /tmp/cc9uNECX.s 			page 5
+
+
+ 119:User/System/control_system.c ****         {
+  83              		.loc 1 119 9 is_stmt 1 view .LVU14
+ 119:User/System/control_system.c ****         {
+  84              		.loc 1 119 12 is_stmt 0 view .LVU15
+  85 0038 FFF7FEFF 		bl	HAL_GetTick
+  86              	.LVL4:
+ 119:User/System/control_system.c ****         {
+  87              		.loc 1 119 26 view .LVU16
+  88 003c 254B     		ldr	r3, .L21+4
+  89 003e 1B68     		ldr	r3, [r3]
+  90 0040 C01A     		subs	r0, r0, r3
+ 119:User/System/control_system.c ****         {
+  91              		.loc 1 119 11 view .LVU17
+  92 0042 4EF66023 		movw	r3, #60000
+  93 0046 9842     		cmp	r0, r3
+  94 0048 03D9     		bls	.L4
+ 121:User/System/control_system.c ****             {
+  95              		.loc 1 121 13 is_stmt 1 view .LVU18
+ 121:User/System/control_system.c ****             {
+  96              		.loc 1 121 28 is_stmt 0 view .LVU19
+  97 004a 214B     		ldr	r3, .L21
+  98 004c 1B7F     		ldrb	r3, [r3, #28]	@ zero_extendqisi2
+ 121:User/System/control_system.c ****             {
+  99              		.loc 1 121 15 view .LVU20
+ 100 004e 002B     		cmp	r3, #0
+ 101 0050 2ED0     		beq	.L20
+ 102              	.L4:
+ 128:User/System/control_system.c ****         {
+ 103              		.loc 1 128 9 is_stmt 1 view .LVU21
+ 128:User/System/control_system.c ****         {
+ 104              		.loc 1 128 24 is_stmt 0 view .LVU22
+ 105 0052 1F4B     		ldr	r3, .L21
+ 106 0054 1B7F     		ldrb	r3, [r3, #28]	@ zero_extendqisi2
+ 128:User/System/control_system.c ****         {
+ 107              		.loc 1 128 11 view .LVU23
+ 108 0056 012B     		cmp	r3, #1
+ 109 0058 EDD1     		bne	.L1
+ 130:User/System/control_system.c ****             {
+ 110              		.loc 1 130 13 is_stmt 1 view .LVU24
+ 130:User/System/control_system.c ****             {
+ 111              		.loc 1 130 16 is_stmt 0 view .LVU25
+ 112 005a FFF7FEFF 		bl	HAL_GetTick
+ 113              	.LVL5:
+ 130:User/System/control_system.c ****             {
+ 114              		.loc 1 130 44 view .LVU26
+ 115 005e 1C4B     		ldr	r3, .L21
+ 116 0060 5B6A     		ldr	r3, [r3, #36]
+ 130:User/System/control_system.c ****             {
+ 117              		.loc 1 130 30 view .LVU27
+ 118 0062 C01A     		subs	r0, r0, r3
+ 130:User/System/control_system.c ****             {
+ 119              		.loc 1 130 15 view .LVU28
+ 120 0064 1C4B     		ldr	r3, .L21+8
+ 121 0066 9842     		cmp	r0, r3
+ 122 0068 E5D9     		bls	.L1
+ 130:User/System/control_system.c ****             {
+ 123              		.loc 1 130 77 discriminator 1 view .LVU29
+ARM GAS  /tmp/cc9uNECX.s 			page 6
+
+
+ 124 006a 194B     		ldr	r3, .L21
+ 125 006c 5C6C     		ldr	r4, [r3, #68]	@ float
+ 130:User/System/control_system.c ****             {
+ 126              		.loc 1 130 95 discriminator 1 view .LVU30
+ 127 006e DD6C     		ldr	r5, [r3, #76]	@ float
+ 130:User/System/control_system.c ****             {
+ 128              		.loc 1 130 68 discriminator 1 view .LVU31
+ 129 0070 2946     		mov	r1, r5
+ 130 0072 2046     		mov	r0, r4
+ 131 0074 FFF7FEFF 		bl	__aeabi_fcmplt
+ 132              	.LVL6:
+ 133 0078 0028     		cmp	r0, #0
+ 134 007a DCD0     		beq	.L1
+ 132:User/System/control_system.c ****                 {
+ 135              		.loc 1 132 17 is_stmt 1 view .LVU32
+ 132:User/System/control_system.c ****                 {
+ 136              		.loc 1 132 41 is_stmt 0 view .LVU33
+ 137 007c 2946     		mov	r1, r5
+ 138 007e 2046     		mov	r0, r4
+ 139 0080 FFF7FEFF 		bl	__aeabi_fsub
+ 140              	.LVL7:
+ 132:User/System/control_system.c ****                 {
+ 141              		.loc 1 132 20 view .LVU34
+ 142 0084 20F00040 		bic	r0, r0, #-2147483648
+ 132:User/System/control_system.c ****                 {
+ 143              		.loc 1 132 19 view .LVU35
+ 144 0088 1449     		ldr	r1, .L21+12
+ 145 008a FFF7FEFF 		bl	__aeabi_fcmpgt
+ 146              	.LVL8:
+ 147 008e 0028     		cmp	r0, #0
+ 148 0090 D1D0     		beq	.L1
+ 134:User/System/control_system.c ****                         device.humidify.status = 2;
+ 149              		.loc 1 134 21 is_stmt 1 view .LVU36
+ 134:User/System/control_system.c ****                         device.humidify.status = 2;
+ 150              		.loc 1 134 40 is_stmt 0 view .LVU37
+ 151 0092 0F4B     		ldr	r3, .L21
+ 152 0094 D96A     		ldr	r1, [r3, #44]	@ float
+ 153 0096 2046     		mov	r0, r4
+ 154 0098 FFF7FEFF 		bl	__aeabi_fsub
+ 155              	.LVL9:
+ 134:User/System/control_system.c ****                         device.humidify.status = 2;
+ 156              		.loc 1 134 23 view .LVU38
+ 157 009c 1049     		ldr	r1, .L21+16
+ 158 009e FFF7FEFF 		bl	__aeabi_fcmpgt
+ 159              	.LVL10:
+ 160 00a2 0028     		cmp	r0, #0
+ 161 00a4 C7D0     		beq	.L1
+ 135:User/System/control_system.c ****                 }
+ 162              		.loc 1 135 25 is_stmt 1 view .LVU39
+ 135:User/System/control_system.c ****                 }
+ 163              		.loc 1 135 48 is_stmt 0 view .LVU40
+ 164 00a6 0A4B     		ldr	r3, .L21
+ 165 00a8 0222     		movs	r2, #2
+ 166 00aa 83F82820 		strb	r2, [r3, #40]
+ 167 00ae C2E7     		b	.L1
+ 168              	.L20:
+ 123:User/System/control_system.c ****                 device.moise.val_sample = device.humi_now;
+ARM GAS  /tmp/cc9uNECX.s 			page 7
+
+
+ 169              		.loc 1 123 17 is_stmt 1 view .LVU41
+ 123:User/System/control_system.c ****                 device.moise.val_sample = device.humi_now;
+ 170              		.loc 1 123 59 is_stmt 0 view .LVU42
+ 171 00b0 074C     		ldr	r4, .L21
+ 172 00b2 0123     		movs	r3, #1
+ 173 00b4 2377     		strb	r3, [r4, #28]
+ 123:User/System/control_system.c ****                 device.moise.val_sample = device.humi_now;
+ 174              		.loc 1 123 37 view .LVU43
+ 175 00b6 6377     		strb	r3, [r4, #29]
+ 124:User/System/control_system.c ****                 device.moise.tick = HAL_GetTick();
+ 176              		.loc 1 124 17 is_stmt 1 view .LVU44
+ 124:User/System/control_system.c ****                 device.moise.tick = HAL_GetTick();
+ 177              		.loc 1 124 49 is_stmt 0 view .LVU45
+ 178 00b8 636C     		ldr	r3, [r4, #68]	@ float
+ 124:User/System/control_system.c ****                 device.moise.tick = HAL_GetTick();
+ 179              		.loc 1 124 41 view .LVU46
+ 180 00ba 2362     		str	r3, [r4, #32]	@ float
+ 125:User/System/control_system.c ****             }
+ 181              		.loc 1 125 17 is_stmt 1 view .LVU47
+ 125:User/System/control_system.c ****             }
+ 182              		.loc 1 125 37 is_stmt 0 view .LVU48
+ 183 00bc FFF7FEFF 		bl	HAL_GetTick
+ 184              	.LVL11:
+ 125:User/System/control_system.c ****             }
+ 185              		.loc 1 125 35 view .LVU49
+ 186 00c0 6062     		str	r0, [r4, #36]
+ 187 00c2 C6E7     		b	.L4
+ 188              	.L19:
+ 143:User/System/control_system.c **** 
+ 189              		.loc 1 143 13 is_stmt 1 view .LVU50
+ 143:User/System/control_system.c **** 
+ 190              		.loc 1 143 55 is_stmt 0 view .LVU51
+ 191 00c4 024B     		ldr	r3, .L21
+ 192 00c6 0022     		movs	r2, #0
+ 193 00c8 1A77     		strb	r2, [r3, #28]
+ 143:User/System/control_system.c **** 
+ 194              		.loc 1 143 33 view .LVU52
+ 195 00ca 5A77     		strb	r2, [r3, #29]
+ 196 00cc AFE7     		b	.L10
+ 197              	.L22:
+ 198 00ce 00BF     		.align	2
+ 199              	.L21:
+ 200 00d0 00000000 		.word	.LANCHOR0
+ 201 00d4 00000000 		.word	.LANCHOR1
+ 202 00d8 80EE3600 		.word	3600000
+ 203 00dc 00004040 		.word	1077936128
+ 204 00e0 0000A0C0 		.word	-1063256064
+ 205              		.cfi_endproc
+ 206              	.LFE201:
+ 208              		.global	__aeabi_fadd
+ 209              		.global	__aeabi_fcmple
+ 210              		.section	.text.Ctrl_System_Humidify,"ax",%progbits
+ 211              		.align	1
+ 212              		.global	Ctrl_System_Humidify
+ 213              		.syntax unified
+ 214              		.thumb
+ 215              		.thumb_func
+ARM GAS  /tmp/cc9uNECX.s 			page 8
+
+
+ 216              		.fpu softvfp
+ 218              	Ctrl_System_Humidify:
+ 219              	.LFB202:
+ 148:User/System/control_system.c **** 
+ 149:User/System/control_system.c **** void Ctrl_System_Humidify(void)
+ 150:User/System/control_system.c **** {
+ 220              		.loc 1 150 1 is_stmt 1 view -0
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 0
+ 223              		@ frame_needed = 0, uses_anonymous_args = 0
+ 224 0000 38B5     		push	{r3, r4, r5, lr}
+ 225              	.LCFI1:
+ 226              		.cfi_def_cfa_offset 16
+ 227              		.cfi_offset 3, -16
+ 228              		.cfi_offset 4, -12
+ 229              		.cfi_offset 5, -8
+ 230              		.cfi_offset 14, -4
+ 151:User/System/control_system.c ****     // dieu khien may tach am
+ 152:User/System/control_system.c ****     if(device.humi_now > device.humi_set + DENTA_ERR)
+ 231              		.loc 1 152 5 view .LVU54
+ 232              		.loc 1 152 14 is_stmt 0 view .LVU55
+ 233 0002 354B     		ldr	r3, .L42
+ 234 0004 5C6C     		ldr	r4, [r3, #68]	@ float
+ 235              		.loc 1 152 32 view .LVU56
+ 236 0006 DD6C     		ldr	r5, [r3, #76]	@ float
+ 237              		.loc 1 152 42 view .LVU57
+ 238 0008 4FF08041 		mov	r1, #1073741824
+ 239 000c 2846     		mov	r0, r5
+ 240 000e FFF7FEFF 		bl	__aeabi_fadd
+ 241              	.LVL12:
+ 242 0012 0146     		mov	r1, r0
+ 243              		.loc 1 152 7 view .LVU58
+ 244 0014 2046     		mov	r0, r4
+ 245 0016 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 246              	.LVL13:
+ 247 001a 70B9     		cbnz	r0, .L40
+ 153:User/System/control_system.c ****     {
+ 154:User/System/control_system.c ****         if(HAL_GetTick() - humidify_tick > TIME_WAIT_DEVICE)
+ 155:User/System/control_system.c ****         {
+ 156:User/System/control_system.c ****             if(device.humidify.status == 0)
+ 157:User/System/control_system.c ****             {
+ 158:User/System/control_system.c ****                 device.humidify.stt_rl = device.humidify.status = 1;
+ 159:User/System/control_system.c ****                 device.humidify.val_sample = device.humi_now;
+ 160:User/System/control_system.c ****                 device.humidify.tick = HAL_GetTick;
+ 161:User/System/control_system.c ****             }
+ 162:User/System/control_system.c ****         }
+ 163:User/System/control_system.c ****         if(device.humidify.status)
+ 164:User/System/control_system.c ****         {
+ 165:User/System/control_system.c ****             if(HAL_GetTick() - device.humidify.tick > SAMPLE_TIME_60M && device.humi_now > device.h
+ 166:User/System/control_system.c ****             {
+ 167:User/System/control_system.c ****                 if(fabs(device.humi_now - device.humi_set) > 3)
+ 168:User/System/control_system.c ****                 {
+ 169:User/System/control_system.c ****                     if (device.humi_now - device.humidify.val_sample > -5.0)
+ 170:User/System/control_system.c ****                         device.humidify.status = 2;                    
+ 171:User/System/control_system.c ****                 }
+ 172:User/System/control_system.c ****             }
+ 173:User/System/control_system.c ****         }
+ARM GAS  /tmp/cc9uNECX.s 			page 9
+
+
+ 174:User/System/control_system.c ****     }
+ 175:User/System/control_system.c ****     else if(device.humi_now <= device.humi_set)
+ 248              		.loc 1 175 10 is_stmt 1 view .LVU59
+ 249              		.loc 1 175 12 is_stmt 0 view .LVU60
+ 250 001c 2946     		mov	r1, r5
+ 251 001e 2046     		mov	r0, r4
+ 252 0020 FFF7FEFF 		bl	__aeabi_fcmple
+ 253              	.LVL14:
+ 254 0024 40B1     		cbz	r0, .L23
+ 176:User/System/control_system.c ****     {
+ 177:User/System/control_system.c ****         if(device.humidify.status == 1)
+ 255              		.loc 1 177 9 is_stmt 1 view .LVU61
+ 256              		.loc 1 177 27 is_stmt 0 view .LVU62
+ 257 0026 2C4B     		ldr	r3, .L42
+ 258 0028 93F82830 		ldrb	r3, [r3, #40]	@ zero_extendqisi2
+ 259              		.loc 1 177 11 view .LVU63
+ 260 002c 012B     		cmp	r3, #1
+ 261 002e 4BD0     		beq	.L41
+ 262              	.L32:
+ 178:User/System/control_system.c ****         {
+ 179:User/System/control_system.c ****             device.humidify.stt_rl = device.humidify.status = 0;
+ 180:User/System/control_system.c ****         }
+ 181:User/System/control_system.c ****         
+ 182:User/System/control_system.c ****         humidify_tick = HAL_GetTick();
+ 263              		.loc 1 182 9 is_stmt 1 view .LVU64
+ 264              		.loc 1 182 25 is_stmt 0 view .LVU65
+ 265 0030 FFF7FEFF 		bl	HAL_GetTick
+ 266              	.LVL15:
+ 267              		.loc 1 182 23 view .LVU66
+ 268 0034 294B     		ldr	r3, .L42+4
+ 269 0036 1860     		str	r0, [r3]
+ 270              	.L23:
+ 183:User/System/control_system.c ****     }
+ 184:User/System/control_system.c **** }
+ 271              		.loc 1 184 1 view .LVU67
+ 272 0038 38BD     		pop	{r3, r4, r5, pc}
+ 273              	.L40:
+ 154:User/System/control_system.c ****         {
+ 274              		.loc 1 154 9 is_stmt 1 view .LVU68
+ 154:User/System/control_system.c ****         {
+ 275              		.loc 1 154 12 is_stmt 0 view .LVU69
+ 276 003a FFF7FEFF 		bl	HAL_GetTick
+ 277              	.LVL16:
+ 154:User/System/control_system.c ****         {
+ 278              		.loc 1 154 26 view .LVU70
+ 279 003e 274B     		ldr	r3, .L42+4
+ 280 0040 1B68     		ldr	r3, [r3]
+ 281 0042 C01A     		subs	r0, r0, r3
+ 154:User/System/control_system.c ****         {
+ 282              		.loc 1 154 11 view .LVU71
+ 283 0044 4EF66023 		movw	r3, #60000
+ 284 0048 9842     		cmp	r0, r3
+ 285 004a 0DD9     		bls	.L26
+ 156:User/System/control_system.c ****             {
+ 286              		.loc 1 156 13 is_stmt 1 view .LVU72
+ 156:User/System/control_system.c ****             {
+ 287              		.loc 1 156 31 is_stmt 0 view .LVU73
+ARM GAS  /tmp/cc9uNECX.s 			page 10
+
+
+ 288 004c 224B     		ldr	r3, .L42
+ 289 004e 93F82830 		ldrb	r3, [r3, #40]	@ zero_extendqisi2
+ 156:User/System/control_system.c ****             {
+ 290              		.loc 1 156 15 view .LVU74
+ 291 0052 4BB9     		cbnz	r3, .L26
+ 158:User/System/control_system.c ****                 device.humidify.val_sample = device.humi_now;
+ 292              		.loc 1 158 17 is_stmt 1 view .LVU75
+ 158:User/System/control_system.c ****                 device.humidify.val_sample = device.humi_now;
+ 293              		.loc 1 158 65 is_stmt 0 view .LVU76
+ 294 0054 204B     		ldr	r3, .L42
+ 295 0056 0122     		movs	r2, #1
+ 296 0058 83F82820 		strb	r2, [r3, #40]
+ 158:User/System/control_system.c ****                 device.humidify.val_sample = device.humi_now;
+ 297              		.loc 1 158 40 view .LVU77
+ 298 005c 83F82920 		strb	r2, [r3, #41]
+ 159:User/System/control_system.c ****                 device.humidify.tick = HAL_GetTick;
+ 299              		.loc 1 159 17 is_stmt 1 view .LVU78
+ 159:User/System/control_system.c ****                 device.humidify.tick = HAL_GetTick;
+ 300              		.loc 1 159 52 is_stmt 0 view .LVU79
+ 301 0060 5A6C     		ldr	r2, [r3, #68]	@ float
+ 159:User/System/control_system.c ****                 device.humidify.tick = HAL_GetTick;
+ 302              		.loc 1 159 44 view .LVU80
+ 303 0062 DA62     		str	r2, [r3, #44]	@ float
+ 160:User/System/control_system.c ****             }
+ 304              		.loc 1 160 17 is_stmt 1 view .LVU81
+ 160:User/System/control_system.c ****             }
+ 305              		.loc 1 160 38 is_stmt 0 view .LVU82
+ 306 0064 1E4A     		ldr	r2, .L42+8
+ 307 0066 1A63     		str	r2, [r3, #48]
+ 308              	.L26:
+ 163:User/System/control_system.c ****         {
+ 309              		.loc 1 163 9 is_stmt 1 view .LVU83
+ 163:User/System/control_system.c ****         {
+ 310              		.loc 1 163 27 is_stmt 0 view .LVU84
+ 311 0068 1B4B     		ldr	r3, .L42
+ 312 006a 93F82830 		ldrb	r3, [r3, #40]	@ zero_extendqisi2
+ 163:User/System/control_system.c ****         {
+ 313              		.loc 1 163 11 view .LVU85
+ 314 006e 002B     		cmp	r3, #0
+ 315 0070 E2D0     		beq	.L23
+ 165:User/System/control_system.c ****             {
+ 316              		.loc 1 165 13 is_stmt 1 view .LVU86
+ 165:User/System/control_system.c ****             {
+ 317              		.loc 1 165 16 is_stmt 0 view .LVU87
+ 318 0072 FFF7FEFF 		bl	HAL_GetTick
+ 319              	.LVL17:
+ 165:User/System/control_system.c ****             {
+ 320              		.loc 1 165 47 view .LVU88
+ 321 0076 184B     		ldr	r3, .L42
+ 322 0078 1B6B     		ldr	r3, [r3, #48]
+ 165:User/System/control_system.c ****             {
+ 323              		.loc 1 165 30 view .LVU89
+ 324 007a C01A     		subs	r0, r0, r3
+ 165:User/System/control_system.c ****             {
+ 325              		.loc 1 165 15 view .LVU90
+ 326 007c 194B     		ldr	r3, .L42+12
+ 327 007e 9842     		cmp	r0, r3
+ARM GAS  /tmp/cc9uNECX.s 			page 11
+
+
+ 328 0080 DAD9     		bls	.L23
+ 165:User/System/control_system.c ****             {
+ 329              		.loc 1 165 80 discriminator 1 view .LVU91
+ 330 0082 154B     		ldr	r3, .L42
+ 331 0084 5C6C     		ldr	r4, [r3, #68]	@ float
+ 165:User/System/control_system.c ****             {
+ 332              		.loc 1 165 98 discriminator 1 view .LVU92
+ 333 0086 DD6C     		ldr	r5, [r3, #76]	@ float
+ 165:User/System/control_system.c ****             {
+ 334              		.loc 1 165 71 discriminator 1 view .LVU93
+ 335 0088 2946     		mov	r1, r5
+ 336 008a 2046     		mov	r0, r4
+ 337 008c FFF7FEFF 		bl	__aeabi_fcmpgt
+ 338              	.LVL18:
+ 339 0090 0028     		cmp	r0, #0
+ 340 0092 D1D0     		beq	.L23
+ 167:User/System/control_system.c ****                 {
+ 341              		.loc 1 167 17 is_stmt 1 view .LVU94
+ 167:User/System/control_system.c ****                 {
+ 342              		.loc 1 167 41 is_stmt 0 view .LVU95
+ 343 0094 2946     		mov	r1, r5
+ 344 0096 2046     		mov	r0, r4
+ 345 0098 FFF7FEFF 		bl	__aeabi_fsub
+ 346              	.LVL19:
+ 167:User/System/control_system.c ****                 {
+ 347              		.loc 1 167 20 view .LVU96
+ 348 009c 20F00040 		bic	r0, r0, #-2147483648
+ 167:User/System/control_system.c ****                 {
+ 349              		.loc 1 167 19 view .LVU97
+ 350 00a0 1149     		ldr	r1, .L42+16
+ 351 00a2 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 352              	.LVL20:
+ 353 00a6 0028     		cmp	r0, #0
+ 354 00a8 C6D0     		beq	.L23
+ 169:User/System/control_system.c ****                         device.humidify.status = 2;                    
+ 355              		.loc 1 169 21 is_stmt 1 view .LVU98
+ 169:User/System/control_system.c ****                         device.humidify.status = 2;                    
+ 356              		.loc 1 169 41 is_stmt 0 view .LVU99
+ 357 00aa 0B4B     		ldr	r3, .L42
+ 358 00ac D96A     		ldr	r1, [r3, #44]	@ float
+ 359 00ae 2046     		mov	r0, r4
+ 360 00b0 FFF7FEFF 		bl	__aeabi_fsub
+ 361              	.LVL21:
+ 169:User/System/control_system.c ****                         device.humidify.status = 2;                    
+ 362              		.loc 1 169 24 view .LVU100
+ 363 00b4 0D49     		ldr	r1, .L42+20
+ 364 00b6 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 365              	.LVL22:
+ 366 00ba 0028     		cmp	r0, #0
+ 367 00bc BCD0     		beq	.L23
+ 170:User/System/control_system.c ****                 }
+ 368              		.loc 1 170 25 is_stmt 1 view .LVU101
+ 170:User/System/control_system.c ****                 }
+ 369              		.loc 1 170 48 is_stmt 0 view .LVU102
+ 370 00be 064B     		ldr	r3, .L42
+ 371 00c0 0222     		movs	r2, #2
+ 372 00c2 83F82820 		strb	r2, [r3, #40]
+ARM GAS  /tmp/cc9uNECX.s 			page 12
+
+
+ 373 00c6 B7E7     		b	.L23
+ 374              	.L41:
+ 179:User/System/control_system.c ****         }
+ 375              		.loc 1 179 13 is_stmt 1 view .LVU103
+ 179:User/System/control_system.c ****         }
+ 376              		.loc 1 179 61 is_stmt 0 view .LVU104
+ 377 00c8 034B     		ldr	r3, .L42
+ 378 00ca 0022     		movs	r2, #0
+ 379 00cc 83F82820 		strb	r2, [r3, #40]
+ 179:User/System/control_system.c ****         }
+ 380              		.loc 1 179 36 view .LVU105
+ 381 00d0 83F82920 		strb	r2, [r3, #41]
+ 382 00d4 ACE7     		b	.L32
+ 383              	.L43:
+ 384 00d6 00BF     		.align	2
+ 385              	.L42:
+ 386 00d8 00000000 		.word	.LANCHOR0
+ 387 00dc 00000000 		.word	.LANCHOR2
+ 388 00e0 00000000 		.word	HAL_GetTick
+ 389 00e4 80EE3600 		.word	3600000
+ 390 00e8 00004040 		.word	1077936128
+ 391 00ec 0000A0C0 		.word	-1063256064
+ 392              		.cfi_endproc
+ 393              	.LFE202:
+ 395              		.section	.text.Ctrl_System_Turn_On_Daikin,"ax",%progbits
+ 396              		.align	1
+ 397              		.global	Ctrl_System_Turn_On_Daikin
+ 398              		.syntax unified
+ 399              		.thumb
+ 400              		.thumb_func
+ 401              		.fpu softvfp
+ 403              	Ctrl_System_Turn_On_Daikin:
+ 404              	.LFB203:
+ 185:User/System/control_system.c **** 
+ 186:User/System/control_system.c **** void Ctrl_System_Turn_On_Daikin(void) 
+ 187:User/System/control_system.c **** {
+ 405              		.loc 1 187 1 is_stmt 1 view -0
+ 406              		.cfi_startproc
+ 407              		@ args = 0, pretend = 0, frame = 0
+ 408              		@ frame_needed = 0, uses_anonymous_args = 0
+ 409 0000 38B5     		push	{r3, r4, r5, lr}
+ 410              	.LCFI2:
+ 411              		.cfi_def_cfa_offset 16
+ 412              		.cfi_offset 3, -16
+ 413              		.cfi_offset 4, -12
+ 414              		.cfi_offset 5, -8
+ 415              		.cfi_offset 14, -4
+ 188:User/System/control_system.c ****     if(device.cooler.status == 0)
+ 416              		.loc 1 188 5 view .LVU107
+ 417              		.loc 1 188 21 is_stmt 0 view .LVU108
+ 418 0002 1F4B     		ldr	r3, .L56
+ 419 0004 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 420              		.loc 1 188 7 view .LVU109
+ 421 0006 13B1     		cbz	r3, .L54
+ 189:User/System/control_system.c ****     {
+ 190:User/System/control_system.c ****         HAL_Delay(50);
+ 191:User/System/control_system.c ****         Modbus_Uart2_Write_Single_Reg(ID_DAIKIN, 5, 1);
+ARM GAS  /tmp/cc9uNECX.s 			page 13
+
+
+ 192:User/System/control_system.c ****         // sample time
+ 193:User/System/control_system.c ****         device.cooler.val_sample = device.temp_now;
+ 194:User/System/control_system.c ****         device.cooler.tick = HAL_GetTick();
+ 195:User/System/control_system.c ****         // device.cooler.status = 1;
+ 196:User/System/control_system.c ****     }
+ 197:User/System/control_system.c **** 
+ 198:User/System/control_system.c ****     else if(device.cooler.status == 1)
+ 422              		.loc 1 198 10 is_stmt 1 view .LVU110
+ 423              		.loc 1 198 12 is_stmt 0 view .LVU111
+ 424 0008 012B     		cmp	r3, #1
+ 425 000a 0FD0     		beq	.L55
+ 426              	.L44:
+ 199:User/System/control_system.c ****     {
+ 200:User/System/control_system.c ****         // neu sau 60 phut lam lanh ma nhiet do khong thay doi nhieu so voi ban dau thi bao loi
+ 201:User/System/control_system.c ****         if(HAL_GetTick() - device.cooler.tick > SAMPLE_TIME_60M && device.temp_now > device.temp_se
+ 202:User/System/control_system.c ****         {
+ 203:User/System/control_system.c ****             if(fabs(device.temp_now - device.temp_set) > 3)
+ 204:User/System/control_system.c ****             {
+ 205:User/System/control_system.c ****                 if(device.temp_now - device.cooler.val_sample > -5)
+ 206:User/System/control_system.c ****                 {
+ 207:User/System/control_system.c ****                     device.cooler.status = 2; // nhiet do khong thay doi nhieu sau 60 phut hoat don
+ 208:User/System/control_system.c ****                 }
+ 209:User/System/control_system.c ****             }
+ 210:User/System/control_system.c ****         }
+ 211:User/System/control_system.c ****     }
+ 212:User/System/control_system.c **** 
+ 213:User/System/control_system.c **** }
+ 427              		.loc 1 213 1 view .LVU112
+ 428 000c 38BD     		pop	{r3, r4, r5, pc}
+ 429              	.L54:
+ 190:User/System/control_system.c ****         Modbus_Uart2_Write_Single_Reg(ID_DAIKIN, 5, 1);
+ 430              		.loc 1 190 9 is_stmt 1 view .LVU113
+ 431 000e 3220     		movs	r0, #50
+ 432 0010 FFF7FEFF 		bl	HAL_Delay
+ 433              	.LVL23:
+ 191:User/System/control_system.c ****         // sample time
+ 434              		.loc 1 191 9 view .LVU114
+ 435 0014 0122     		movs	r2, #1
+ 436 0016 0521     		movs	r1, #5
+ 437 0018 0B20     		movs	r0, #11
+ 438 001a FFF7FEFF 		bl	Modbus_Uart2_Write_Single_Reg
+ 439              	.LVL24:
+ 193:User/System/control_system.c ****         device.cooler.tick = HAL_GetTick();
+ 440              		.loc 1 193 9 view .LVU115
+ 193:User/System/control_system.c ****         device.cooler.tick = HAL_GetTick();
+ 441              		.loc 1 193 42 is_stmt 0 view .LVU116
+ 442 001e 184C     		ldr	r4, .L56
+ 443 0020 236C     		ldr	r3, [r4, #64]	@ float
+ 193:User/System/control_system.c ****         device.cooler.tick = HAL_GetTick();
+ 444              		.loc 1 193 34 view .LVU117
+ 445 0022 A360     		str	r3, [r4, #8]	@ float
+ 194:User/System/control_system.c ****         // device.cooler.status = 1;
+ 446              		.loc 1 194 9 is_stmt 1 view .LVU118
+ 194:User/System/control_system.c ****         // device.cooler.status = 1;
+ 447              		.loc 1 194 30 is_stmt 0 view .LVU119
+ 448 0024 FFF7FEFF 		bl	HAL_GetTick
+ 449              	.LVL25:
+ARM GAS  /tmp/cc9uNECX.s 			page 14
+
+
+ 194:User/System/control_system.c ****         // device.cooler.status = 1;
+ 450              		.loc 1 194 28 view .LVU120
+ 451 0028 E060     		str	r0, [r4, #12]
+ 452 002a EFE7     		b	.L44
+ 453              	.L55:
+ 201:User/System/control_system.c ****         {
+ 454              		.loc 1 201 9 is_stmt 1 view .LVU121
+ 201:User/System/control_system.c ****         {
+ 455              		.loc 1 201 12 is_stmt 0 view .LVU122
+ 456 002c FFF7FEFF 		bl	HAL_GetTick
+ 457              	.LVL26:
+ 201:User/System/control_system.c ****         {
+ 458              		.loc 1 201 41 view .LVU123
+ 459 0030 134B     		ldr	r3, .L56
+ 460 0032 DB68     		ldr	r3, [r3, #12]
+ 201:User/System/control_system.c ****         {
+ 461              		.loc 1 201 26 view .LVU124
+ 462 0034 C01A     		subs	r0, r0, r3
+ 201:User/System/control_system.c ****         {
+ 463              		.loc 1 201 11 view .LVU125
+ 464 0036 134B     		ldr	r3, .L56+4
+ 465 0038 9842     		cmp	r0, r3
+ 466 003a E7D9     		bls	.L44
+ 201:User/System/control_system.c ****         {
+ 467              		.loc 1 201 74 discriminator 1 view .LVU126
+ 468 003c 104B     		ldr	r3, .L56
+ 469 003e 1C6C     		ldr	r4, [r3, #64]	@ float
+ 201:User/System/control_system.c ****         {
+ 470              		.loc 1 201 92 discriminator 1 view .LVU127
+ 471 0040 9D6C     		ldr	r5, [r3, #72]	@ float
+ 201:User/System/control_system.c ****         {
+ 472              		.loc 1 201 65 discriminator 1 view .LVU128
+ 473 0042 2946     		mov	r1, r5
+ 474 0044 2046     		mov	r0, r4
+ 475 0046 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 476              	.LVL27:
+ 477 004a 0028     		cmp	r0, #0
+ 478 004c DED0     		beq	.L44
+ 203:User/System/control_system.c ****             {
+ 479              		.loc 1 203 13 is_stmt 1 view .LVU129
+ 203:User/System/control_system.c ****             {
+ 480              		.loc 1 203 37 is_stmt 0 view .LVU130
+ 481 004e 2946     		mov	r1, r5
+ 482 0050 2046     		mov	r0, r4
+ 483 0052 FFF7FEFF 		bl	__aeabi_fsub
+ 484              	.LVL28:
+ 203:User/System/control_system.c ****             {
+ 485              		.loc 1 203 16 view .LVU131
+ 486 0056 20F00040 		bic	r0, r0, #-2147483648
+ 203:User/System/control_system.c ****             {
+ 487              		.loc 1 203 15 view .LVU132
+ 488 005a 0B49     		ldr	r1, .L56+8
+ 489 005c FFF7FEFF 		bl	__aeabi_fcmpgt
+ 490              	.LVL29:
+ 491 0060 0028     		cmp	r0, #0
+ 492 0062 D3D0     		beq	.L44
+ 205:User/System/control_system.c ****                 {
+ARM GAS  /tmp/cc9uNECX.s 			page 15
+
+
+ 493              		.loc 1 205 17 is_stmt 1 view .LVU133
+ 205:User/System/control_system.c ****                 {
+ 494              		.loc 1 205 36 is_stmt 0 view .LVU134
+ 495 0064 064B     		ldr	r3, .L56
+ 496 0066 9968     		ldr	r1, [r3, #8]	@ float
+ 497 0068 2046     		mov	r0, r4
+ 498 006a FFF7FEFF 		bl	__aeabi_fsub
+ 499              	.LVL30:
+ 205:User/System/control_system.c ****                 {
+ 500              		.loc 1 205 19 view .LVU135
+ 501 006e 0749     		ldr	r1, .L56+12
+ 502 0070 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 503              	.LVL31:
+ 504 0074 0028     		cmp	r0, #0
+ 505 0076 C9D0     		beq	.L44
+ 207:User/System/control_system.c ****                 }
+ 506              		.loc 1 207 21 is_stmt 1 view .LVU136
+ 207:User/System/control_system.c ****                 }
+ 507              		.loc 1 207 42 is_stmt 0 view .LVU137
+ 508 0078 014B     		ldr	r3, .L56
+ 509 007a 0222     		movs	r2, #2
+ 510 007c 1A71     		strb	r2, [r3, #4]
+ 511              		.loc 1 213 1 view .LVU138
+ 512 007e C5E7     		b	.L44
+ 513              	.L57:
+ 514              		.align	2
+ 515              	.L56:
+ 516 0080 00000000 		.word	.LANCHOR0
+ 517 0084 80EE3600 		.word	3600000
+ 518 0088 00004040 		.word	1077936128
+ 519 008c 0000A0C0 		.word	-1063256064
+ 520              		.cfi_endproc
+ 521              	.LFE203:
+ 523              		.section	.text.Ctrl_System_Turn_Off_Daikin,"ax",%progbits
+ 524              		.align	1
+ 525              		.global	Ctrl_System_Turn_Off_Daikin
+ 526              		.syntax unified
+ 527              		.thumb
+ 528              		.thumb_func
+ 529              		.fpu softvfp
+ 531              	Ctrl_System_Turn_Off_Daikin:
+ 532              	.LFB204:
+ 214:User/System/control_system.c **** 
+ 215:User/System/control_system.c **** void Ctrl_System_Turn_Off_Daikin(void) 
+ 216:User/System/control_system.c **** {
+ 533              		.loc 1 216 1 is_stmt 1 view -0
+ 534              		.cfi_startproc
+ 535              		@ args = 0, pretend = 0, frame = 0
+ 536              		@ frame_needed = 0, uses_anonymous_args = 0
+ 537 0000 08B5     		push	{r3, lr}
+ 538              	.LCFI3:
+ 539              		.cfi_def_cfa_offset 8
+ 540              		.cfi_offset 3, -8
+ 541              		.cfi_offset 14, -4
+ 217:User/System/control_system.c ****      if(device.cooler.status == 1)
+ 542              		.loc 1 217 6 view .LVU140
+ 543              		.loc 1 217 22 is_stmt 0 view .LVU141
+ARM GAS  /tmp/cc9uNECX.s 			page 16
+
+
+ 544 0002 084B     		ldr	r3, .L62
+ 545 0004 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 546              		.loc 1 217 8 view .LVU142
+ 547 0006 012B     		cmp	r3, #1
+ 548 0008 00D0     		beq	.L61
+ 549              	.L58:
+ 218:User/System/control_system.c ****     {
+ 219:User/System/control_system.c ****         HAL_Delay(50);
+ 220:User/System/control_system.c ****         Modbus_Uart2_Write_Single_Reg(ID_DAIKIN, 5, 0);
+ 221:User/System/control_system.c ****         device.cooler.status = 0;
+ 222:User/System/control_system.c ****     }
+ 223:User/System/control_system.c **** }
+ 550              		.loc 1 223 1 view .LVU143
+ 551 000a 08BD     		pop	{r3, pc}
+ 552              	.L61:
+ 219:User/System/control_system.c ****         Modbus_Uart2_Write_Single_Reg(ID_DAIKIN, 5, 0);
+ 553              		.loc 1 219 9 is_stmt 1 view .LVU144
+ 554 000c 3220     		movs	r0, #50
+ 555 000e FFF7FEFF 		bl	HAL_Delay
+ 556              	.LVL32:
+ 220:User/System/control_system.c ****         device.cooler.status = 0;
+ 557              		.loc 1 220 9 view .LVU145
+ 558 0012 0022     		movs	r2, #0
+ 559 0014 0521     		movs	r1, #5
+ 560 0016 0B20     		movs	r0, #11
+ 561 0018 FFF7FEFF 		bl	Modbus_Uart2_Write_Single_Reg
+ 562              	.LVL33:
+ 221:User/System/control_system.c ****     }
+ 563              		.loc 1 221 9 view .LVU146
+ 221:User/System/control_system.c ****     }
+ 564              		.loc 1 221 30 is_stmt 0 view .LVU147
+ 565 001c 014B     		ldr	r3, .L62
+ 566 001e 0022     		movs	r2, #0
+ 567 0020 1A71     		strb	r2, [r3, #4]
+ 568              		.loc 1 223 1 view .LVU148
+ 569 0022 F2E7     		b	.L58
+ 570              	.L63:
+ 571              		.align	2
+ 572              	.L62:
+ 573 0024 00000000 		.word	.LANCHOR0
+ 574              		.cfi_endproc
+ 575              	.LFE204:
+ 577              		.section	.text.Ctrl_System_Daikin_Set_Temp,"ax",%progbits
+ 578              		.align	1
+ 579              		.global	Ctrl_System_Daikin_Set_Temp
+ 580              		.syntax unified
+ 581              		.thumb
+ 582              		.thumb_func
+ 583              		.fpu softvfp
+ 585              	Ctrl_System_Daikin_Set_Temp:
+ 586              	.LVL34:
+ 587              	.LFB205:
+ 224:User/System/control_system.c **** 
+ 225:User/System/control_system.c **** void Ctrl_System_Daikin_Set_Temp(uint8_t temp) 
+ 226:User/System/control_system.c **** {
+ 588              		.loc 1 226 1 is_stmt 1 view -0
+ 589              		.cfi_startproc
+ARM GAS  /tmp/cc9uNECX.s 			page 17
+
+
+ 590              		@ args = 0, pretend = 0, frame = 0
+ 591              		@ frame_needed = 0, uses_anonymous_args = 0
+ 227:User/System/control_system.c ****     if(device.cooler.status == 1 && temp != device.temp_daikin)
+ 592              		.loc 1 227 5 view .LVU150
+ 593              		.loc 1 227 21 is_stmt 0 view .LVU151
+ 594 0000 0B4B     		ldr	r3, .L72
+ 595 0002 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 596              		.loc 1 227 7 view .LVU152
+ 597 0004 012B     		cmp	r3, #1
+ 598 0006 00D0     		beq	.L70
+ 599 0008 7047     		bx	lr
+ 600              	.L70:
+ 226:User/System/control_system.c ****     if(device.cooler.status == 1 && temp != device.temp_daikin)
+ 601              		.loc 1 226 1 discriminator 1 view .LVU153
+ 602 000a 10B5     		push	{r4, lr}
+ 603              	.LCFI4:
+ 604              		.cfi_def_cfa_offset 8
+ 605              		.cfi_offset 4, -8
+ 606              		.cfi_offset 14, -4
+ 607 000c 0446     		mov	r4, r0
+ 608              		.loc 1 227 51 discriminator 1 view .LVU154
+ 609 000e 084B     		ldr	r3, .L72
+ 610 0010 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 611              		.loc 1 227 34 discriminator 1 view .LVU155
+ 612 0012 8342     		cmp	r3, r0
+ 613 0014 00D1     		bne	.L71
+ 614              	.LVL35:
+ 615              	.L64:
+ 228:User/System/control_system.c ****     {
+ 229:User/System/control_system.c ****         HAL_Delay(50);
+ 230:User/System/control_system.c ****         Modbus_Uart2_Write_Single_Reg(ID_DAIKIN, 1, temp);
+ 231:User/System/control_system.c ****         device.temp_daikin = temp;
+ 232:User/System/control_system.c ****     }
+ 233:User/System/control_system.c **** }
+ 616              		.loc 1 233 1 view .LVU156
+ 617 0016 10BD     		pop	{r4, pc}
+ 618              	.LVL36:
+ 619              	.L71:
+ 229:User/System/control_system.c ****         Modbus_Uart2_Write_Single_Reg(ID_DAIKIN, 1, temp);
+ 620              		.loc 1 229 9 is_stmt 1 view .LVU157
+ 621 0018 3220     		movs	r0, #50
+ 622              	.LVL37:
+ 229:User/System/control_system.c ****         Modbus_Uart2_Write_Single_Reg(ID_DAIKIN, 1, temp);
+ 623              		.loc 1 229 9 is_stmt 0 view .LVU158
+ 624 001a FFF7FEFF 		bl	HAL_Delay
+ 625              	.LVL38:
+ 230:User/System/control_system.c ****         device.temp_daikin = temp;
+ 626              		.loc 1 230 9 is_stmt 1 view .LVU159
+ 627 001e 2246     		mov	r2, r4
+ 628 0020 0121     		movs	r1, #1
+ 629 0022 0B20     		movs	r0, #11
+ 630 0024 FFF7FEFF 		bl	Modbus_Uart2_Write_Single_Reg
+ 631              	.LVL39:
+ 231:User/System/control_system.c ****     }
+ 632              		.loc 1 231 9 view .LVU160
+ 231:User/System/control_system.c ****     }
+ 633              		.loc 1 231 28 is_stmt 0 view .LVU161
+ARM GAS  /tmp/cc9uNECX.s 			page 18
+
+
+ 634 0028 014B     		ldr	r3, .L72
+ 635 002a 5C70     		strb	r4, [r3, #1]
+ 636              		.loc 1 233 1 view .LVU162
+ 637 002c F3E7     		b	.L64
+ 638              	.L73:
+ 639 002e 00BF     		.align	2
+ 640              	.L72:
+ 641 0030 00000000 		.word	.LANCHOR0
+ 642              		.cfi_endproc
+ 643              	.LFE205:
+ 645              		.section	.text.Ctrl_System_Valve_Air,"ax",%progbits
+ 646              		.align	1
+ 647              		.global	Ctrl_System_Valve_Air
+ 648              		.syntax unified
+ 649              		.thumb
+ 650              		.thumb_func
+ 651              		.fpu softvfp
+ 653              	Ctrl_System_Valve_Air:
+ 654              	.LVL40:
+ 655              	.LFB206:
+ 234:User/System/control_system.c **** 
+ 235:User/System/control_system.c **** void Ctrl_System_Valve_Air(uint8_t valve) 
+ 236:User/System/control_system.c **** {
+ 656              		.loc 1 236 1 is_stmt 1 view -0
+ 657              		.cfi_startproc
+ 658              		@ args = 0, pretend = 0, frame = 0
+ 659              		@ frame_needed = 0, uses_anonymous_args = 0
+ 660              		@ link register save eliminated.
+ 237:User/System/control_system.c ****     switch (valve)
+ 661              		.loc 1 237 5 view .LVU164
+ 662 0000 0128     		cmp	r0, #1
+ 663 0002 0CD0     		beq	.L75
+ 664 0004 0228     		cmp	r0, #2
+ 665 0006 14D0     		beq	.L76
+ 666 0008 00B1     		cbz	r0, .L78
+ 667              	.L74:
+ 238:User/System/control_system.c ****     {
+ 239:User/System/control_system.c ****         case 0:
+ 240:User/System/control_system.c ****             // close all valves
+ 241:User/System/control_system.c ****             device.valve_fan = 0;
+ 242:User/System/control_system.c ****             device.valve_cooler = 0;
+ 243:User/System/control_system.c ****             device.valve_heater = 0;
+ 244:User/System/control_system.c ****             break;
+ 245:User/System/control_system.c ****         case 1:
+ 246:User/System/control_system.c ****             // open the cool valve
+ 247:User/System/control_system.c ****             device.valve_fan = 1;
+ 248:User/System/control_system.c ****             device.valve_cooler = 1;
+ 249:User/System/control_system.c ****             device.valve_heater = 0;
+ 250:User/System/control_system.c **** 
+ 251:User/System/control_system.c ****             break;
+ 252:User/System/control_system.c ****         case 2:
+ 253:User/System/control_system.c ****             // open the heater valve
+ 254:User/System/control_system.c ****             device.valve_fan = 1;
+ 255:User/System/control_system.c ****             device.valve_cooler = 0;
+ 256:User/System/control_system.c ****             device.valve_heater = 1;
+ 257:User/System/control_system.c ****            
+ 258:User/System/control_system.c ****             break;
+ARM GAS  /tmp/cc9uNECX.s 			page 19
+
+
+ 259:User/System/control_system.c ****         default:
+ 260:User/System/control_system.c **** 
+ 261:User/System/control_system.c ****             break;
+ 262:User/System/control_system.c ****     }
+ 263:User/System/control_system.c **** }
+ 668              		.loc 1 263 1 is_stmt 0 view .LVU165
+ 669 000a 7047     		bx	lr
+ 670              	.L78:
+ 241:User/System/control_system.c ****             device.valve_cooler = 0;
+ 671              		.loc 1 241 13 is_stmt 1 view .LVU166
+ 241:User/System/control_system.c ****             device.valve_cooler = 0;
+ 672              		.loc 1 241 30 is_stmt 0 view .LVU167
+ 673 000c 0E4B     		ldr	r3, .L79
+ 674 000e 0022     		movs	r2, #0
+ 675 0010 83F83D20 		strb	r2, [r3, #61]
+ 242:User/System/control_system.c ****             device.valve_heater = 0;
+ 676              		.loc 1 242 13 is_stmt 1 view .LVU168
+ 242:User/System/control_system.c ****             device.valve_heater = 0;
+ 677              		.loc 1 242 33 is_stmt 0 view .LVU169
+ 678 0014 83F83B20 		strb	r2, [r3, #59]
+ 243:User/System/control_system.c ****             break;
+ 679              		.loc 1 243 13 is_stmt 1 view .LVU170
+ 243:User/System/control_system.c ****             break;
+ 680              		.loc 1 243 33 is_stmt 0 view .LVU171
+ 681 0018 83F83C20 		strb	r2, [r3, #60]
+ 244:User/System/control_system.c ****         case 1:
+ 682              		.loc 1 244 13 is_stmt 1 view .LVU172
+ 683 001c 7047     		bx	lr
+ 684              	.L75:
+ 247:User/System/control_system.c ****             device.valve_cooler = 1;
+ 685              		.loc 1 247 13 view .LVU173
+ 247:User/System/control_system.c ****             device.valve_cooler = 1;
+ 686              		.loc 1 247 30 is_stmt 0 view .LVU174
+ 687 001e 0A4B     		ldr	r3, .L79
+ 688 0020 0122     		movs	r2, #1
+ 689 0022 83F83D20 		strb	r2, [r3, #61]
+ 248:User/System/control_system.c ****             device.valve_heater = 0;
+ 690              		.loc 1 248 13 is_stmt 1 view .LVU175
+ 248:User/System/control_system.c ****             device.valve_heater = 0;
+ 691              		.loc 1 248 33 is_stmt 0 view .LVU176
+ 692 0026 83F83B20 		strb	r2, [r3, #59]
+ 249:User/System/control_system.c **** 
+ 693              		.loc 1 249 13 is_stmt 1 view .LVU177
+ 249:User/System/control_system.c **** 
+ 694              		.loc 1 249 33 is_stmt 0 view .LVU178
+ 695 002a 0022     		movs	r2, #0
+ 696 002c 83F83C20 		strb	r2, [r3, #60]
+ 251:User/System/control_system.c ****         case 2:
+ 697              		.loc 1 251 13 is_stmt 1 view .LVU179
+ 698 0030 7047     		bx	lr
+ 699              	.L76:
+ 254:User/System/control_system.c ****             device.valve_cooler = 0;
+ 700              		.loc 1 254 13 view .LVU180
+ 254:User/System/control_system.c ****             device.valve_cooler = 0;
+ 701              		.loc 1 254 30 is_stmt 0 view .LVU181
+ 702 0032 054B     		ldr	r3, .L79
+ 703 0034 0122     		movs	r2, #1
+ARM GAS  /tmp/cc9uNECX.s 			page 20
+
+
+ 704 0036 83F83D20 		strb	r2, [r3, #61]
+ 255:User/System/control_system.c ****             device.valve_heater = 1;
+ 705              		.loc 1 255 13 is_stmt 1 view .LVU182
+ 255:User/System/control_system.c ****             device.valve_heater = 1;
+ 706              		.loc 1 255 33 is_stmt 0 view .LVU183
+ 707 003a 0021     		movs	r1, #0
+ 708 003c 83F83B10 		strb	r1, [r3, #59]
+ 256:User/System/control_system.c ****            
+ 709              		.loc 1 256 13 is_stmt 1 view .LVU184
+ 256:User/System/control_system.c ****            
+ 710              		.loc 1 256 33 is_stmt 0 view .LVU185
+ 711 0040 83F83C20 		strb	r2, [r3, #60]
+ 258:User/System/control_system.c ****         default:
+ 712              		.loc 1 258 13 is_stmt 1 view .LVU186
+ 713              		.loc 1 263 1 is_stmt 0 view .LVU187
+ 714 0044 E1E7     		b	.L74
+ 715              	.L80:
+ 716 0046 00BF     		.align	2
+ 717              	.L79:
+ 718 0048 00000000 		.word	.LANCHOR0
+ 719              		.cfi_endproc
+ 720              	.LFE206:
+ 722              		.section	.text.Ctrl_System_Thermistor,"ax",%progbits
+ 723              		.align	1
+ 724              		.global	Ctrl_System_Thermistor
+ 725              		.syntax unified
+ 726              		.thumb
+ 727              		.thumb_func
+ 728              		.fpu softvfp
+ 730              	Ctrl_System_Thermistor:
+ 731              	.LVL41:
+ 732              	.LFB207:
+ 264:User/System/control_system.c **** 
+ 265:User/System/control_system.c **** void Ctrl_System_Thermistor(uint8_t num)
+ 266:User/System/control_system.c **** {
+ 733              		.loc 1 266 1 is_stmt 1 view -0
+ 734              		.cfi_startproc
+ 735              		@ args = 0, pretend = 0, frame = 0
+ 736              		@ frame_needed = 0, uses_anonymous_args = 0
+ 737              		@ link register save eliminated.
+ 267:User/System/control_system.c ****     switch (num)
+ 738              		.loc 1 267 5 view .LVU189
+ 739 0000 0328     		cmp	r0, #3
+ 740 0002 28D8     		bhi	.L81
+ 741 0004 DFE800F0 		tbb	[pc, r0]
+ 742              	.L84:
+ 743 0008 02       		.byte	(.L87-.L84)/2
+ 744 0009 0B       		.byte	(.L86-.L84)/2
+ 745 000a 15       		.byte	(.L85-.L84)/2
+ 746 000b 1F       		.byte	(.L83-.L84)/2
+ 747              		.p2align 1
+ 748              	.L87:
+ 268:User/System/control_system.c ****     {
+ 269:User/System/control_system.c ****         case 0:
+ 270:User/System/control_system.c ****             device.thermistor1 = 0;
+ 749              		.loc 1 270 13 view .LVU190
+ 750              		.loc 1 270 32 is_stmt 0 view .LVU191
+ARM GAS  /tmp/cc9uNECX.s 			page 21
+
+
+ 751 000c 124B     		ldr	r3, .L88
+ 752 000e 0022     		movs	r2, #0
+ 753 0010 83F83420 		strb	r2, [r3, #52]
+ 271:User/System/control_system.c ****             device.thermistor2 = 0;
+ 754              		.loc 1 271 13 is_stmt 1 view .LVU192
+ 755              		.loc 1 271 32 is_stmt 0 view .LVU193
+ 756 0014 83F83520 		strb	r2, [r3, #53]
+ 272:User/System/control_system.c ****             device.thermistor3 = 0;
+ 757              		.loc 1 272 13 is_stmt 1 view .LVU194
+ 758              		.loc 1 272 32 is_stmt 0 view .LVU195
+ 759 0018 83F83620 		strb	r2, [r3, #54]
+ 273:User/System/control_system.c ****             break;
+ 760              		.loc 1 273 13 is_stmt 1 view .LVU196
+ 761 001c 7047     		bx	lr
+ 762              	.L86:
+ 274:User/System/control_system.c ****         case 1:
+ 275:User/System/control_system.c ****             device.thermistor1 = 1;
+ 763              		.loc 1 275 13 view .LVU197
+ 764              		.loc 1 275 32 is_stmt 0 view .LVU198
+ 765 001e 0E4B     		ldr	r3, .L88
+ 766 0020 0122     		movs	r2, #1
+ 767 0022 83F83420 		strb	r2, [r3, #52]
+ 276:User/System/control_system.c ****             device.thermistor2 = 0;
+ 768              		.loc 1 276 13 is_stmt 1 view .LVU199
+ 769              		.loc 1 276 32 is_stmt 0 view .LVU200
+ 770 0026 0022     		movs	r2, #0
+ 771 0028 83F83520 		strb	r2, [r3, #53]
+ 277:User/System/control_system.c ****             device.thermistor3 = 0;
+ 772              		.loc 1 277 13 is_stmt 1 view .LVU201
+ 773              		.loc 1 277 32 is_stmt 0 view .LVU202
+ 774 002c 83F83620 		strb	r2, [r3, #54]
+ 278:User/System/control_system.c ****             break;
+ 775              		.loc 1 278 13 is_stmt 1 view .LVU203
+ 776 0030 7047     		bx	lr
+ 777              	.L85:
+ 279:User/System/control_system.c ****         case 2:
+ 280:User/System/control_system.c ****             device.thermistor1 = 1;
+ 778              		.loc 1 280 13 view .LVU204
+ 779              		.loc 1 280 32 is_stmt 0 view .LVU205
+ 780 0032 094B     		ldr	r3, .L88
+ 781 0034 0122     		movs	r2, #1
+ 782 0036 83F83420 		strb	r2, [r3, #52]
+ 281:User/System/control_system.c ****             device.thermistor2 = 1;
+ 783              		.loc 1 281 13 is_stmt 1 view .LVU206
+ 784              		.loc 1 281 32 is_stmt 0 view .LVU207
+ 785 003a 83F83520 		strb	r2, [r3, #53]
+ 282:User/System/control_system.c ****             device.thermistor3 = 0;
+ 786              		.loc 1 282 13 is_stmt 1 view .LVU208
+ 787              		.loc 1 282 32 is_stmt 0 view .LVU209
+ 788 003e 0022     		movs	r2, #0
+ 789 0040 83F83620 		strb	r2, [r3, #54]
+ 283:User/System/control_system.c ****             break;
+ 790              		.loc 1 283 13 is_stmt 1 view .LVU210
+ 791 0044 7047     		bx	lr
+ 792              	.L83:
+ 284:User/System/control_system.c ****         case 3:
+ 285:User/System/control_system.c ****             device.thermistor1 = 1;
+ARM GAS  /tmp/cc9uNECX.s 			page 22
+
+
+ 793              		.loc 1 285 13 view .LVU211
+ 794              		.loc 1 285 32 is_stmt 0 view .LVU212
+ 795 0046 044B     		ldr	r3, .L88
+ 796 0048 0122     		movs	r2, #1
+ 797 004a 83F83420 		strb	r2, [r3, #52]
+ 286:User/System/control_system.c ****             device.thermistor2 = 1;
+ 798              		.loc 1 286 13 is_stmt 1 view .LVU213
+ 799              		.loc 1 286 32 is_stmt 0 view .LVU214
+ 800 004e 83F83520 		strb	r2, [r3, #53]
+ 287:User/System/control_system.c ****             device.thermistor3 = 1;
+ 801              		.loc 1 287 13 is_stmt 1 view .LVU215
+ 802              		.loc 1 287 32 is_stmt 0 view .LVU216
+ 803 0052 83F83620 		strb	r2, [r3, #54]
+ 288:User/System/control_system.c ****             break;
+ 804              		.loc 1 288 13 is_stmt 1 view .LVU217
+ 805              	.L81:
+ 289:User/System/control_system.c ****         default:
+ 290:User/System/control_system.c ****             break;
+ 291:User/System/control_system.c ****     }    
+ 292:User/System/control_system.c ****     
+ 293:User/System/control_system.c **** }
+ 806              		.loc 1 293 1 is_stmt 0 view .LVU218
+ 807 0056 7047     		bx	lr
+ 808              	.L89:
+ 809              		.align	2
+ 810              	.L88:
+ 811 0058 00000000 		.word	.LANCHOR0
+ 812              		.cfi_endproc
+ 813              	.LFE207:
+ 815              		.global	__aeabi_f2uiz
+ 816              		.section	.text.Ctrl_System_Cooler,"ax",%progbits
+ 817              		.align	1
+ 818              		.global	Ctrl_System_Cooler
+ 819              		.syntax unified
+ 820              		.thumb
+ 821              		.thumb_func
+ 822              		.fpu softvfp
+ 824              	Ctrl_System_Cooler:
+ 825              	.LFB199:
+  53:User/System/control_system.c ****     // dieu khien phan lam lanh
+ 826              		.loc 1 53 1 is_stmt 1 view -0
+ 827              		.cfi_startproc
+ 828              		@ args = 0, pretend = 0, frame = 0
+ 829              		@ frame_needed = 0, uses_anonymous_args = 0
+ 830 0000 08B5     		push	{r3, lr}
+ 831              	.LCFI5:
+ 832              		.cfi_def_cfa_offset 8
+ 833              		.cfi_offset 3, -8
+ 834              		.cfi_offset 14, -4
+  55:User/System/control_system.c ****     {
+ 835              		.loc 1 55 5 view .LVU220
+  55:User/System/control_system.c ****     {
+ 836              		.loc 1 55 7 is_stmt 0 view .LVU221
+ 837 0002 0B49     		ldr	r1, .L96
+ 838 0004 0B4B     		ldr	r3, .L96+4
+ 839 0006 986C     		ldr	r0, [r3, #72]	@ float
+ 840 0008 FFF7FEFF 		bl	__aeabi_fcmple
+ARM GAS  /tmp/cc9uNECX.s 			page 23
+
+
+ 841              	.LVL42:
+ 842 000c 00B9     		cbnz	r0, .L95
+ 843              	.L90:
+  62:User/System/control_system.c **** 
+ 844              		.loc 1 62 1 view .LVU222
+ 845 000e 08BD     		pop	{r3, pc}
+ 846              	.L95:
+  57:User/System/control_system.c ****         Ctrl_System_Turn_On_Daikin();
+ 847              		.loc 1 57 9 is_stmt 1 view .LVU223
+ 848 0010 0020     		movs	r0, #0
+ 849 0012 FFF7FEFF 		bl	Ctrl_System_Thermistor
+ 850              	.LVL43:
+  58:User/System/control_system.c ****         Ctrl_System_Daikin_Set_Temp(device.temp_set);
+ 851              		.loc 1 58 9 view .LVU224
+ 852 0016 FFF7FEFF 		bl	Ctrl_System_Turn_On_Daikin
+ 853              	.LVL44:
+  59:User/System/control_system.c ****         Ctrl_System_Valve_Air(VALVE_COOL);
+ 854              		.loc 1 59 9 view .LVU225
+ 855 001a 064B     		ldr	r3, .L96+4
+ 856 001c 986C     		ldr	r0, [r3, #72]	@ float
+ 857 001e FFF7FEFF 		bl	__aeabi_f2uiz
+ 858              	.LVL45:
+ 859 0022 C0B2     		uxtb	r0, r0
+ 860 0024 FFF7FEFF 		bl	Ctrl_System_Daikin_Set_Temp
+ 861              	.LVL46:
+  60:User/System/control_system.c ****     }
+ 862              		.loc 1 60 9 view .LVU226
+ 863 0028 0120     		movs	r0, #1
+ 864 002a FFF7FEFF 		bl	Ctrl_System_Valve_Air
+ 865              	.LVL47:
+  62:User/System/control_system.c **** 
+ 866              		.loc 1 62 1 is_stmt 0 view .LVU227
+ 867 002e EEE7     		b	.L90
+ 868              	.L97:
+ 869              		.align	2
+ 870              	.L96:
+ 871 0030 0000E041 		.word	1105199104
+ 872 0034 00000000 		.word	.LANCHOR0
+ 873              		.cfi_endproc
+ 874              	.LFE199:
+ 876              		.section	.text.Ctrl_System_Waning_Temp_High,"ax",%progbits
+ 877              		.align	1
+ 878              		.global	Ctrl_System_Waning_Temp_High
+ 879              		.syntax unified
+ 880              		.thumb
+ 881              		.thumb_func
+ 882              		.fpu softvfp
+ 884              	Ctrl_System_Waning_Temp_High:
+ 885              	.LFB208:
+ 294:User/System/control_system.c **** 
+ 295:User/System/control_system.c **** void Ctrl_System_Waning_Temp_High(void)
+ 296:User/System/control_system.c **** {
+ 886              		.loc 1 296 1 is_stmt 1 view -0
+ 887              		.cfi_startproc
+ 888              		@ args = 0, pretend = 0, frame = 0
+ 889              		@ frame_needed = 0, uses_anonymous_args = 0
+ 890 0000 08B5     		push	{r3, lr}
+ARM GAS  /tmp/cc9uNECX.s 			page 24
+
+
+ 891              	.LCFI6:
+ 892              		.cfi_def_cfa_offset 8
+ 893              		.cfi_offset 3, -8
+ 894              		.cfi_offset 14, -4
+ 297:User/System/control_system.c ****     // khoa cua khong cho mo khi nhiet do trong phong dang tang cao
+ 298:User/System/control_system.c ****     if(device.temp_now > 40.0 && device.sensor_door == 0)
+ 895              		.loc 1 298 5 view .LVU229
+ 896              		.loc 1 298 7 is_stmt 0 view .LVU230
+ 897 0002 0A49     		ldr	r1, .L104
+ 898 0004 0A4B     		ldr	r3, .L104+4
+ 899 0006 186C     		ldr	r0, [r3, #64]	@ float
+ 900 0008 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 901              	.LVL48:
+ 902 000c 40B1     		cbz	r0, .L99
+ 903              		.loc 1 298 40 discriminator 1 view .LVU231
+ 904 000e 084B     		ldr	r3, .L104+4
+ 905 0010 93F83F30 		ldrb	r3, [r3, #63]	@ zero_extendqisi2
+ 906              		.loc 1 298 31 discriminator 1 view .LVU232
+ 907 0014 23B9     		cbnz	r3, .L99
+ 299:User/System/control_system.c ****     {
+ 300:User/System/control_system.c ****         device.door = 1;
+ 908              		.loc 1 300 9 is_stmt 1 view .LVU233
+ 909              		.loc 1 300 21 is_stmt 0 view .LVU234
+ 910 0016 064B     		ldr	r3, .L104+4
+ 911 0018 0122     		movs	r2, #1
+ 912 001a 83F83E20 		strb	r2, [r3, #62]
+ 913 001e 03E0     		b	.L98
+ 914              	.L99:
+ 301:User/System/control_system.c ****     }
+ 302:User/System/control_system.c ****     else
+ 303:User/System/control_system.c ****     {
+ 304:User/System/control_system.c ****         device.door = 0;
+ 915              		.loc 1 304 9 is_stmt 1 view .LVU235
+ 916              		.loc 1 304 21 is_stmt 0 view .LVU236
+ 917 0020 034B     		ldr	r3, .L104+4
+ 918 0022 0022     		movs	r2, #0
+ 919 0024 83F83E20 		strb	r2, [r3, #62]
+ 920              	.L98:
+ 305:User/System/control_system.c ****     }
+ 306:User/System/control_system.c **** }
+ 921              		.loc 1 306 1 view .LVU237
+ 922 0028 08BD     		pop	{r3, pc}
+ 923              	.L105:
+ 924 002a 00BF     		.align	2
+ 925              	.L104:
+ 926 002c 00002042 		.word	1109393408
+ 927 0030 00000000 		.word	.LANCHOR0
+ 928              		.cfi_endproc
+ 929              	.LFE208:
+ 931              		.section	.text.Ctrl_System_Heater,"ax",%progbits
+ 932              		.align	1
+ 933              		.global	Ctrl_System_Heater
+ 934              		.syntax unified
+ 935              		.thumb
+ 936              		.thumb_func
+ 937              		.fpu softvfp
+ 939              	Ctrl_System_Heater:
+ARM GAS  /tmp/cc9uNECX.s 			page 25
+
+
+ 940              	.LFB200:
+  65:User/System/control_system.c ****     // dieu khien phan gia nhiet
+ 941              		.loc 1 65 1 is_stmt 1 view -0
+ 942              		.cfi_startproc
+ 943              		@ args = 0, pretend = 0, frame = 0
+ 944              		@ frame_needed = 0, uses_anonymous_args = 0
+ 945 0000 38B5     		push	{r3, r4, r5, lr}
+ 946              	.LCFI7:
+ 947              		.cfi_def_cfa_offset 16
+ 948              		.cfi_offset 3, -16
+ 949              		.cfi_offset 4, -12
+ 950              		.cfi_offset 5, -8
+ 951              		.cfi_offset 14, -4
+  69:User/System/control_system.c **** 
+ 952              		.loc 1 69 5 view .LVU239
+ 953 0002 FFF7FEFF 		bl	Ctrl_System_Waning_Temp_High
+ 954              	.LVL49:
+  71:User/System/control_system.c ****     {
+ 955              		.loc 1 71 5 view .LVU240
+  71:User/System/control_system.c ****     {
+ 956              		.loc 1 71 14 is_stmt 0 view .LVU241
+ 957 0006 3C4B     		ldr	r3, .L129
+ 958 0008 9C6C     		ldr	r4, [r3, #72]	@ float
+  71:User/System/control_system.c ****     {
+ 959              		.loc 1 71 7 view .LVU242
+ 960 000a 3C49     		ldr	r1, .L129+4
+ 961 000c 2046     		mov	r0, r4
+ 962 000e FFF7FEFF 		bl	__aeabi_fcmpgt
+ 963              	.LVL50:
+ 964 0012 88B1     		cbz	r0, .L106
+  73:User/System/control_system.c ****         {
+ 965              		.loc 1 73 9 is_stmt 1 view .LVU243
+  73:User/System/control_system.c ****         {
+ 966              		.loc 1 73 18 is_stmt 0 view .LVU244
+ 967 0014 384B     		ldr	r3, .L129
+ 968 0016 1D6C     		ldr	r5, [r3, #64]	@ float
+  73:User/System/control_system.c ****         {
+ 969              		.loc 1 73 46 view .LVU245
+ 970 0018 4FF08041 		mov	r1, #1073741824
+ 971 001c 2046     		mov	r0, r4
+ 972 001e FFF7FEFF 		bl	__aeabi_fsub
+ 973              	.LVL51:
+ 974 0022 0146     		mov	r1, r0
+  73:User/System/control_system.c ****         {
+ 975              		.loc 1 73 11 view .LVU246
+ 976 0024 2846     		mov	r0, r5
+ 977 0026 FFF7FEFF 		bl	__aeabi_fcmplt
+ 978              	.LVL52:
+ 979 002a 30B9     		cbnz	r0, .L125
+ 102:User/System/control_system.c ****         {
+ 980              		.loc 1 102 14 is_stmt 1 view .LVU247
+ 102:User/System/control_system.c ****         {
+ 981              		.loc 1 102 16 is_stmt 0 view .LVU248
+ 982 002c 2946     		mov	r1, r5
+ 983 002e 2046     		mov	r0, r4
+ 984 0030 FFF7FEFF 		bl	__aeabi_fcmplt
+ 985              	.LVL53:
+ARM GAS  /tmp/cc9uNECX.s 			page 26
+
+
+ 986 0034 0028     		cmp	r0, #0
+ 987 0036 4CD1     		bne	.L126
+ 988              	.L106:
+ 112:User/System/control_system.c **** 
+ 989              		.loc 1 112 1 view .LVU249
+ 990 0038 38BD     		pop	{r3, r4, r5, pc}
+ 991              	.L125:
+  75:User/System/control_system.c ****             Ctrl_System_Valve_Air(VALVE_HEAT);
+ 992              		.loc 1 75 13 is_stmt 1 view .LVU250
+ 993 003a FFF7FEFF 		bl	Ctrl_System_Turn_Off_Daikin
+ 994              	.LVL54:
+  76:User/System/control_system.c ****             if(HAL_GetTick() - thermis_tick > TIME_WAIT_DEVICE)
+ 995              		.loc 1 76 13 view .LVU251
+ 996 003e 0220     		movs	r0, #2
+ 997 0040 FFF7FEFF 		bl	Ctrl_System_Valve_Air
+ 998              	.LVL55:
+  77:User/System/control_system.c ****             {
+ 999              		.loc 1 77 13 view .LVU252
+  77:User/System/control_system.c ****             {
+ 1000              		.loc 1 77 16 is_stmt 0 view .LVU253
+ 1001 0044 FFF7FEFF 		bl	HAL_GetTick
+ 1002              	.LVL56:
+  77:User/System/control_system.c ****             {
+ 1003              		.loc 1 77 30 view .LVU254
+ 1004 0048 2D4B     		ldr	r3, .L129+8
+ 1005 004a 1B68     		ldr	r3, [r3]
+ 1006 004c C01A     		subs	r0, r0, r3
+  77:User/System/control_system.c ****             {
+ 1007              		.loc 1 77 15 view .LVU255
+ 1008 004e 4EF66023 		movw	r3, #60000
+ 1009 0052 9842     		cmp	r0, r3
+ 1010 0054 2DD8     		bhi	.L127
+ 1011              	.L111:
+  87:User/System/control_system.c ****             {
+ 1012              		.loc 1 87 13 is_stmt 1 view .LVU256
+  87:User/System/control_system.c ****             {
+ 1013              		.loc 1 87 29 is_stmt 0 view .LVU257
+ 1014 0056 284B     		ldr	r3, .L129
+ 1015 0058 1B7C     		ldrb	r3, [r3, #16]	@ zero_extendqisi2
+  87:User/System/control_system.c ****             {
+ 1016              		.loc 1 87 15 view .LVU258
+ 1017 005a 012B     		cmp	r3, #1
+ 1018 005c ECD1     		bne	.L106
+  90:User/System/control_system.c ****                 {
+ 1019              		.loc 1 90 17 is_stmt 1 view .LVU259
+  90:User/System/control_system.c ****                 {
+ 1020              		.loc 1 90 20 is_stmt 0 view .LVU260
+ 1021 005e FFF7FEFF 		bl	HAL_GetTick
+ 1022              	.LVL57:
+  90:User/System/control_system.c ****                 {
+ 1023              		.loc 1 90 49 view .LVU261
+ 1024 0062 254B     		ldr	r3, .L129
+ 1025 0064 9B69     		ldr	r3, [r3, #24]
+  90:User/System/control_system.c ****                 {
+ 1026              		.loc 1 90 34 view .LVU262
+ 1027 0066 C01A     		subs	r0, r0, r3
+  90:User/System/control_system.c ****                 {
+ARM GAS  /tmp/cc9uNECX.s 			page 27
+
+
+ 1028              		.loc 1 90 19 view .LVU263
+ 1029 0068 264B     		ldr	r3, .L129+12
+ 1030 006a 9842     		cmp	r0, r3
+ 1031 006c E4D9     		bls	.L106
+  90:User/System/control_system.c ****                 {
+ 1032              		.loc 1 90 82 discriminator 1 view .LVU264
+ 1033 006e 224B     		ldr	r3, .L129
+ 1034 0070 1C6C     		ldr	r4, [r3, #64]	@ float
+  90:User/System/control_system.c ****                 {
+ 1035              		.loc 1 90 100 discriminator 1 view .LVU265
+ 1036 0072 9D6C     		ldr	r5, [r3, #72]	@ float
+  90:User/System/control_system.c ****                 {
+ 1037              		.loc 1 90 73 discriminator 1 view .LVU266
+ 1038 0074 2946     		mov	r1, r5
+ 1039 0076 2046     		mov	r0, r4
+ 1040 0078 FFF7FEFF 		bl	__aeabi_fcmplt
+ 1041              	.LVL58:
+ 1042 007c 0028     		cmp	r0, #0
+ 1043 007e DBD0     		beq	.L106
+  92:User/System/control_system.c ****                     {
+ 1044              		.loc 1 92 21 is_stmt 1 view .LVU267
+  92:User/System/control_system.c ****                     {
+ 1045              		.loc 1 92 45 is_stmt 0 view .LVU268
+ 1046 0080 2946     		mov	r1, r5
+ 1047 0082 2046     		mov	r0, r4
+ 1048 0084 FFF7FEFF 		bl	__aeabi_fsub
+ 1049              	.LVL59:
+  92:User/System/control_system.c ****                     {
+ 1050              		.loc 1 92 24 view .LVU269
+ 1051 0088 20F00040 		bic	r0, r0, #-2147483648
+  92:User/System/control_system.c ****                     {
+ 1052              		.loc 1 92 23 view .LVU270
+ 1053 008c 1E49     		ldr	r1, .L129+16
+ 1054 008e FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1055              	.LVL60:
+ 1056 0092 0028     		cmp	r0, #0
+ 1057 0094 D0D0     		beq	.L106
+  94:User/System/control_system.c ****                         {
+ 1058              		.loc 1 94 25 is_stmt 1 view .LVU271
+  94:User/System/control_system.c ****                         {
+ 1059              		.loc 1 94 44 is_stmt 0 view .LVU272
+ 1060 0096 184B     		ldr	r3, .L129
+ 1061 0098 5969     		ldr	r1, [r3, #20]	@ float
+ 1062 009a 2046     		mov	r0, r4
+ 1063 009c FFF7FEFF 		bl	__aeabi_fsub
+ 1064              	.LVL61:
+  94:User/System/control_system.c ****                         {
+ 1065              		.loc 1 94 27 view .LVU273
+ 1066 00a0 1A49     		ldr	r1, .L129+20
+ 1067 00a2 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1068              	.LVL62:
+ 1069 00a6 0028     		cmp	r0, #0
+ 1070 00a8 C6D0     		beq	.L106
+  96:User/System/control_system.c ****                         }
+ 1071              		.loc 1 96 29 is_stmt 1 view .LVU274
+  96:User/System/control_system.c ****                         }
+ 1072              		.loc 1 96 50 is_stmt 0 view .LVU275
+ARM GAS  /tmp/cc9uNECX.s 			page 28
+
+
+ 1073 00aa 134B     		ldr	r3, .L129
+ 1074 00ac 0222     		movs	r2, #2
+ 1075 00ae 1A74     		strb	r2, [r3, #16]
+ 1076 00b0 C2E7     		b	.L106
+ 1077              	.L127:
+  79:User/System/control_system.c ****                 if(device.heater.status == 0)
+ 1078              		.loc 1 79 17 is_stmt 1 view .LVU276
+ 1079 00b2 0320     		movs	r0, #3
+ 1080 00b4 FFF7FEFF 		bl	Ctrl_System_Thermistor
+ 1081              	.LVL63:
+  80:User/System/control_system.c ****                 {
+ 1082              		.loc 1 80 17 view .LVU277
+  80:User/System/control_system.c ****                 {
+ 1083              		.loc 1 80 33 is_stmt 0 view .LVU278
+ 1084 00b8 0F4B     		ldr	r3, .L129
+ 1085 00ba 1B7C     		ldrb	r3, [r3, #16]	@ zero_extendqisi2
+  80:User/System/control_system.c ****                 {
+ 1086              		.loc 1 80 19 view .LVU279
+ 1087 00bc 002B     		cmp	r3, #0
+ 1088 00be CAD1     		bne	.L111
+  82:User/System/control_system.c ****                     device.heater.val_sample = device.temp_now;
+ 1089              		.loc 1 82 21 is_stmt 1 view .LVU280
+  82:User/System/control_system.c ****                     device.heater.val_sample = device.temp_now;
+ 1090              		.loc 1 82 42 is_stmt 0 view .LVU281
+ 1091 00c0 0D4C     		ldr	r4, .L129
+ 1092 00c2 0123     		movs	r3, #1
+ 1093 00c4 2374     		strb	r3, [r4, #16]
+  83:User/System/control_system.c ****                     device.heater.tick = HAL_GetTick();
+ 1094              		.loc 1 83 21 is_stmt 1 view .LVU282
+  83:User/System/control_system.c ****                     device.heater.tick = HAL_GetTick();
+ 1095              		.loc 1 83 54 is_stmt 0 view .LVU283
+ 1096 00c6 236C     		ldr	r3, [r4, #64]	@ float
+  83:User/System/control_system.c ****                     device.heater.tick = HAL_GetTick();
+ 1097              		.loc 1 83 46 view .LVU284
+ 1098 00c8 6361     		str	r3, [r4, #20]	@ float
+  84:User/System/control_system.c ****                 }
+ 1099              		.loc 1 84 21 is_stmt 1 view .LVU285
+  84:User/System/control_system.c ****                 }
+ 1100              		.loc 1 84 42 is_stmt 0 view .LVU286
+ 1101 00ca FFF7FEFF 		bl	HAL_GetTick
+ 1102              	.LVL64:
+  84:User/System/control_system.c ****                 }
+ 1103              		.loc 1 84 40 view .LVU287
+ 1104 00ce A061     		str	r0, [r4, #24]
+ 1105 00d0 C1E7     		b	.L111
+ 1106              	.L126:
+ 104:User/System/control_system.c ****             Ctrl_System_Valve_Air(VALVE_HEAT);
+ 1107              		.loc 1 104 13 is_stmt 1 view .LVU288
+ 1108 00d2 0020     		movs	r0, #0
+ 1109 00d4 FFF7FEFF 		bl	Ctrl_System_Thermistor
+ 1110              	.LVL65:
+ 105:User/System/control_system.c ****             if(device.heater.status == 1)
+ 1111              		.loc 1 105 13 view .LVU289
+ 1112 00d8 0220     		movs	r0, #2
+ 1113 00da FFF7FEFF 		bl	Ctrl_System_Valve_Air
+ 1114              	.LVL66:
+ 106:User/System/control_system.c ****                 device.heater.status = 0;
+ARM GAS  /tmp/cc9uNECX.s 			page 29
+
+
+ 1115              		.loc 1 106 13 view .LVU290
+ 106:User/System/control_system.c ****                 device.heater.status = 0;
+ 1116              		.loc 1 106 29 is_stmt 0 view .LVU291
+ 1117 00de 064B     		ldr	r3, .L129
+ 1118 00e0 1B7C     		ldrb	r3, [r3, #16]	@ zero_extendqisi2
+ 106:User/System/control_system.c ****                 device.heater.status = 0;
+ 1119              		.loc 1 106 15 view .LVU292
+ 1120 00e2 012B     		cmp	r3, #1
+ 1121 00e4 04D0     		beq	.L128
+ 1122              	.L116:
+ 109:User/System/control_system.c ****         }
+ 1123              		.loc 1 109 13 is_stmt 1 view .LVU293
+ 109:User/System/control_system.c ****         }
+ 1124              		.loc 1 109 28 is_stmt 0 view .LVU294
+ 1125 00e6 FFF7FEFF 		bl	HAL_GetTick
+ 1126              	.LVL67:
+ 109:User/System/control_system.c ****         }
+ 1127              		.loc 1 109 26 view .LVU295
+ 1128 00ea 054B     		ldr	r3, .L129+8
+ 1129 00ec 1860     		str	r0, [r3]
+ 112:User/System/control_system.c **** 
+ 1130              		.loc 1 112 1 view .LVU296
+ 1131 00ee A3E7     		b	.L106
+ 1132              	.L128:
+ 107:User/System/control_system.c **** 
+ 1133              		.loc 1 107 17 is_stmt 1 view .LVU297
+ 107:User/System/control_system.c **** 
+ 1134              		.loc 1 107 38 is_stmt 0 view .LVU298
+ 1135 00f0 014B     		ldr	r3, .L129
+ 1136 00f2 0022     		movs	r2, #0
+ 1137 00f4 1A74     		strb	r2, [r3, #16]
+ 1138 00f6 F6E7     		b	.L116
+ 1139              	.L130:
+ 1140              		.align	2
+ 1141              	.L129:
+ 1142 00f8 00000000 		.word	.LANCHOR0
+ 1143 00fc 0000E041 		.word	1105199104
+ 1144 0100 00000000 		.word	.LANCHOR3
+ 1145 0104 80EE3600 		.word	3600000
+ 1146 0108 00004040 		.word	1077936128
+ 1147 010c 0000A0C0 		.word	-1063256064
+ 1148              		.cfi_endproc
+ 1149              	.LFE200:
+ 1151              		.section	.text.Ctrl_System_Light_Warning,"ax",%progbits
+ 1152              		.align	1
+ 1153              		.global	Ctrl_System_Light_Warning
+ 1154              		.syntax unified
+ 1155              		.thumb
+ 1156              		.thumb_func
+ 1157              		.fpu softvfp
+ 1159              	Ctrl_System_Light_Warning:
+ 1160              	.LFB209:
+ 307:User/System/control_system.c **** 
+ 308:User/System/control_system.c **** void Ctrl_System_Light_Warning(void)
+ 309:User/System/control_system.c **** {
+ 1161              		.loc 1 309 1 is_stmt 1 view -0
+ 1162              		.cfi_startproc
+ARM GAS  /tmp/cc9uNECX.s 			page 30
+
+
+ 1163              		@ args = 0, pretend = 0, frame = 0
+ 1164              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1165              		@ link register save eliminated.
+ 310:User/System/control_system.c ****     // Khi chay chuong trinh den xanh sang
+ 311:User/System/control_system.c ****     // Khi dung chuong trinh den do sang
+ 312:User/System/control_system.c ****     // khi co loi den vang sang
+ 313:User/System/control_system.c **** 
+ 314:User/System/control_system.c ****     if(device.active == ACTIVE_ON)
+ 1166              		.loc 1 314 5 view .LVU300
+ 1167              		.loc 1 314 14 is_stmt 0 view .LVU301
+ 1168 0000 144B     		ldr	r3, .L140
+ 1169 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1170              		.loc 1 314 7 view .LVU302
+ 1171 0004 012B     		cmp	r3, #1
+ 1172 0006 08D0     		beq	.L138
+ 315:User/System/control_system.c ****     {
+ 316:User/System/control_system.c ****         device.warning_green = 1;
+ 317:User/System/control_system.c ****         device.warning_red = 0;
+ 318:User/System/control_system.c ****     }
+ 319:User/System/control_system.c ****     else
+ 320:User/System/control_system.c ****     {
+ 321:User/System/control_system.c ****         device.warning_green = 0;
+ 1173              		.loc 1 321 9 is_stmt 1 view .LVU303
+ 1174              		.loc 1 321 30 is_stmt 0 view .LVU304
+ 1175 0008 124B     		ldr	r3, .L140
+ 1176 000a 0022     		movs	r2, #0
+ 1177 000c 83F83920 		strb	r2, [r3, #57]
+ 322:User/System/control_system.c ****         device.warning_red = 1;
+ 1178              		.loc 1 322 9 is_stmt 1 view .LVU305
+ 1179              		.loc 1 322 28 is_stmt 0 view .LVU306
+ 1180 0010 0122     		movs	r2, #1
+ 1181 0012 83F83820 		strb	r2, [r3, #56]
+ 1182              	.L134:
+ 309:User/System/control_system.c ****     // Khi chay chuong trinh den xanh sang
+ 1183              		.loc 1 309 1 discriminator 1 view .LVU307
+ 1184 0016 0023     		movs	r3, #0
+ 1185 0018 0CE0     		b	.L133
+ 1186              	.L138:
+ 316:User/System/control_system.c ****         device.warning_red = 0;
+ 1187              		.loc 1 316 9 is_stmt 1 view .LVU308
+ 316:User/System/control_system.c ****         device.warning_red = 0;
+ 1188              		.loc 1 316 30 is_stmt 0 view .LVU309
+ 1189 001a 0E4B     		ldr	r3, .L140
+ 1190 001c 0122     		movs	r2, #1
+ 1191 001e 83F83920 		strb	r2, [r3, #57]
+ 317:User/System/control_system.c ****     }
+ 1192              		.loc 1 317 9 is_stmt 1 view .LVU310
+ 317:User/System/control_system.c ****     }
+ 1193              		.loc 1 317 28 is_stmt 0 view .LVU311
+ 1194 0022 0022     		movs	r2, #0
+ 1195 0024 83F83820 		strb	r2, [r3, #56]
+ 1196 0028 F5E7     		b	.L134
+ 1197              	.LVL68:
+ 1198              	.L135:
+ 1199              	.LBB2:
+ 323:User/System/control_system.c ****     }
+ 324:User/System/control_system.c ****     for(int i = 0; i < 10; i++)
+ARM GAS  /tmp/cc9uNECX.s 			page 31
+
+
+ 325:User/System/control_system.c ****     {
+ 326:User/System/control_system.c ****         if(sht_list[i].state != 0)
+ 327:User/System/control_system.c ****         {
+ 328:User/System/control_system.c ****             device.warning_yellow = 1;
+ 329:User/System/control_system.c ****         }
+ 330:User/System/control_system.c ****         else{
+ 331:User/System/control_system.c ****             device.warning_yellow = 0;
+ 1200              		.loc 1 331 13 is_stmt 1 view .LVU312
+ 1201              		.loc 1 331 35 is_stmt 0 view .LVU313
+ 1202 002a 0A4A     		ldr	r2, .L140
+ 1203 002c 0021     		movs	r1, #0
+ 1204 002e 82F83A10 		strb	r1, [r2, #58]
+ 1205              	.L136:
+ 324:User/System/control_system.c ****     {
+ 1206              		.loc 1 324 28 is_stmt 1 discriminator 2 view .LVU314
+ 324:User/System/control_system.c ****     {
+ 1207              		.loc 1 324 29 is_stmt 0 discriminator 2 view .LVU315
+ 1208 0032 0133     		adds	r3, r3, #1
+ 1209              	.LVL69:
+ 1210              	.L133:
+ 324:User/System/control_system.c ****     {
+ 1211              		.loc 1 324 20 is_stmt 1 discriminator 1 view .LVU316
+ 324:User/System/control_system.c ****     {
+ 1212              		.loc 1 324 5 is_stmt 0 discriminator 1 view .LVU317
+ 1213 0034 092B     		cmp	r3, #9
+ 1214 0036 0CDC     		bgt	.L139
+ 326:User/System/control_system.c ****         {
+ 1215              		.loc 1 326 9 is_stmt 1 view .LVU318
+ 326:User/System/control_system.c ****         {
+ 1216              		.loc 1 326 23 is_stmt 0 view .LVU319
+ 1217 0038 C3EB0312 		rsb	r2, r3, r3, lsl #4
+ 1218 003c 9100     		lsls	r1, r2, #2
+ 1219 003e 064A     		ldr	r2, .L140+4
+ 1220 0040 0A44     		add	r2, r2, r1
+ 1221 0042 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 326:User/System/control_system.c ****         {
+ 1222              		.loc 1 326 11 view .LVU320
+ 1223 0044 002A     		cmp	r2, #0
+ 1224 0046 F0D0     		beq	.L135
+ 328:User/System/control_system.c ****         }
+ 1225              		.loc 1 328 13 is_stmt 1 view .LVU321
+ 328:User/System/control_system.c ****         }
+ 1226              		.loc 1 328 35 is_stmt 0 view .LVU322
+ 1227 0048 024A     		ldr	r2, .L140
+ 1228 004a 0121     		movs	r1, #1
+ 1229 004c 82F83A10 		strb	r1, [r2, #58]
+ 1230 0050 EFE7     		b	.L136
+ 1231              	.L139:
+ 1232              	.LBE2:
+ 332:User/System/control_system.c ****         }
+ 333:User/System/control_system.c ****     }
+ 334:User/System/control_system.c **** }
+ 1233              		.loc 1 334 1 view .LVU323
+ 1234 0052 7047     		bx	lr
+ 1235              	.L141:
+ 1236              		.align	2
+ 1237              	.L140:
+ARM GAS  /tmp/cc9uNECX.s 			page 32
+
+
+ 1238 0054 00000000 		.word	.LANCHOR0
+ 1239 0058 00000000 		.word	sht_list
+ 1240              		.cfi_endproc
+ 1241              	.LFE209:
+ 1243              		.section	.text.Ctrl_System_Turn_Off_All_Device,"ax",%progbits
+ 1244              		.align	1
+ 1245              		.global	Ctrl_System_Turn_Off_All_Device
+ 1246              		.syntax unified
+ 1247              		.thumb
+ 1248              		.thumb_func
+ 1249              		.fpu softvfp
+ 1251              	Ctrl_System_Turn_Off_All_Device:
+ 1252              	.LFB210:
+ 335:User/System/control_system.c **** 
+ 336:User/System/control_system.c **** void Ctrl_System_Turn_Off_All_Device(void)
+ 337:User/System/control_system.c **** {
+ 1253              		.loc 1 337 1 is_stmt 1 view -0
+ 1254              		.cfi_startproc
+ 1255              		@ args = 0, pretend = 0, frame = 0
+ 1256              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1257 0000 08B5     		push	{r3, lr}
+ 1258              	.LCFI8:
+ 1259              		.cfi_def_cfa_offset 8
+ 1260              		.cfi_offset 3, -8
+ 1261              		.cfi_offset 14, -4
+ 338:User/System/control_system.c ****     Ctrl_System_Turn_Off_Daikin();
+ 1262              		.loc 1 338 5 view .LVU325
+ 1263 0002 FFF7FEFF 		bl	Ctrl_System_Turn_Off_Daikin
+ 1264              	.LVL70:
+ 339:User/System/control_system.c ****     Ctrl_System_Thermistor(THERMISTOR_ALL_OFF);
+ 1265              		.loc 1 339 5 view .LVU326
+ 1266 0006 0020     		movs	r0, #0
+ 1267 0008 FFF7FEFF 		bl	Ctrl_System_Thermistor
+ 1268              	.LVL71:
+ 340:User/System/control_system.c ****     Ctrl_System_Valve_Air(VALVE_OFF);
+ 1269              		.loc 1 340 5 view .LVU327
+ 1270 000c 0020     		movs	r0, #0
+ 1271 000e FFF7FEFF 		bl	Ctrl_System_Valve_Air
+ 1272              	.LVL72:
+ 341:User/System/control_system.c ****     device.humidify.stt_rl = device.humidify.status = 0;
+ 1273              		.loc 1 341 5 view .LVU328
+ 1274              		.loc 1 341 53 is_stmt 0 view .LVU329
+ 1275 0012 064B     		ldr	r3, .L144
+ 1276 0014 0022     		movs	r2, #0
+ 1277 0016 83F82820 		strb	r2, [r3, #40]
+ 1278              		.loc 1 341 28 view .LVU330
+ 1279 001a 83F82920 		strb	r2, [r3, #41]
+ 342:User/System/control_system.c ****     device.moise.stt_rl = device.moise.status = 0;
+ 1280              		.loc 1 342 5 is_stmt 1 view .LVU331
+ 1281              		.loc 1 342 47 is_stmt 0 view .LVU332
+ 1282 001e 1A77     		strb	r2, [r3, #28]
+ 1283              		.loc 1 342 25 view .LVU333
+ 1284 0020 5A77     		strb	r2, [r3, #29]
+ 343:User/System/control_system.c ****     device.door = 0;
+ 1285              		.loc 1 343 5 is_stmt 1 view .LVU334
+ 1286              		.loc 1 343 17 is_stmt 0 view .LVU335
+ 1287 0022 83F83E20 		strb	r2, [r3, #62]
+ARM GAS  /tmp/cc9uNECX.s 			page 33
+
+
+ 344:User/System/control_system.c ****     device.cooler.status = 0;
+ 1288              		.loc 1 344 5 is_stmt 1 view .LVU336
+ 1289              		.loc 1 344 26 is_stmt 0 view .LVU337
+ 1290 0026 1A71     		strb	r2, [r3, #4]
+ 345:User/System/control_system.c **** }
+ 1291              		.loc 1 345 1 view .LVU338
+ 1292 0028 08BD     		pop	{r3, pc}
+ 1293              	.L145:
+ 1294 002a 00BF     		.align	2
+ 1295              	.L144:
+ 1296 002c 00000000 		.word	.LANCHOR0
+ 1297              		.cfi_endproc
+ 1298              	.LFE210:
+ 1300              		.section	.text.Ctrl_System_Init_Load,"ax",%progbits
+ 1301              		.align	1
+ 1302              		.global	Ctrl_System_Init_Load
+ 1303              		.syntax unified
+ 1304              		.thumb
+ 1305              		.thumb_func
+ 1306              		.fpu softvfp
+ 1308              	Ctrl_System_Init_Load:
+ 1309              	.LFB197:
+  29:User/System/control_system.c ****     device.light = 1;                       // den luan luan bat
+ 1310              		.loc 1 29 33 is_stmt 1 view -0
+ 1311              		.cfi_startproc
+ 1312              		@ args = 0, pretend = 0, frame = 0
+ 1313              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1314 0000 08B5     		push	{r3, lr}
+ 1315              	.LCFI9:
+ 1316              		.cfi_def_cfa_offset 8
+ 1317              		.cfi_offset 3, -8
+ 1318              		.cfi_offset 14, -4
+  30:User/System/control_system.c ****     SHT_Init_Load();
+ 1319              		.loc 1 30 5 view .LVU340
+  30:User/System/control_system.c ****     SHT_Init_Load();
+ 1320              		.loc 1 30 18 is_stmt 0 view .LVU341
+ 1321 0002 044B     		ldr	r3, .L148
+ 1322 0004 0122     		movs	r2, #1
+ 1323 0006 83F83720 		strb	r2, [r3, #55]
+  31:User/System/control_system.c ****     Ctrl_System_Turn_Off_All_Device();
+ 1324              		.loc 1 31 5 is_stmt 1 view .LVU342
+ 1325 000a FFF7FEFF 		bl	SHT_Init_Load
+ 1326              	.LVL73:
+  32:User/System/control_system.c **** }
+ 1327              		.loc 1 32 5 view .LVU343
+ 1328 000e FFF7FEFF 		bl	Ctrl_System_Turn_Off_All_Device
+ 1329              	.LVL74:
+  33:User/System/control_system.c **** 
+ 1330              		.loc 1 33 1 is_stmt 0 view .LVU344
+ 1331 0012 08BD     		pop	{r3, pc}
+ 1332              	.L149:
+ 1333              		.align	2
+ 1334              	.L148:
+ 1335 0014 00000000 		.word	.LANCHOR0
+ 1336              		.cfi_endproc
+ 1337              	.LFE197:
+ 1339              		.section	.text.Ctrl_System_Device_Manage,"ax",%progbits
+ARM GAS  /tmp/cc9uNECX.s 			page 34
+
+
+ 1340              		.align	1
+ 1341              		.global	Ctrl_System_Device_Manage
+ 1342              		.syntax unified
+ 1343              		.thumb
+ 1344              		.thumb_func
+ 1345              		.fpu softvfp
+ 1347              	Ctrl_System_Device_Manage:
+ 1348              	.LFB198:
+  36:User/System/control_system.c ****     Ctrl_System_Light_Warning();
+ 1349              		.loc 1 36 1 is_stmt 1 view -0
+ 1350              		.cfi_startproc
+ 1351              		@ args = 0, pretend = 0, frame = 0
+ 1352              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1353 0000 08B5     		push	{r3, lr}
+ 1354              	.LCFI10:
+ 1355              		.cfi_def_cfa_offset 8
+ 1356              		.cfi_offset 3, -8
+ 1357              		.cfi_offset 14, -4
+  37:User/System/control_system.c ****     Modbus_Refesh_Regs();
+ 1358              		.loc 1 37 5 view .LVU346
+ 1359 0002 FFF7FEFF 		bl	Ctrl_System_Light_Warning
+ 1360              	.LVL75:
+  38:User/System/control_system.c ****     if(device.active == ACTIVE_ON)
+ 1361              		.loc 1 38 5 view .LVU347
+ 1362 0006 FFF7FEFF 		bl	Modbus_Refesh_Regs
+ 1363              	.LVL76:
+  39:User/System/control_system.c ****     {
+ 1364              		.loc 1 39 5 view .LVU348
+  39:User/System/control_system.c ****     {
+ 1365              		.loc 1 39 14 is_stmt 0 view .LVU349
+ 1366 000a 084B     		ldr	r3, .L155
+ 1367 000c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  39:User/System/control_system.c ****     {
+ 1368              		.loc 1 39 7 view .LVU350
+ 1369 000e 012B     		cmp	r3, #1
+ 1370 0010 02D0     		beq	.L154
+  48:User/System/control_system.c ****     }
+ 1371              		.loc 1 48 9 is_stmt 1 view .LVU351
+ 1372 0012 FFF7FEFF 		bl	Ctrl_System_Turn_Off_All_Device
+ 1373              	.LVL77:
+ 1374              	.L150:
+  50:User/System/control_system.c **** 
+ 1375              		.loc 1 50 1 is_stmt 0 view .LVU352
+ 1376 0016 08BD     		pop	{r3, pc}
+ 1377              	.L154:
+  41:User/System/control_system.c ****         Ctrl_System_Heater();
+ 1378              		.loc 1 41 9 is_stmt 1 view .LVU353
+ 1379 0018 FFF7FEFF 		bl	Ctrl_System_Cooler
+ 1380              	.LVL78:
+  42:User/System/control_system.c ****         Ctrl_System_Moise();
+ 1381              		.loc 1 42 9 view .LVU354
+ 1382 001c FFF7FEFF 		bl	Ctrl_System_Heater
+ 1383              	.LVL79:
+  43:User/System/control_system.c ****         Ctrl_System_Humidify();
+ 1384              		.loc 1 43 9 view .LVU355
+ 1385 0020 FFF7FEFF 		bl	Ctrl_System_Moise
+ 1386              	.LVL80:
+ARM GAS  /tmp/cc9uNECX.s 			page 35
+
+
+  44:User/System/control_system.c ****     }
+ 1387              		.loc 1 44 9 view .LVU356
+ 1388 0024 FFF7FEFF 		bl	Ctrl_System_Humidify
+ 1389              	.LVL81:
+ 1390 0028 F5E7     		b	.L150
+ 1391              	.L156:
+ 1392 002a 00BF     		.align	2
+ 1393              	.L155:
+ 1394 002c 00000000 		.word	.LANCHOR0
+ 1395              		.cfi_endproc
+ 1396              	.LFE198:
+ 1398              		.global	thermis_tick
+ 1399              		.global	moise_tick
+ 1400              		.global	humidify_tick
+ 1401              		.global	device
+ 1402              		.section	.bss.device,"aw",%nobits
+ 1403              		.align	2
+ 1404              		.set	.LANCHOR0,. + 0
+ 1407              	device:
+ 1408 0000 00000000 		.space	80
+ 1408      00000000 
+ 1408      00000000 
+ 1408      00000000 
+ 1408      00000000 
+ 1409              		.section	.bss.humidify_tick,"aw",%nobits
+ 1410              		.align	2
+ 1411              		.set	.LANCHOR2,. + 0
+ 1414              	humidify_tick:
+ 1415 0000 00000000 		.space	4
+ 1416              		.section	.bss.moise_tick,"aw",%nobits
+ 1417              		.align	2
+ 1418              		.set	.LANCHOR1,. + 0
+ 1421              	moise_tick:
+ 1422 0000 00000000 		.space	4
+ 1423              		.section	.bss.thermis_tick,"aw",%nobits
+ 1424              		.align	2
+ 1425              		.set	.LANCHOR3,. + 0
+ 1428              	thermis_tick:
+ 1429 0000 00000000 		.space	4
+ 1430              		.text
+ 1431              	.Letext0:
+ 1432              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 1433              		.file 3 "User/System/control_system.h"
+ 1434              		.file 4 "User/Peripherals/sht_sensor.h"
+ 1435              		.file 5 "Inc/stm32f1xx_hal.h"
+ 1436              		.file 6 "User/Modbus/modbus_data.h"
+ARM GAS  /tmp/cc9uNECX.s 			page 36
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 control_system.c
+     /tmp/cc9uNECX.s:19     .text.Ctrl_System_Moise:0000000000000000 $t
+     /tmp/cc9uNECX.s:27     .text.Ctrl_System_Moise:0000000000000000 Ctrl_System_Moise
+     /tmp/cc9uNECX.s:200    .text.Ctrl_System_Moise:00000000000000d0 $d
+     /tmp/cc9uNECX.s:211    .text.Ctrl_System_Humidify:0000000000000000 $t
+     /tmp/cc9uNECX.s:218    .text.Ctrl_System_Humidify:0000000000000000 Ctrl_System_Humidify
+     /tmp/cc9uNECX.s:386    .text.Ctrl_System_Humidify:00000000000000d8 $d
+     /tmp/cc9uNECX.s:396    .text.Ctrl_System_Turn_On_Daikin:0000000000000000 $t
+     /tmp/cc9uNECX.s:403    .text.Ctrl_System_Turn_On_Daikin:0000000000000000 Ctrl_System_Turn_On_Daikin
+     /tmp/cc9uNECX.s:516    .text.Ctrl_System_Turn_On_Daikin:0000000000000080 $d
+     /tmp/cc9uNECX.s:524    .text.Ctrl_System_Turn_Off_Daikin:0000000000000000 $t
+     /tmp/cc9uNECX.s:531    .text.Ctrl_System_Turn_Off_Daikin:0000000000000000 Ctrl_System_Turn_Off_Daikin
+     /tmp/cc9uNECX.s:573    .text.Ctrl_System_Turn_Off_Daikin:0000000000000024 $d
+     /tmp/cc9uNECX.s:578    .text.Ctrl_System_Daikin_Set_Temp:0000000000000000 $t
+     /tmp/cc9uNECX.s:585    .text.Ctrl_System_Daikin_Set_Temp:0000000000000000 Ctrl_System_Daikin_Set_Temp
+     /tmp/cc9uNECX.s:641    .text.Ctrl_System_Daikin_Set_Temp:0000000000000030 $d
+     /tmp/cc9uNECX.s:646    .text.Ctrl_System_Valve_Air:0000000000000000 $t
+     /tmp/cc9uNECX.s:653    .text.Ctrl_System_Valve_Air:0000000000000000 Ctrl_System_Valve_Air
+     /tmp/cc9uNECX.s:718    .text.Ctrl_System_Valve_Air:0000000000000048 $d
+     /tmp/cc9uNECX.s:723    .text.Ctrl_System_Thermistor:0000000000000000 $t
+     /tmp/cc9uNECX.s:730    .text.Ctrl_System_Thermistor:0000000000000000 Ctrl_System_Thermistor
+     /tmp/cc9uNECX.s:743    .text.Ctrl_System_Thermistor:0000000000000008 $d
+     /tmp/cc9uNECX.s:747    .text.Ctrl_System_Thermistor:000000000000000c $t
+     /tmp/cc9uNECX.s:811    .text.Ctrl_System_Thermistor:0000000000000058 $d
+     /tmp/cc9uNECX.s:817    .text.Ctrl_System_Cooler:0000000000000000 $t
+     /tmp/cc9uNECX.s:824    .text.Ctrl_System_Cooler:0000000000000000 Ctrl_System_Cooler
+     /tmp/cc9uNECX.s:871    .text.Ctrl_System_Cooler:0000000000000030 $d
+     /tmp/cc9uNECX.s:877    .text.Ctrl_System_Waning_Temp_High:0000000000000000 $t
+     /tmp/cc9uNECX.s:884    .text.Ctrl_System_Waning_Temp_High:0000000000000000 Ctrl_System_Waning_Temp_High
+     /tmp/cc9uNECX.s:926    .text.Ctrl_System_Waning_Temp_High:000000000000002c $d
+     /tmp/cc9uNECX.s:932    .text.Ctrl_System_Heater:0000000000000000 $t
+     /tmp/cc9uNECX.s:939    .text.Ctrl_System_Heater:0000000000000000 Ctrl_System_Heater
+     /tmp/cc9uNECX.s:1142   .text.Ctrl_System_Heater:00000000000000f8 $d
+     /tmp/cc9uNECX.s:1152   .text.Ctrl_System_Light_Warning:0000000000000000 $t
+     /tmp/cc9uNECX.s:1159   .text.Ctrl_System_Light_Warning:0000000000000000 Ctrl_System_Light_Warning
+     /tmp/cc9uNECX.s:1238   .text.Ctrl_System_Light_Warning:0000000000000054 $d
+     /tmp/cc9uNECX.s:1244   .text.Ctrl_System_Turn_Off_All_Device:0000000000000000 $t
+     /tmp/cc9uNECX.s:1251   .text.Ctrl_System_Turn_Off_All_Device:0000000000000000 Ctrl_System_Turn_Off_All_Device
+     /tmp/cc9uNECX.s:1296   .text.Ctrl_System_Turn_Off_All_Device:000000000000002c $d
+     /tmp/cc9uNECX.s:1301   .text.Ctrl_System_Init_Load:0000000000000000 $t
+     /tmp/cc9uNECX.s:1308   .text.Ctrl_System_Init_Load:0000000000000000 Ctrl_System_Init_Load
+     /tmp/cc9uNECX.s:1335   .text.Ctrl_System_Init_Load:0000000000000014 $d
+     /tmp/cc9uNECX.s:1340   .text.Ctrl_System_Device_Manage:0000000000000000 $t
+     /tmp/cc9uNECX.s:1347   .text.Ctrl_System_Device_Manage:0000000000000000 Ctrl_System_Device_Manage
+     /tmp/cc9uNECX.s:1394   .text.Ctrl_System_Device_Manage:000000000000002c $d
+     /tmp/cc9uNECX.s:1428   .bss.thermis_tick:0000000000000000 thermis_tick
+     /tmp/cc9uNECX.s:1421   .bss.moise_tick:0000000000000000 moise_tick
+     /tmp/cc9uNECX.s:1414   .bss.humidify_tick:0000000000000000 humidify_tick
+     /tmp/cc9uNECX.s:1407   .bss.device:0000000000000000 device
+     /tmp/cc9uNECX.s:1403   .bss.device:0000000000000000 $d
+     /tmp/cc9uNECX.s:1410   .bss.humidify_tick:0000000000000000 $d
+     /tmp/cc9uNECX.s:1417   .bss.moise_tick:0000000000000000 $d
+     /tmp/cc9uNECX.s:1424   .bss.thermis_tick:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_fsub
+ARM GAS  /tmp/cc9uNECX.s 			page 37
+
+
+__aeabi_fcmplt
+__aeabi_fcmpgt
+HAL_GetTick
+__aeabi_fadd
+__aeabi_fcmple
+HAL_Delay
+Modbus_Uart2_Write_Single_Reg
+__aeabi_f2uiz
+sht_list
+SHT_Init_Load
+Modbus_Refesh_Regs

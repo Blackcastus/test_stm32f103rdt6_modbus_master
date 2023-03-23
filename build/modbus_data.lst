@@ -1,0 +1,1235 @@
+ARM GAS  /tmp/ccO6LuPD.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"modbus_data.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.Modbus_Uart2_Process,"ax",%progbits
+  16              		.align	1
+  17              		.global	Modbus_Uart2_Process
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	Modbus_Uart2_Process:
+  25              	.LFB197:
+  26              		.file 1 "User/Modbus/modbus_data.c"
+   1:User/Modbus/modbus_data.c **** #include "modbus_data.h"
+   2:User/Modbus/modbus_data.c **** #include "modbus_crc.h"
+   3:User/Modbus/modbus_data.c **** #include "usart.h"
+   4:User/Modbus/modbus_data.c **** #include "config.h"
+   5:User/Modbus/modbus_data.c **** #include "sht_sensor.h"
+   6:User/Modbus/modbus_data.c **** #include "control_system.h"
+   7:User/Modbus/modbus_data.c **** 
+   8:User/Modbus/modbus_data.c **** 
+   9:User/Modbus/modbus_data.c **** extern DEVICE_t device;
+  10:User/Modbus/modbus_data.c **** 
+  11:User/Modbus/modbus_data.c **** 
+  12:User/Modbus/modbus_data.c **** // Modbus Register
+  13:User/Modbus/modbus_data.c **** uint16_t modbus_holding_buf[NoB_HOLDING_REGISTER] = {0},
+  14:User/Modbus/modbus_data.c **** 		modbus_input_buf[NoB_INPUT_REGISTER] = {0};
+  15:User/Modbus/modbus_data.c **** // UART
+  16:User/Modbus/modbus_data.c **** extern DMA_Event_t      dma_uart2_rx;
+  17:User/Modbus/modbus_data.c **** 
+  18:User/Modbus/modbus_data.c **** 
+  19:User/Modbus/modbus_data.c **** void Modbus_Uart2_Process(void)
+  20:User/Modbus/modbus_data.c **** {
+  27              		.loc 1 20 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 08B5     		push	{r3, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 3, -8
+  35              		.cfi_offset 14, -4
+  21:User/Modbus/modbus_data.c ****     // Modbus_Refesh_Regs();
+  22:User/Modbus/modbus_data.c ****     /* code */
+  23:User/Modbus/modbus_data.c ****     if (dma_uart2_rx.state) // da nhan xong frame modbus => xu ly
+ARM GAS  /tmp/ccO6LuPD.s 			page 2
+
+
+  36              		.loc 1 23 5 view .LVU1
+  37              		.loc 1 23 21 is_stmt 0 view .LVU2
+  38 0002 1D4B     		ldr	r3, .L8
+  39 0004 93F80134 		ldrb	r3, [r3, #1025]	@ zero_extendqisi2
+  40              		.loc 1 23 8 view .LVU3
+  41 0008 03B9     		cbnz	r3, .L7
+  42              	.L1:
+  24:User/Modbus/modbus_data.c ****     {
+  25:User/Modbus/modbus_data.c ****         if (Modbus_Check_Crc16(dma_uart2_rx.data, dma_uart2_rx.length))
+  26:User/Modbus/modbus_data.c ****         {
+  27:User/Modbus/modbus_data.c ****             switch (dma_uart2_rx.data[1])       // Kiem tra Function code         
+  28:User/Modbus/modbus_data.c ****             {
+  29:User/Modbus/modbus_data.c ****                 case R_HOLD_REGS:
+  30:User/Modbus/modbus_data.c ****                     if (dma_uart2_rx.data[0] == 11)     // Daikin
+  31:User/Modbus/modbus_data.c ****                     {
+  32:User/Modbus/modbus_data.c **** 
+  33:User/Modbus/modbus_data.c ****                     } else {
+  34:User/Modbus/modbus_data.c ****                         // Cam bien SHT
+  35:User/Modbus/modbus_data.c ****                         SHT_Get_Value(dma_uart2_rx.data[0]-1, (dma_uart2_rx.data[3]<<8) + dma_uart2
+  36:User/Modbus/modbus_data.c ****                             (dma_uart2_rx.data[5]<<8) + dma_uart2_rx.data[6]);
+  37:User/Modbus/modbus_data.c ****                     }
+  38:User/Modbus/modbus_data.c ****                     break;
+  39:User/Modbus/modbus_data.c **** 
+  40:User/Modbus/modbus_data.c ****                 case W_SINGLE_REG:
+  41:User/Modbus/modbus_data.c ****                     // printf("daikin\n");
+  42:User/Modbus/modbus_data.c ****                     if (dma_uart2_rx.data[0] == 11)     // Daikin
+  43:User/Modbus/modbus_data.c ****                     {
+  44:User/Modbus/modbus_data.c **** 
+  45:User/Modbus/modbus_data.c ****                         if (dma_uart2_rx.data[3] == 5)
+  46:User/Modbus/modbus_data.c ****                         {
+  47:User/Modbus/modbus_data.c ****                             device.cooler.status = dma_uart2_rx.data[5];
+  48:User/Modbus/modbus_data.c ****                         } 
+  49:User/Modbus/modbus_data.c ****                     }
+  50:User/Modbus/modbus_data.c ****                     break;
+  51:User/Modbus/modbus_data.c **** 
+  52:User/Modbus/modbus_data.c ****                 
+  53:User/Modbus/modbus_data.c ****                 default:
+  54:User/Modbus/modbus_data.c ****                     break;
+  55:User/Modbus/modbus_data.c ****             }
+  56:User/Modbus/modbus_data.c ****         }
+  57:User/Modbus/modbus_data.c ****         
+  58:User/Modbus/modbus_data.c ****         /* Reset */
+  59:User/Modbus/modbus_data.c ****         dma_uart2_rx.state = 0;
+  60:User/Modbus/modbus_data.c ****         dma_uart2_rx.length = 0;
+  61:User/Modbus/modbus_data.c ****     }
+  62:User/Modbus/modbus_data.c ****     
+  63:User/Modbus/modbus_data.c **** }
+  43              		.loc 1 63 1 view .LVU4
+  44 000a 08BD     		pop	{r3, pc}
+  45              	.L7:
+  25:User/Modbus/modbus_data.c ****         {
+  46              		.loc 1 25 9 is_stmt 1 view .LVU5
+  25:User/Modbus/modbus_data.c ****         {
+  47              		.loc 1 25 13 is_stmt 0 view .LVU6
+  48 000c 1A48     		ldr	r0, .L8
+  49 000e B0F80214 		ldrh	r1, [r0, #1026]
+  50 0012 0130     		adds	r0, r0, #1
+ARM GAS  /tmp/ccO6LuPD.s 			page 3
+
+
+  51 0014 FFF7FEFF 		bl	Modbus_Check_Crc16
+  52              	.LVL0:
+  25:User/Modbus/modbus_data.c ****         {
+  53              		.loc 1 25 12 view .LVU7
+  54 0018 28B1     		cbz	r0, .L3
+  27:User/Modbus/modbus_data.c ****             {
+  55              		.loc 1 27 13 is_stmt 1 view .LVU8
+  27:User/Modbus/modbus_data.c ****             {
+  56              		.loc 1 27 38 is_stmt 0 view .LVU9
+  57 001a 174B     		ldr	r3, .L8
+  58 001c 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+  27:User/Modbus/modbus_data.c ****             {
+  59              		.loc 1 27 13 view .LVU10
+  60 001e 032B     		cmp	r3, #3
+  61 0020 08D0     		beq	.L4
+  62 0022 062B     		cmp	r3, #6
+  63 0024 1BD0     		beq	.L5
+  64              	.L3:
+  59:User/Modbus/modbus_data.c ****         dma_uart2_rx.length = 0;
+  65              		.loc 1 59 9 is_stmt 1 view .LVU11
+  59:User/Modbus/modbus_data.c ****         dma_uart2_rx.length = 0;
+  66              		.loc 1 59 28 is_stmt 0 view .LVU12
+  67 0026 144B     		ldr	r3, .L8
+  68 0028 0022     		movs	r2, #0
+  69 002a 83F80124 		strb	r2, [r3, #1025]
+  60:User/Modbus/modbus_data.c ****     }
+  70              		.loc 1 60 9 is_stmt 1 view .LVU13
+  60:User/Modbus/modbus_data.c ****     }
+  71              		.loc 1 60 29 is_stmt 0 view .LVU14
+  72 002e A3F80224 		strh	r2, [r3, #1026]	@ movhi
+  73              		.loc 1 63 1 view .LVU15
+  74 0032 EAE7     		b	.L1
+  75              	.L4:
+  30:User/Modbus/modbus_data.c ****                     {
+  76              		.loc 1 30 21 is_stmt 1 view .LVU16
+  30:User/Modbus/modbus_data.c ****                     {
+  77              		.loc 1 30 42 is_stmt 0 view .LVU17
+  78 0034 104B     		ldr	r3, .L8
+  79 0036 5878     		ldrb	r0, [r3, #1]	@ zero_extendqisi2
+  30:User/Modbus/modbus_data.c ****                     {
+  80              		.loc 1 30 24 view .LVU18
+  81 0038 0B28     		cmp	r0, #11
+  82 003a F4D0     		beq	.L3
+  35:User/Modbus/modbus_data.c ****                             (dma_uart2_rx.data[5]<<8) + dma_uart2_rx.data[6]);
+  83              		.loc 1 35 25 is_stmt 1 view .LVU19
+  35:User/Modbus/modbus_data.c ****                             (dma_uart2_rx.data[5]<<8) + dma_uart2_rx.data[6]);
+  84              		.loc 1 35 81 is_stmt 0 view .LVU20
+  85 003c 93F804C0 		ldrb	ip, [r3, #4]	@ zero_extendqisi2
+  35:User/Modbus/modbus_data.c ****                             (dma_uart2_rx.data[5]<<8) + dma_uart2_rx.data[6]);
+  86              		.loc 1 35 108 view .LVU21
+  87 0040 5979     		ldrb	r1, [r3, #5]	@ zero_extendqisi2
+  36:User/Modbus/modbus_data.c ****                     }
+  88              		.loc 1 36 47 view .LVU22
+  89 0042 93F806E0 		ldrb	lr, [r3, #6]	@ zero_extendqisi2
+  36:User/Modbus/modbus_data.c ****                     }
+  90              		.loc 1 36 74 view .LVU23
+  91 0046 DA79     		ldrb	r2, [r3, #7]	@ zero_extendqisi2
+ARM GAS  /tmp/ccO6LuPD.s 			page 4
+
+
+  35:User/Modbus/modbus_data.c ****                             (dma_uart2_rx.data[5]<<8) + dma_uart2_rx.data[6]);
+  92              		.loc 1 35 25 view .LVU24
+  93 0048 02EB0E22 		add	r2, r2, lr, lsl #8
+  94 004c 01EB0C21 		add	r1, r1, ip, lsl #8
+  95 0050 0138     		subs	r0, r0, #1
+  96 0052 92B2     		uxth	r2, r2
+  97 0054 89B2     		uxth	r1, r1
+  98 0056 C0B2     		uxtb	r0, r0
+  99 0058 FFF7FEFF 		bl	SHT_Get_Value
+ 100              	.LVL1:
+ 101 005c E3E7     		b	.L3
+ 102              	.L5:
+  42:User/Modbus/modbus_data.c ****                     {
+ 103              		.loc 1 42 21 is_stmt 1 view .LVU25
+  42:User/Modbus/modbus_data.c ****                     {
+ 104              		.loc 1 42 42 is_stmt 0 view .LVU26
+ 105 005e 064B     		ldr	r3, .L8
+ 106 0060 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+  42:User/Modbus/modbus_data.c ****                     {
+ 107              		.loc 1 42 24 view .LVU27
+ 108 0062 0B2B     		cmp	r3, #11
+ 109 0064 DFD1     		bne	.L3
+  45:User/Modbus/modbus_data.c ****                         {
+ 110              		.loc 1 45 25 is_stmt 1 view .LVU28
+  45:User/Modbus/modbus_data.c ****                         {
+ 111              		.loc 1 45 46 is_stmt 0 view .LVU29
+ 112 0066 044B     		ldr	r3, .L8
+ 113 0068 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+  45:User/Modbus/modbus_data.c ****                         {
+ 114              		.loc 1 45 28 view .LVU30
+ 115 006a 052B     		cmp	r3, #5
+ 116 006c DBD1     		bne	.L3
+  47:User/Modbus/modbus_data.c ****                         } 
+ 117              		.loc 1 47 29 is_stmt 1 view .LVU31
+  47:User/Modbus/modbus_data.c ****                         } 
+ 118              		.loc 1 47 69 is_stmt 0 view .LVU32
+ 119 006e 024B     		ldr	r3, .L8
+ 120 0070 9A79     		ldrb	r2, [r3, #6]	@ zero_extendqisi2
+  47:User/Modbus/modbus_data.c ****                         } 
+ 121              		.loc 1 47 50 view .LVU33
+ 122 0072 024B     		ldr	r3, .L8+4
+ 123 0074 1A71     		strb	r2, [r3, #4]
+ 124 0076 D6E7     		b	.L3
+ 125              	.L9:
+ 126              		.align	2
+ 127              	.L8:
+ 128 0078 00000000 		.word	dma_uart2_rx
+ 129 007c 00000000 		.word	device
+ 130              		.cfi_endproc
+ 131              	.LFE197:
+ 133              		.section	.text.Modbus_Uart2_Write_Single_Reg,"ax",%progbits
+ 134              		.align	1
+ 135              		.global	Modbus_Uart2_Write_Single_Reg
+ 136              		.syntax unified
+ 137              		.thumb
+ 138              		.thumb_func
+ 139              		.fpu softvfp
+ARM GAS  /tmp/ccO6LuPD.s 			page 5
+
+
+ 141              	Modbus_Uart2_Write_Single_Reg:
+ 142              	.LVL2:
+ 143              	.LFB198:
+  64:User/Modbus/modbus_data.c **** 
+  65:User/Modbus/modbus_data.c **** // Ghi gia tri toi 1 thanh ghi
+  66:User/Modbus/modbus_data.c **** void Modbus_Uart2_Write_Single_Reg(uint8_t id, uint16_t reg, uint16_t value)
+  67:User/Modbus/modbus_data.c **** {
+ 144              		.loc 1 67 1 is_stmt 1 view -0
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 8
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              		.loc 1 67 1 is_stmt 0 view .LVU35
+ 149 0000 00B5     		push	{lr}
+ 150              	.LCFI1:
+ 151              		.cfi_def_cfa_offset 4
+ 152              		.cfi_offset 14, -4
+ 153 0002 83B0     		sub	sp, sp, #12
+ 154              	.LCFI2:
+ 155              		.cfi_def_cfa_offset 16
+  68:User/Modbus/modbus_data.c ****     uint8_t payload[8] = {id, W_SINGLE_REG, reg<<8, reg, value<<8, value};
+ 156              		.loc 1 68 5 is_stmt 1 view .LVU36
+ 157              		.loc 1 68 13 is_stmt 0 view .LVU37
+ 158 0004 0023     		movs	r3, #0
+ 159 0006 0093     		str	r3, [sp]
+ 160 0008 0193     		str	r3, [sp, #4]
+ 161 000a 8DF80000 		strb	r0, [sp]
+ 162 000e 0623     		movs	r3, #6
+ 163 0010 8DF80130 		strb	r3, [sp, #1]
+ 164 0014 8DF80310 		strb	r1, [sp, #3]
+ 165 0018 8DF80520 		strb	r2, [sp, #5]
+  69:User/Modbus/modbus_data.c ****     uint16_t i = Modbus_Create_Crc16(payload, 6);
+ 166              		.loc 1 69 5 is_stmt 1 view .LVU38
+ 167              		.loc 1 69 18 is_stmt 0 view .LVU39
+ 168 001c 1946     		mov	r1, r3
+ 169              	.LVL3:
+ 170              		.loc 1 69 18 view .LVU40
+ 171 001e 6846     		mov	r0, sp
+ 172              	.LVL4:
+ 173              		.loc 1 69 18 view .LVU41
+ 174 0020 FFF7FEFF 		bl	Modbus_Create_Crc16
+ 175              	.LVL5:
+  70:User/Modbus/modbus_data.c ****     payload[6] = (uint8_t)i;
+ 176              		.loc 1 70 5 is_stmt 1 view .LVU42
+ 177              		.loc 1 70 16 is_stmt 0 view .LVU43
+ 178 0024 8DF80600 		strb	r0, [sp, #6]
+  71:User/Modbus/modbus_data.c ****     payload[7] = (uint8_t)(i>>8);
+ 179              		.loc 1 71 5 is_stmt 1 view .LVU44
+ 180              		.loc 1 71 18 is_stmt 0 view .LVU45
+ 181 0028 C0F30720 		ubfx	r0, r0, #8, #8
+ 182              	.LVL6:
+ 183              		.loc 1 71 16 view .LVU46
+ 184 002c 8DF80700 		strb	r0, [sp, #7]
+  72:User/Modbus/modbus_data.c ****     Uart2_Send_Data(payload, 8);
+ 185              		.loc 1 72 5 is_stmt 1 view .LVU47
+ 186 0030 0821     		movs	r1, #8
+ 187 0032 6846     		mov	r0, sp
+ 188 0034 FFF7FEFF 		bl	Uart2_Send_Data
+ARM GAS  /tmp/ccO6LuPD.s 			page 6
+
+
+ 189              	.LVL7:
+  73:User/Modbus/modbus_data.c ****     HAL_Delay(100);
+ 190              		.loc 1 73 5 view .LVU48
+ 191 0038 6420     		movs	r0, #100
+ 192 003a FFF7FEFF 		bl	HAL_Delay
+ 193              	.LVL8:
+  74:User/Modbus/modbus_data.c **** }
+ 194              		.loc 1 74 1 is_stmt 0 view .LVU49
+ 195 003e 03B0     		add	sp, sp, #12
+ 196              	.LCFI3:
+ 197              		.cfi_def_cfa_offset 4
+ 198              		@ sp needed
+ 199 0040 5DF804FB 		ldr	pc, [sp], #4
+ 200              		.cfi_endproc
+ 201              	.LFE198:
+ 203              		.section	.text.Modbus_Uart2_Read_Regs,"ax",%progbits
+ 204              		.align	1
+ 205              		.global	Modbus_Uart2_Read_Regs
+ 206              		.syntax unified
+ 207              		.thumb
+ 208              		.thumb_func
+ 209              		.fpu softvfp
+ 211              	Modbus_Uart2_Read_Regs:
+ 212              	.LVL9:
+ 213              	.LFB199:
+  75:User/Modbus/modbus_data.c **** 
+  76:User/Modbus/modbus_data.c **** // Doc gia tri 1 thanh ghi
+  77:User/Modbus/modbus_data.c **** void Modbus_Uart2_Read_Regs(uint8_t id, uint16_t reg, uint16_t number)
+  78:User/Modbus/modbus_data.c **** {
+ 214              		.loc 1 78 1 is_stmt 1 view -0
+ 215              		.cfi_startproc
+ 216              		@ args = 0, pretend = 0, frame = 8
+ 217              		@ frame_needed = 0, uses_anonymous_args = 0
+ 218              		.loc 1 78 1 is_stmt 0 view .LVU51
+ 219 0000 00B5     		push	{lr}
+ 220              	.LCFI4:
+ 221              		.cfi_def_cfa_offset 4
+ 222              		.cfi_offset 14, -4
+ 223 0002 83B0     		sub	sp, sp, #12
+ 224              	.LCFI5:
+ 225              		.cfi_def_cfa_offset 16
+  79:User/Modbus/modbus_data.c ****     uint8_t payload[8] = {id, R_HOLD_REGS, reg<<8, reg, number<<8, number};
+ 226              		.loc 1 79 5 is_stmt 1 view .LVU52
+ 227              		.loc 1 79 13 is_stmt 0 view .LVU53
+ 228 0004 0023     		movs	r3, #0
+ 229 0006 0093     		str	r3, [sp]
+ 230 0008 0193     		str	r3, [sp, #4]
+ 231 000a 8DF80000 		strb	r0, [sp]
+ 232 000e 0323     		movs	r3, #3
+ 233 0010 8DF80130 		strb	r3, [sp, #1]
+ 234 0014 8DF80310 		strb	r1, [sp, #3]
+ 235 0018 8DF80520 		strb	r2, [sp, #5]
+  80:User/Modbus/modbus_data.c ****     uint16_t i = Modbus_Create_Crc16(payload, 6);
+ 236              		.loc 1 80 5 is_stmt 1 view .LVU54
+ 237              		.loc 1 80 18 is_stmt 0 view .LVU55
+ 238 001c 0621     		movs	r1, #6
+ 239              	.LVL10:
+ARM GAS  /tmp/ccO6LuPD.s 			page 7
+
+
+ 240              		.loc 1 80 18 view .LVU56
+ 241 001e 6846     		mov	r0, sp
+ 242              	.LVL11:
+ 243              		.loc 1 80 18 view .LVU57
+ 244 0020 FFF7FEFF 		bl	Modbus_Create_Crc16
+ 245              	.LVL12:
+  81:User/Modbus/modbus_data.c ****     payload[6] = (uint8_t)i;
+ 246              		.loc 1 81 5 is_stmt 1 view .LVU58
+ 247              		.loc 1 81 16 is_stmt 0 view .LVU59
+ 248 0024 8DF80600 		strb	r0, [sp, #6]
+  82:User/Modbus/modbus_data.c ****     payload[7] = (uint8_t)(i>>8);
+ 249              		.loc 1 82 5 is_stmt 1 view .LVU60
+ 250              		.loc 1 82 18 is_stmt 0 view .LVU61
+ 251 0028 C0F30720 		ubfx	r0, r0, #8, #8
+ 252              	.LVL13:
+ 253              		.loc 1 82 16 view .LVU62
+ 254 002c 8DF80700 		strb	r0, [sp, #7]
+  83:User/Modbus/modbus_data.c ****     Uart2_Send_Data(payload, 8);
+ 255              		.loc 1 83 5 is_stmt 1 view .LVU63
+ 256 0030 0821     		movs	r1, #8
+ 257 0032 6846     		mov	r0, sp
+ 258 0034 FFF7FEFF 		bl	Uart2_Send_Data
+ 259              	.LVL14:
+  84:User/Modbus/modbus_data.c ****     HAL_Delay(100);
+ 260              		.loc 1 84 5 view .LVU64
+ 261 0038 6420     		movs	r0, #100
+ 262 003a FFF7FEFF 		bl	HAL_Delay
+ 263              	.LVL15:
+  85:User/Modbus/modbus_data.c **** }
+ 264              		.loc 1 85 1 is_stmt 0 view .LVU65
+ 265 003e 03B0     		add	sp, sp, #12
+ 266              	.LCFI6:
+ 267              		.cfi_def_cfa_offset 4
+ 268              		@ sp needed
+ 269 0040 5DF804FB 		ldr	pc, [sp], #4
+ 270              		.cfi_endproc
+ 271              	.LFE199:
+ 273              		.global	__aeabi_i2d
+ 274              		.global	__aeabi_ddiv
+ 275              		.global	__aeabi_d2f
+ 276              		.section	.text.Modbus_Uart1_Data_Process,"ax",%progbits
+ 277              		.align	1
+ 278              		.global	Modbus_Uart1_Data_Process
+ 279              		.syntax unified
+ 280              		.thumb
+ 281              		.thumb_func
+ 282              		.fpu softvfp
+ 284              	Modbus_Uart1_Data_Process:
+ 285              	.LVL16:
+ 286              	.LFB200:
+  86:User/Modbus/modbus_data.c **** 
+  87:User/Modbus/modbus_data.c **** 
+  88:User/Modbus/modbus_data.c **** void Modbus_Uart1_Data_Process(uint8_t id_slave, uint8_t * data, uint16_t length)
+  89:User/Modbus/modbus_data.c **** {
+ 287              		.loc 1 89 1 is_stmt 1 view -0
+ 288              		.cfi_startproc
+ 289              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccO6LuPD.s 			page 8
+
+
+ 290              		@ frame_needed = 1, uses_anonymous_args = 0
+ 291              		.loc 1 89 1 is_stmt 0 view .LVU67
+ 292 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 293              	.LCFI7:
+ 294              		.cfi_def_cfa_offset 32
+ 295              		.cfi_offset 3, -32
+ 296              		.cfi_offset 4, -28
+ 297              		.cfi_offset 5, -24
+ 298              		.cfi_offset 6, -20
+ 299              		.cfi_offset 7, -16
+ 300              		.cfi_offset 8, -12
+ 301              		.cfi_offset 9, -8
+ 302              		.cfi_offset 14, -4
+ 303 0004 00AF     		add	r7, sp, #0
+ 304              	.LCFI8:
+ 305              		.cfi_def_cfa_register 7
+  90:User/Modbus/modbus_data.c **** 	if (data[0] == id_slave && Modbus_Check_Crc16(data, length))
+ 306              		.loc 1 90 2 is_stmt 1 view .LVU68
+ 307              		.loc 1 90 10 is_stmt 0 view .LVU69
+ 308 0006 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 309              		.loc 1 90 5 view .LVU70
+ 310 0008 8342     		cmp	r3, r0
+ 311 000a 02D0     		beq	.L33
+ 312              	.LVL17:
+ 313              	.L14:
+  91:User/Modbus/modbus_data.c **** 	{
+  92:User/Modbus/modbus_data.c **** 		switch (data[1])
+  93:User/Modbus/modbus_data.c **** 		{
+  94:User/Modbus/modbus_data.c **** 			case R_HOLD_REGS:
+  95:User/Modbus/modbus_data.c **** 			case R_INPUT_REGS:
+  96:User/Modbus/modbus_data.c **** 				if (length == 8)
+  97:User/Modbus/modbus_data.c **** 				{
+  98:User/Modbus/modbus_data.c ****                     uint16_t first_addr, total_addr;
+  99:User/Modbus/modbus_data.c **** 					first_addr = (data[2] << 8) | data[3];
+ 100:User/Modbus/modbus_data.c **** 					total_addr = (data[4] << 8) | data[5];
+ 101:User/Modbus/modbus_data.c **** 
+ 102:User/Modbus/modbus_data.c **** 					if (data[1] == 3)		/* Holding */
+ 103:User/Modbus/modbus_data.c **** 					{
+ 104:User/Modbus/modbus_data.c **** 						if (first_addr + total_addr > NoB_HOLDING_REGISTER)
+ 105:User/Modbus/modbus_data.c **** 							return;
+ 106:User/Modbus/modbus_data.c **** 					}
+ 107:User/Modbus/modbus_data.c **** 					else
+ 108:User/Modbus/modbus_data.c **** 					{
+ 109:User/Modbus/modbus_data.c **** 						if (first_addr + total_addr > NoB_INPUT_REGISTER)
+ 110:User/Modbus/modbus_data.c **** 							return;
+ 111:User/Modbus/modbus_data.c **** 					}
+ 112:User/Modbus/modbus_data.c **** 					/* Respone data to master */
+ 113:User/Modbus/modbus_data.c **** 					uint8_t data_to_send[2*total_addr+5];
+ 114:User/Modbus/modbus_data.c **** 					uint16_t i, j;
+ 115:User/Modbus/modbus_data.c **** 
+ 116:User/Modbus/modbus_data.c **** 					data_to_send[0] = id_slave;
+ 117:User/Modbus/modbus_data.c **** 					data_to_send[1] = data[1];
+ 118:User/Modbus/modbus_data.c **** 					data_to_send[2] = 2*total_addr;
+ 119:User/Modbus/modbus_data.c **** 
+ 120:User/Modbus/modbus_data.c **** 					for (i = first_addr, j=3; i < (total_addr+first_addr); i++, j=j+2)
+ 121:User/Modbus/modbus_data.c **** 					{
+ 122:User/Modbus/modbus_data.c **** 						if (data[1] == 3)		/* Holding */
+ARM GAS  /tmp/ccO6LuPD.s 			page 9
+
+
+ 123:User/Modbus/modbus_data.c ****                         {
+ 124:User/Modbus/modbus_data.c ****                             data_to_send[j] = (uint8_t)(modbus_holding_buf[i]>>8);
+ 125:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_holding_buf[i];
+ 126:User/Modbus/modbus_data.c ****                         }
+ 127:User/Modbus/modbus_data.c **** 						else
+ 128:User/Modbus/modbus_data.c ****                         {
+ 129:User/Modbus/modbus_data.c ****                             data_to_send[j] = (uint8_t)(modbus_input_buf[i]>>8);
+ 130:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_input_buf[i];
+ 131:User/Modbus/modbus_data.c ****                         }	
+ 132:User/Modbus/modbus_data.c **** 					}
+ 133:User/Modbus/modbus_data.c **** 					/* create crc */
+ 134:User/Modbus/modbus_data.c **** 					i = Modbus_Create_Crc16(data_to_send, j);
+ 135:User/Modbus/modbus_data.c **** 					data_to_send[j] = (uint8_t)i;
+ 136:User/Modbus/modbus_data.c **** 					data_to_send[j+1] = (uint8_t)(i>>8);
+ 137:User/Modbus/modbus_data.c **** 					Uart1_Send_Data(data_to_send, j+2);
+ 138:User/Modbus/modbus_data.c **** 					
+ 139:User/Modbus/modbus_data.c **** 				}
+ 140:User/Modbus/modbus_data.c **** 				break;
+ 141:User/Modbus/modbus_data.c ****             case W_SINGLE_REG:
+ 142:User/Modbus/modbus_data.c ****                 if (length == 8)	
+ 143:User/Modbus/modbus_data.c **** 				{
+ 144:User/Modbus/modbus_data.c ****                     uint16_t first_addr;
+ 145:User/Modbus/modbus_data.c **** 					/* Check valid register */
+ 146:User/Modbus/modbus_data.c **** 					first_addr = data[2] << 8 | data[3];
+ 147:User/Modbus/modbus_data.c ****                     modbus_holding_buf[first_addr] = (data[4]<<8) + data[5];
+ 148:User/Modbus/modbus_data.c ****                     Uart1_Send_Data(data, length);
+ 149:User/Modbus/modbus_data.c **** 
+ 150:User/Modbus/modbus_data.c ****                     switch (first_addr)
+ 151:User/Modbus/modbus_data.c ****                     {
+ 152:User/Modbus/modbus_data.c ****                         case 20:
+ 153:User/Modbus/modbus_data.c ****                             device.temp_set = modbus_holding_buf[20] / 10.0;
+ 154:User/Modbus/modbus_data.c ****                             sys_cfg.settemp = device.temp_set;                  
+ 155:User/Modbus/modbus_data.c ****                             CFG_Save();
+ 156:User/Modbus/modbus_data.c ****                             break;
+ 157:User/Modbus/modbus_data.c **** 
+ 158:User/Modbus/modbus_data.c ****                         case 21:
+ 159:User/Modbus/modbus_data.c ****                             device.humi_set = modbus_holding_buf[21] / 10.0;
+ 160:User/Modbus/modbus_data.c ****                             sys_cfg.sethumi = device.humi_set;
+ 161:User/Modbus/modbus_data.c ****                             CFG_Save();
+ 162:User/Modbus/modbus_data.c ****                             break;
+ 163:User/Modbus/modbus_data.c **** 
+ 164:User/Modbus/modbus_data.c ****                         case 25:
+ 165:User/Modbus/modbus_data.c ****                             device.active = modbus_holding_buf[25];
+ 166:User/Modbus/modbus_data.c ****                             break;
+ 167:User/Modbus/modbus_data.c ****                             
+ 168:User/Modbus/modbus_data.c ****                         case 30 ... 79:        // Temp Y1 -> ID 1
+ 169:User/Modbus/modbus_data.c ****                             SHT_Get_Calib_Value(first_addr,modbus_holding_buf[first_addr]);
+ 170:User/Modbus/modbus_data.c ****                             break;
+ 171:User/Modbus/modbus_data.c ****                         
+ 172:User/Modbus/modbus_data.c ****                         default:
+ 173:User/Modbus/modbus_data.c ****                             break;
+ 174:User/Modbus/modbus_data.c ****                     }
+ 175:User/Modbus/modbus_data.c **** 
+ 176:User/Modbus/modbus_data.c **** 				}
+ 177:User/Modbus/modbus_data.c **** 
+ 178:User/Modbus/modbus_data.c ****                 break;
+ 179:User/Modbus/modbus_data.c **** 
+ARM GAS  /tmp/ccO6LuPD.s 			page 10
+
+
+ 180:User/Modbus/modbus_data.c **** 			default:
+ 181:User/Modbus/modbus_data.c **** 				break;
+ 182:User/Modbus/modbus_data.c **** 		}
+ 183:User/Modbus/modbus_data.c **** 	}
+ 184:User/Modbus/modbus_data.c **** }
+ 314              		.loc 1 184 1 view .LVU71
+ 315 000c BD46     		mov	sp, r7
+ 316              	.LCFI9:
+ 317              		.cfi_remember_state
+ 318              		.cfi_def_cfa_register 13
+ 319              		@ sp needed
+ 320 000e BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 321              	.LVL18:
+ 322              	.L33:
+ 323              	.LCFI10:
+ 324              		.cfi_restore_state
+ 325              		.loc 1 184 1 view .LVU72
+ 326 0012 0646     		mov	r6, r0
+ 327 0014 0C46     		mov	r4, r1
+ 328 0016 1546     		mov	r5, r2
+  90:User/Modbus/modbus_data.c **** 	if (data[0] == id_slave && Modbus_Check_Crc16(data, length))
+ 329              		.loc 1 90 29 discriminator 1 view .LVU73
+ 330 0018 1146     		mov	r1, r2
+ 331              	.LVL19:
+  90:User/Modbus/modbus_data.c **** 	if (data[0] == id_slave && Modbus_Check_Crc16(data, length))
+ 332              		.loc 1 90 29 discriminator 1 view .LVU74
+ 333 001a 2046     		mov	r0, r4
+ 334              	.LVL20:
+  90:User/Modbus/modbus_data.c **** 	if (data[0] == id_slave && Modbus_Check_Crc16(data, length))
+ 335              		.loc 1 90 29 discriminator 1 view .LVU75
+ 336 001c FFF7FEFF 		bl	Modbus_Check_Crc16
+ 337              	.LVL21:
+  90:User/Modbus/modbus_data.c **** 	if (data[0] == id_slave && Modbus_Check_Crc16(data, length))
+ 338              		.loc 1 90 26 discriminator 1 view .LVU76
+ 339 0020 0028     		cmp	r0, #0
+ 340 0022 F3D0     		beq	.L14
+  92:User/Modbus/modbus_data.c **** 		{
+ 341              		.loc 1 92 3 is_stmt 1 view .LVU77
+  92:User/Modbus/modbus_data.c **** 		{
+ 342              		.loc 1 92 15 is_stmt 0 view .LVU78
+ 343 0024 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+  92:User/Modbus/modbus_data.c **** 		{
+ 344              		.loc 1 92 3 view .LVU79
+ 345 0026 042B     		cmp	r3, #4
+ 346 0028 33D9     		bls	.L34
+ 347 002a 062B     		cmp	r3, #6
+ 348 002c EED1     		bne	.L14
+ 142:User/Modbus/modbus_data.c **** 				{
+ 349              		.loc 1 142 17 is_stmt 1 view .LVU80
+ 142:User/Modbus/modbus_data.c **** 				{
+ 350              		.loc 1 142 20 is_stmt 0 view .LVU81
+ 351 002e 082D     		cmp	r5, #8
+ 352 0030 ECD1     		bne	.L14
+ 353              	.LBB2:
+ 144:User/Modbus/modbus_data.c **** 					/* Check valid register */
+ 354              		.loc 1 144 21 is_stmt 1 view .LVU82
+ 146:User/Modbus/modbus_data.c ****                     modbus_holding_buf[first_addr] = (data[4]<<8) + data[5];
+ARM GAS  /tmp/ccO6LuPD.s 			page 11
+
+
+ 355              		.loc 1 146 6 view .LVU83
+ 146:User/Modbus/modbus_data.c ****                     modbus_holding_buf[first_addr] = (data[4]<<8) + data[5];
+ 356              		.loc 1 146 23 is_stmt 0 view .LVU84
+ 357 0032 A278     		ldrb	r2, [r4, #2]	@ zero_extendqisi2
+ 146:User/Modbus/modbus_data.c ****                     modbus_holding_buf[first_addr] = (data[4]<<8) + data[5];
+ 358              		.loc 1 146 38 view .LVU85
+ 359 0034 E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 146:User/Modbus/modbus_data.c ****                     modbus_holding_buf[first_addr] = (data[4]<<8) + data[5];
+ 360              		.loc 1 146 32 view .LVU86
+ 361 0036 43EA0223 		orr	r3, r3, r2, lsl #8
+ 362 003a 0FFA83F8 		sxth	r8, r3
+ 146:User/Modbus/modbus_data.c ****                     modbus_holding_buf[first_addr] = (data[4]<<8) + data[5];
+ 363              		.loc 1 146 17 view .LVU87
+ 364 003e 1E46     		mov	r6, r3
+ 365              	.LVL22:
+ 147:User/Modbus/modbus_data.c ****                     Uart1_Send_Data(data, length);
+ 366              		.loc 1 147 21 is_stmt 1 view .LVU88
+ 147:User/Modbus/modbus_data.c ****                     Uart1_Send_Data(data, length);
+ 367              		.loc 1 147 59 is_stmt 0 view .LVU89
+ 368 0040 2279     		ldrb	r2, [r4, #4]	@ zero_extendqisi2
+ 147:User/Modbus/modbus_data.c ****                     Uart1_Send_Data(data, length);
+ 369              		.loc 1 147 73 view .LVU90
+ 370 0042 6379     		ldrb	r3, [r4, #5]	@ zero_extendqisi2
+ 147:User/Modbus/modbus_data.c ****                     Uart1_Send_Data(data, length);
+ 371              		.loc 1 147 67 view .LVU91
+ 372 0044 03EB0223 		add	r3, r3, r2, lsl #8
+ 147:User/Modbus/modbus_data.c ****                     Uart1_Send_Data(data, length);
+ 373              		.loc 1 147 52 view .LVU92
+ 374 0048 564A     		ldr	r2, .L38
+ 375 004a 22F81630 		strh	r3, [r2, r6, lsl #1]	@ movhi
+ 148:User/Modbus/modbus_data.c **** 
+ 376              		.loc 1 148 21 is_stmt 1 view .LVU93
+ 377 004e 2946     		mov	r1, r5
+ 378 0050 2046     		mov	r0, r4
+ 379 0052 FFF7FEFF 		bl	Uart1_Send_Data
+ 380              	.LVL23:
+ 150:User/Modbus/modbus_data.c ****                     {
+ 381              		.loc 1 150 21 view .LVU94
+ 382 0056 B8F1190F 		cmp	r8, #25
+ 383 005a 00F09D80 		beq	.L26
+ 384 005e 7BDC     		bgt	.L27
+ 385 0060 B8F1140F 		cmp	r8, #20
+ 386 0064 00F08680 		beq	.L28
+ 387 0068 B8F1150F 		cmp	r8, #21
+ 388 006c CED1     		bne	.L14
+ 159:User/Modbus/modbus_data.c ****                             sys_cfg.sethumi = device.humi_set;
+ 389              		.loc 1 159 29 view .LVU95
+ 159:User/Modbus/modbus_data.c ****                             sys_cfg.sethumi = device.humi_set;
+ 390              		.loc 1 159 70 is_stmt 0 view .LVU96
+ 391 006e 4D4B     		ldr	r3, .L38
+ 392 0070 588D     		ldrh	r0, [r3, #42]
+ 393 0072 FFF7FEFF 		bl	__aeabi_i2d
+ 394              	.LVL24:
+ 395 0076 0022     		movs	r2, #0
+ 396 0078 4B4B     		ldr	r3, .L38+4
+ 397 007a FFF7FEFF 		bl	__aeabi_ddiv
+ 398              	.LVL25:
+ARM GAS  /tmp/ccO6LuPD.s 			page 12
+
+
+ 399 007e FFF7FEFF 		bl	__aeabi_d2f
+ 400              	.LVL26:
+ 159:User/Modbus/modbus_data.c ****                             sys_cfg.sethumi = device.humi_set;
+ 401              		.loc 1 159 45 view .LVU97
+ 402 0082 4A4A     		ldr	r2, .L38+8
+ 403 0084 D064     		str	r0, [r2, #76]	@ float
+ 160:User/Modbus/modbus_data.c ****                             CFG_Save();
+ 404              		.loc 1 160 29 is_stmt 1 view .LVU98
+ 160:User/Modbus/modbus_data.c ****                             CFG_Save();
+ 405              		.loc 1 160 45 is_stmt 0 view .LVU99
+ 406 0086 4A4A     		ldr	r2, .L38+12
+ 407 0088 C2F8A800 		str	r0, [r2, #168]	@ float
+ 161:User/Modbus/modbus_data.c ****                             break;
+ 408              		.loc 1 161 29 is_stmt 1 view .LVU100
+ 409 008c FFF7FEFF 		bl	CFG_Save
+ 410              	.LVL27:
+ 162:User/Modbus/modbus_data.c **** 
+ 411              		.loc 1 162 29 view .LVU101
+ 412 0090 BCE7     		b	.L14
+ 413              	.LVL28:
+ 414              	.L34:
+ 162:User/Modbus/modbus_data.c **** 
+ 415              		.loc 1 162 29 is_stmt 0 view .LVU102
+ 416              	.LBE2:
+  92:User/Modbus/modbus_data.c **** 		{
+ 417              		.loc 1 92 3 view .LVU103
+ 418 0092 032B     		cmp	r3, #3
+ 419 0094 BAD3     		bcc	.L14
+  96:User/Modbus/modbus_data.c **** 				{
+ 420              		.loc 1 96 5 is_stmt 1 view .LVU104
+  96:User/Modbus/modbus_data.c **** 				{
+ 421              		.loc 1 96 8 is_stmt 0 view .LVU105
+ 422 0096 082D     		cmp	r5, #8
+ 423 0098 B8D1     		bne	.L14
+ 424              	.LBB3:
+  97:User/Modbus/modbus_data.c ****                     uint16_t first_addr, total_addr;
+ 425              		.loc 1 97 5 view .LVU106
+ 426 009a E846     		mov	r8, sp
+  98:User/Modbus/modbus_data.c **** 					first_addr = (data[2] << 8) | data[3];
+ 427              		.loc 1 98 21 is_stmt 1 view .LVU107
+  99:User/Modbus/modbus_data.c **** 					total_addr = (data[4] << 8) | data[5];
+ 428              		.loc 1 99 6 view .LVU108
+  99:User/Modbus/modbus_data.c **** 					total_addr = (data[4] << 8) | data[5];
+ 429              		.loc 1 99 24 is_stmt 0 view .LVU109
+ 430 009c A278     		ldrb	r2, [r4, #2]	@ zero_extendqisi2
+  99:User/Modbus/modbus_data.c **** 					total_addr = (data[4] << 8) | data[5];
+ 431              		.loc 1 99 40 view .LVU110
+ 432 009e 94F803C0 		ldrb	ip, [r4, #3]	@ zero_extendqisi2
+  99:User/Modbus/modbus_data.c **** 					total_addr = (data[4] << 8) | data[5];
+ 433              		.loc 1 99 17 view .LVU111
+ 434 00a2 4CEA022C 		orr	ip, ip, r2, lsl #8
+ 435              	.LVL29:
+ 100:User/Modbus/modbus_data.c **** 
+ 436              		.loc 1 100 6 is_stmt 1 view .LVU112
+ 100:User/Modbus/modbus_data.c **** 
+ 437              		.loc 1 100 24 is_stmt 0 view .LVU113
+ 438 00a6 2279     		ldrb	r2, [r4, #4]	@ zero_extendqisi2
+ARM GAS  /tmp/ccO6LuPD.s 			page 13
+
+
+ 100:User/Modbus/modbus_data.c **** 
+ 439              		.loc 1 100 40 view .LVU114
+ 440 00a8 6079     		ldrb	r0, [r4, #5]	@ zero_extendqisi2
+ 100:User/Modbus/modbus_data.c **** 
+ 441              		.loc 1 100 34 view .LVU115
+ 442 00aa 40EA0220 		orr	r0, r0, r2, lsl #8
+ 443 00ae 02B2     		sxth	r2, r0
+ 444              	.LVL30:
+ 102:User/Modbus/modbus_data.c **** 					{
+ 445              		.loc 1 102 6 is_stmt 1 view .LVU116
+ 102:User/Modbus/modbus_data.c **** 					{
+ 446              		.loc 1 102 9 is_stmt 0 view .LVU117
+ 447 00b0 032B     		cmp	r3, #3
+ 448 00b2 16D0     		beq	.L35
+ 109:User/Modbus/modbus_data.c **** 							return;
+ 449              		.loc 1 109 7 is_stmt 1 view .LVU118
+ 109:User/Modbus/modbus_data.c **** 							return;
+ 450              		.loc 1 109 22 is_stmt 0 view .LVU119
+ 451 00b4 0CEB0003 		add	r3, ip, r0
+ 109:User/Modbus/modbus_data.c **** 							return;
+ 452              		.loc 1 109 10 view .LVU120
+ 453 00b8 C82B     		cmp	r3, #200
+ 454 00ba 16DC     		bgt	.L20
+ 455              	.L21:
+ 113:User/Modbus/modbus_data.c **** 					uint16_t i, j;
+ 456              		.loc 1 113 6 is_stmt 1 view .LVU121
+ 113:User/Modbus/modbus_data.c **** 					uint16_t i, j;
+ 457              		.loc 1 113 28 is_stmt 0 view .LVU122
+ 458 00bc 4300     		lsls	r3, r0, #1
+ 459              	.LVL31:
+ 113:User/Modbus/modbus_data.c **** 					uint16_t i, j;
+ 460              		.loc 1 113 14 view .LVU123
+ 461 00be 0C33     		adds	r3, r3, #12
+ 462              	.LVL32:
+ 113:User/Modbus/modbus_data.c **** 					uint16_t i, j;
+ 463              		.loc 1 113 14 view .LVU124
+ 464 00c0 DB08     		lsrs	r3, r3, #3
+ 465              	.LVL33:
+ 113:User/Modbus/modbus_data.c **** 					uint16_t i, j;
+ 466              		.loc 1 113 14 view .LVU125
+ 467 00c2 6946     		mov	r1, sp
+ 468 00c4 A1EBC303 		sub	r3, r1, r3, lsl #3
+ 469 00c8 9D46     		mov	sp, r3
+ 470 00ca E946     		mov	r9, sp
+ 471              	.LVL34:
+ 114:User/Modbus/modbus_data.c **** 
+ 472              		.loc 1 114 6 is_stmt 1 view .LVU126
+ 116:User/Modbus/modbus_data.c **** 					data_to_send[1] = data[1];
+ 473              		.loc 1 116 6 view .LVU127
+ 116:User/Modbus/modbus_data.c **** 					data_to_send[1] = data[1];
+ 474              		.loc 1 116 22 is_stmt 0 view .LVU128
+ 475 00cc 8DF80060 		strb	r6, [sp]
+ 117:User/Modbus/modbus_data.c **** 					data_to_send[2] = 2*total_addr;
+ 476              		.loc 1 117 6 is_stmt 1 view .LVU129
+ 117:User/Modbus/modbus_data.c **** 					data_to_send[2] = 2*total_addr;
+ 477              		.loc 1 117 22 is_stmt 0 view .LVU130
+ 478 00d0 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ARM GAS  /tmp/ccO6LuPD.s 			page 14
+
+
+ 479              	.LVL35:
+ 117:User/Modbus/modbus_data.c **** 					data_to_send[2] = 2*total_addr;
+ 480              		.loc 1 117 22 view .LVU131
+ 481 00d2 8DF80130 		strb	r3, [sp, #1]
+ 118:User/Modbus/modbus_data.c **** 
+ 482              		.loc 1 118 6 is_stmt 1 view .LVU132
+ 118:User/Modbus/modbus_data.c **** 
+ 483              		.loc 1 118 22 is_stmt 0 view .LVU133
+ 484 00d6 5200     		lsls	r2, r2, #1
+ 485 00d8 8DF80220 		strb	r2, [sp, #2]
+ 120:User/Modbus/modbus_data.c **** 					{
+ 486              		.loc 1 120 6 is_stmt 1 view .LVU134
+ 487              	.LVL36:
+ 120:User/Modbus/modbus_data.c **** 					{
+ 488              		.loc 1 120 13 is_stmt 0 view .LVU135
+ 489 00dc 6346     		mov	r3, ip
+ 120:User/Modbus/modbus_data.c **** 					{
+ 490              		.loc 1 120 28 view .LVU136
+ 491 00de 0325     		movs	r5, #3
+ 120:User/Modbus/modbus_data.c **** 					{
+ 492              		.loc 1 120 6 view .LVU137
+ 493 00e0 14E0     		b	.L22
+ 494              	.LVL37:
+ 495              	.L35:
+ 104:User/Modbus/modbus_data.c **** 							return;
+ 496              		.loc 1 104 7 is_stmt 1 view .LVU138
+ 104:User/Modbus/modbus_data.c **** 							return;
+ 497              		.loc 1 104 22 is_stmt 0 view .LVU139
+ 498 00e2 0CEB0003 		add	r3, ip, r0
+ 104:User/Modbus/modbus_data.c **** 							return;
+ 499              		.loc 1 104 10 view .LVU140
+ 500 00e6 C82B     		cmp	r3, #200
+ 501 00e8 E8DD     		ble	.L21
+ 502              	.L20:
+ 503 00ea C546     		mov	sp, r8
+ 504 00ec 8EE7     		b	.L14
+ 505              	.LVL38:
+ 506              	.L37:
+ 124:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_holding_buf[i];
+ 507              		.loc 1 124 29 is_stmt 1 view .LVU141
+ 124:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_holding_buf[i];
+ 508              		.loc 1 124 75 is_stmt 0 view .LVU142
+ 509 00ee 2D4E     		ldr	r6, .L38
+ 510 00f0 36F81210 		ldrh	r1, [r6, r2, lsl #1]
+ 124:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_holding_buf[i];
+ 511              		.loc 1 124 47 view .LVU143
+ 512 00f4 090A     		lsrs	r1, r1, #8
+ 124:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_holding_buf[i];
+ 513              		.loc 1 124 45 view .LVU144
+ 514 00f6 09F80510 		strb	r1, [r9, r5]
+ 125:User/Modbus/modbus_data.c ****                         }
+ 515              		.loc 1 125 29 is_stmt 1 view .LVU145
+ 125:User/Modbus/modbus_data.c ****                         }
+ 516              		.loc 1 125 43 is_stmt 0 view .LVU146
+ 517 00fa 691C     		adds	r1, r5, #1
+ 125:User/Modbus/modbus_data.c ****                         }
+ 518              		.loc 1 125 49 view .LVU147
+ARM GAS  /tmp/ccO6LuPD.s 			page 15
+
+
+ 519 00fc 16F81260 		ldrb	r6, [r6, r2, lsl #1]	@ zero_extendqisi2
+ 125:User/Modbus/modbus_data.c ****                         }
+ 520              		.loc 1 125 47 view .LVU148
+ 521 0100 09F80160 		strb	r6, [r9, r1]
+ 522              	.L24:
+ 120:User/Modbus/modbus_data.c **** 					{
+ 523              		.loc 1 120 61 is_stmt 1 discriminator 2 view .LVU149
+ 120:User/Modbus/modbus_data.c **** 					{
+ 524              		.loc 1 120 62 is_stmt 0 discriminator 2 view .LVU150
+ 525 0104 0133     		adds	r3, r3, #1
+ 526              	.LVL39:
+ 120:User/Modbus/modbus_data.c **** 					{
+ 527              		.loc 1 120 62 discriminator 2 view .LVU151
+ 528 0106 9BB2     		uxth	r3, r3
+ 529              	.LVL40:
+ 120:User/Modbus/modbus_data.c **** 					{
+ 530              		.loc 1 120 67 discriminator 2 view .LVU152
+ 531 0108 0235     		adds	r5, r5, #2
+ 532              	.LVL41:
+ 120:User/Modbus/modbus_data.c **** 					{
+ 533              		.loc 1 120 67 discriminator 2 view .LVU153
+ 534 010a ADB2     		uxth	r5, r5
+ 535              	.LVL42:
+ 536              	.L22:
+ 120:User/Modbus/modbus_data.c **** 					{
+ 537              		.loc 1 120 32 is_stmt 1 discriminator 1 view .LVU154
+ 120:User/Modbus/modbus_data.c **** 					{
+ 538              		.loc 1 120 34 is_stmt 0 discriminator 1 view .LVU155
+ 539 010c 1A46     		mov	r2, r3
+ 120:User/Modbus/modbus_data.c **** 					{
+ 540              		.loc 1 120 47 discriminator 1 view .LVU156
+ 541 010e 0CEB0001 		add	r1, ip, r0
+ 120:User/Modbus/modbus_data.c **** 					{
+ 542              		.loc 1 120 6 discriminator 1 view .LVU157
+ 543 0112 8B42     		cmp	r3, r1
+ 544 0114 0EDA     		bge	.L36
+ 122:User/Modbus/modbus_data.c ****                         {
+ 545              		.loc 1 122 7 is_stmt 1 view .LVU158
+ 122:User/Modbus/modbus_data.c ****                         {
+ 546              		.loc 1 122 15 is_stmt 0 view .LVU159
+ 547 0116 6178     		ldrb	r1, [r4, #1]	@ zero_extendqisi2
+ 122:User/Modbus/modbus_data.c ****                         {
+ 548              		.loc 1 122 10 view .LVU160
+ 549 0118 0329     		cmp	r1, #3
+ 550 011a E8D0     		beq	.L37
+ 129:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_input_buf[i];
+ 551              		.loc 1 129 29 is_stmt 1 view .LVU161
+ 129:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_input_buf[i];
+ 552              		.loc 1 129 73 is_stmt 0 view .LVU162
+ 553 011c 254E     		ldr	r6, .L38+16
+ 554 011e 36F81210 		ldrh	r1, [r6, r2, lsl #1]
+ 129:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_input_buf[i];
+ 555              		.loc 1 129 47 view .LVU163
+ 556 0122 090A     		lsrs	r1, r1, #8
+ 129:User/Modbus/modbus_data.c ****                             data_to_send[j+1] = (uint8_t)modbus_input_buf[i];
+ 557              		.loc 1 129 45 view .LVU164
+ 558 0124 09F80510 		strb	r1, [r9, r5]
+ARM GAS  /tmp/ccO6LuPD.s 			page 16
+
+
+ 130:User/Modbus/modbus_data.c ****                         }	
+ 559              		.loc 1 130 29 is_stmt 1 view .LVU165
+ 130:User/Modbus/modbus_data.c ****                         }	
+ 560              		.loc 1 130 43 is_stmt 0 view .LVU166
+ 561 0128 691C     		adds	r1, r5, #1
+ 130:User/Modbus/modbus_data.c ****                         }	
+ 562              		.loc 1 130 49 view .LVU167
+ 563 012a 16F81260 		ldrb	r6, [r6, r2, lsl #1]	@ zero_extendqisi2
+ 130:User/Modbus/modbus_data.c ****                         }	
+ 564              		.loc 1 130 47 view .LVU168
+ 565 012e 09F80160 		strb	r6, [r9, r1]
+ 566 0132 E7E7     		b	.L24
+ 567              	.L36:
+ 134:User/Modbus/modbus_data.c **** 					data_to_send[j] = (uint8_t)i;
+ 568              		.loc 1 134 6 is_stmt 1 view .LVU169
+ 134:User/Modbus/modbus_data.c **** 					data_to_send[j] = (uint8_t)i;
+ 569              		.loc 1 134 10 is_stmt 0 view .LVU170
+ 570 0134 2946     		mov	r1, r5
+ 571 0136 4846     		mov	r0, r9
+ 572              	.LVL43:
+ 134:User/Modbus/modbus_data.c **** 					data_to_send[j] = (uint8_t)i;
+ 573              		.loc 1 134 10 view .LVU171
+ 574 0138 FFF7FEFF 		bl	Modbus_Create_Crc16
+ 575              	.LVL44:
+ 135:User/Modbus/modbus_data.c **** 					data_to_send[j+1] = (uint8_t)(i>>8);
+ 576              		.loc 1 135 6 is_stmt 1 view .LVU172
+ 135:User/Modbus/modbus_data.c **** 					data_to_send[j+1] = (uint8_t)(i>>8);
+ 577              		.loc 1 135 22 is_stmt 0 view .LVU173
+ 578 013c 09F80500 		strb	r0, [r9, r5]
+ 136:User/Modbus/modbus_data.c **** 					Uart1_Send_Data(data_to_send, j+2);
+ 579              		.loc 1 136 6 is_stmt 1 view .LVU174
+ 136:User/Modbus/modbus_data.c **** 					Uart1_Send_Data(data_to_send, j+2);
+ 580              		.loc 1 136 20 is_stmt 0 view .LVU175
+ 581 0140 6B1C     		adds	r3, r5, #1
+ 136:User/Modbus/modbus_data.c **** 					Uart1_Send_Data(data_to_send, j+2);
+ 582              		.loc 1 136 26 view .LVU176
+ 583 0142 C0F30720 		ubfx	r0, r0, #8, #8
+ 584              	.LVL45:
+ 136:User/Modbus/modbus_data.c **** 					Uart1_Send_Data(data_to_send, j+2);
+ 585              		.loc 1 136 24 view .LVU177
+ 586 0146 09F80300 		strb	r0, [r9, r3]
+ 137:User/Modbus/modbus_data.c **** 					
+ 587              		.loc 1 137 6 is_stmt 1 view .LVU178
+ 588 014a A91C     		adds	r1, r5, #2
+ 589 014c 89B2     		uxth	r1, r1
+ 590 014e 4846     		mov	r0, r9
+ 591 0150 FFF7FEFF 		bl	Uart1_Send_Data
+ 592              	.LVL46:
+ 593 0154 C546     		mov	sp, r8
+ 594 0156 59E7     		b	.L14
+ 595              	.LVL47:
+ 596              	.L27:
+ 137:User/Modbus/modbus_data.c **** 					
+ 597              		.loc 1 137 6 is_stmt 0 view .LVU179
+ 598              	.LBE3:
+ 599              	.LBB4:
+ 600 0158 A8F11E03 		sub	r3, r8, #30
+ARM GAS  /tmp/ccO6LuPD.s 			page 17
+
+
+ 601 015c 9BB2     		uxth	r3, r3
+ 602 015e 312B     		cmp	r3, #49
+ 603 0160 3FF654AF 		bhi	.L14
+ 169:User/Modbus/modbus_data.c ****                             break;
+ 604              		.loc 1 169 29 is_stmt 1 view .LVU180
+ 605 0164 0F4B     		ldr	r3, .L38
+ 606 0166 33F81610 		ldrh	r1, [r3, r6, lsl #1]
+ 607 016a 5FFA88F0 		uxtb	r0, r8
+ 608 016e FFF7FEFF 		bl	SHT_Get_Calib_Value
+ 609              	.LVL48:
+ 170:User/Modbus/modbus_data.c ****                         
+ 610              		.loc 1 170 29 view .LVU181
+ 611 0172 4BE7     		b	.L14
+ 612              	.L28:
+ 153:User/Modbus/modbus_data.c ****                             sys_cfg.settemp = device.temp_set;                  
+ 613              		.loc 1 153 29 view .LVU182
+ 153:User/Modbus/modbus_data.c ****                             sys_cfg.settemp = device.temp_set;                  
+ 614              		.loc 1 153 70 is_stmt 0 view .LVU183
+ 615 0174 0B4B     		ldr	r3, .L38
+ 616 0176 188D     		ldrh	r0, [r3, #40]
+ 617 0178 FFF7FEFF 		bl	__aeabi_i2d
+ 618              	.LVL49:
+ 619 017c 0022     		movs	r2, #0
+ 620 017e 0A4B     		ldr	r3, .L38+4
+ 621 0180 FFF7FEFF 		bl	__aeabi_ddiv
+ 622              	.LVL50:
+ 623 0184 FFF7FEFF 		bl	__aeabi_d2f
+ 624              	.LVL51:
+ 153:User/Modbus/modbus_data.c ****                             sys_cfg.settemp = device.temp_set;                  
+ 625              		.loc 1 153 45 view .LVU184
+ 626 0188 084A     		ldr	r2, .L38+8
+ 627 018a 9064     		str	r0, [r2, #72]	@ float
+ 154:User/Modbus/modbus_data.c ****                             CFG_Save();
+ 628              		.loc 1 154 29 is_stmt 1 view .LVU185
+ 154:User/Modbus/modbus_data.c ****                             CFG_Save();
+ 629              		.loc 1 154 45 is_stmt 0 view .LVU186
+ 630 018c 084A     		ldr	r2, .L38+12
+ 631 018e C2F8A400 		str	r0, [r2, #164]	@ float
+ 155:User/Modbus/modbus_data.c ****                             break;
+ 632              		.loc 1 155 29 is_stmt 1 view .LVU187
+ 633 0192 FFF7FEFF 		bl	CFG_Save
+ 634              	.LVL52:
+ 156:User/Modbus/modbus_data.c **** 
+ 635              		.loc 1 156 29 view .LVU188
+ 636 0196 39E7     		b	.L14
+ 637              	.L26:
+ 165:User/Modbus/modbus_data.c ****                             break;
+ 638              		.loc 1 165 29 view .LVU189
+ 165:User/Modbus/modbus_data.c ****                             break;
+ 639              		.loc 1 165 63 is_stmt 0 view .LVU190
+ 640 0198 024B     		ldr	r3, .L38
+ 641 019a 5A8E     		ldrh	r2, [r3, #50]
+ 165:User/Modbus/modbus_data.c ****                             break;
+ 642              		.loc 1 165 43 view .LVU191
+ 643 019c 034B     		ldr	r3, .L38+8
+ 644 019e 1A70     		strb	r2, [r3]
+ 166:User/Modbus/modbus_data.c ****                             
+ARM GAS  /tmp/ccO6LuPD.s 			page 18
+
+
+ 645              		.loc 1 166 29 is_stmt 1 view .LVU192
+ 646 01a0 34E7     		b	.L14
+ 647              	.L39:
+ 648 01a2 00BF     		.align	2
+ 649              	.L38:
+ 650 01a4 00000000 		.word	.LANCHOR0
+ 651 01a8 00002440 		.word	1076101120
+ 652 01ac 00000000 		.word	device
+ 653 01b0 00000000 		.word	sys_cfg
+ 654 01b4 00000000 		.word	.LANCHOR1
+ 655              	.LBE4:
+ 656              		.cfi_endproc
+ 657              	.LFE200:
+ 659              		.section	.text.Modbus_Refesh_Regs,"ax",%progbits
+ 660              		.align	1
+ 661              		.global	Modbus_Refesh_Regs
+ 662              		.syntax unified
+ 663              		.thumb
+ 664              		.thumb_func
+ 665              		.fpu softvfp
+ 667              	Modbus_Refesh_Regs:
+ 668              	.LFB201:
+ 185:User/Modbus/modbus_data.c **** 
+ 186:User/Modbus/modbus_data.c **** void Modbus_Refesh_Regs(void)
+ 187:User/Modbus/modbus_data.c **** {
+ 669              		.loc 1 187 1 view -0
+ 670              		.cfi_startproc
+ 671              		@ args = 0, pretend = 0, frame = 0
+ 672              		@ frame_needed = 0, uses_anonymous_args = 0
+ 673              		@ link register save eliminated.
+ 188:User/Modbus/modbus_data.c ****     // fc 03 / 06
+ 189:User/Modbus/modbus_data.c ****     modbus_holding_buf[0] = device.cooler.status;
+ 674              		.loc 1 189 5 view .LVU194
+ 675              		.loc 1 189 42 is_stmt 0 view .LVU195
+ 676 0000 174B     		ldr	r3, .L41
+ 677 0002 1979     		ldrb	r1, [r3, #4]	@ zero_extendqisi2
+ 678              		.loc 1 189 27 view .LVU196
+ 679 0004 174A     		ldr	r2, .L41+4
+ 680 0006 1180     		strh	r1, [r2]	@ movhi
+ 190:User/Modbus/modbus_data.c ****     modbus_holding_buf[5] = device.humidify.status;
+ 681              		.loc 1 190 5 is_stmt 1 view .LVU197
+ 682              		.loc 1 190 44 is_stmt 0 view .LVU198
+ 683 0008 93F82810 		ldrb	r1, [r3, #40]	@ zero_extendqisi2
+ 684              		.loc 1 190 27 view .LVU199
+ 685 000c 5181     		strh	r1, [r2, #10]	@ movhi
+ 191:User/Modbus/modbus_data.c ****     modbus_holding_buf[6] = device.moise.status;
+ 686              		.loc 1 191 5 is_stmt 1 view .LVU200
+ 687              		.loc 1 191 41 is_stmt 0 view .LVU201
+ 688 000e 197F     		ldrb	r1, [r3, #28]	@ zero_extendqisi2
+ 689              		.loc 1 191 27 view .LVU202
+ 690 0010 9181     		strh	r1, [r2, #12]	@ movhi
+ 192:User/Modbus/modbus_data.c ****     modbus_holding_buf[7] = device.thermistor1;
+ 691              		.loc 1 192 5 is_stmt 1 view .LVU203
+ 692              		.loc 1 192 35 is_stmt 0 view .LVU204
+ 693 0012 93F83410 		ldrb	r1, [r3, #52]	@ zero_extendqisi2
+ 694              		.loc 1 192 27 view .LVU205
+ 695 0016 D181     		strh	r1, [r2, #14]	@ movhi
+ARM GAS  /tmp/ccO6LuPD.s 			page 19
+
+
+ 193:User/Modbus/modbus_data.c ****     modbus_holding_buf[8] = device.thermistor2;
+ 696              		.loc 1 193 5 is_stmt 1 view .LVU206
+ 697              		.loc 1 193 35 is_stmt 0 view .LVU207
+ 698 0018 93F83510 		ldrb	r1, [r3, #53]	@ zero_extendqisi2
+ 699              		.loc 1 193 27 view .LVU208
+ 700 001c 1182     		strh	r1, [r2, #16]	@ movhi
+ 194:User/Modbus/modbus_data.c ****     modbus_holding_buf[9] = device.thermistor3;
+ 701              		.loc 1 194 5 is_stmt 1 view .LVU209
+ 702              		.loc 1 194 35 is_stmt 0 view .LVU210
+ 703 001e 93F83610 		ldrb	r1, [r3, #54]	@ zero_extendqisi2
+ 704              		.loc 1 194 27 view .LVU211
+ 705 0022 5182     		strh	r1, [r2, #18]	@ movhi
+ 195:User/Modbus/modbus_data.c ****     modbus_holding_buf[10] = device.light;
+ 706              		.loc 1 195 5 is_stmt 1 view .LVU212
+ 707              		.loc 1 195 36 is_stmt 0 view .LVU213
+ 708 0024 93F83710 		ldrb	r1, [r3, #55]	@ zero_extendqisi2
+ 709              		.loc 1 195 28 view .LVU214
+ 710 0028 9182     		strh	r1, [r2, #20]	@ movhi
+ 196:User/Modbus/modbus_data.c ****     modbus_holding_buf[11] = device.warning_green;
+ 711              		.loc 1 196 5 is_stmt 1 view .LVU215
+ 712              		.loc 1 196 36 is_stmt 0 view .LVU216
+ 713 002a 93F83910 		ldrb	r1, [r3, #57]	@ zero_extendqisi2
+ 714              		.loc 1 196 28 view .LVU217
+ 715 002e D182     		strh	r1, [r2, #22]	@ movhi
+ 197:User/Modbus/modbus_data.c ****     modbus_holding_buf[12] = device.warning_red;
+ 716              		.loc 1 197 5 is_stmt 1 view .LVU218
+ 717              		.loc 1 197 36 is_stmt 0 view .LVU219
+ 718 0030 93F83810 		ldrb	r1, [r3, #56]	@ zero_extendqisi2
+ 719              		.loc 1 197 28 view .LVU220
+ 720 0034 1183     		strh	r1, [r2, #24]	@ movhi
+ 198:User/Modbus/modbus_data.c ****     modbus_holding_buf[13] = device.warning_yellow;
+ 721              		.loc 1 198 5 is_stmt 1 view .LVU221
+ 722              		.loc 1 198 36 is_stmt 0 view .LVU222
+ 723 0036 93F83A10 		ldrb	r1, [r3, #58]	@ zero_extendqisi2
+ 724              		.loc 1 198 28 view .LVU223
+ 725 003a 5183     		strh	r1, [r2, #26]	@ movhi
+ 199:User/Modbus/modbus_data.c ****     modbus_holding_buf[14] = device.door;
+ 726              		.loc 1 199 5 is_stmt 1 view .LVU224
+ 727              		.loc 1 199 36 is_stmt 0 view .LVU225
+ 728 003c 93F83E10 		ldrb	r1, [r3, #62]	@ zero_extendqisi2
+ 729              		.loc 1 199 28 view .LVU226
+ 730 0040 9183     		strh	r1, [r2, #28]	@ movhi
+ 200:User/Modbus/modbus_data.c ****     modbus_holding_buf[15] = device.valve_fan;
+ 731              		.loc 1 200 5 is_stmt 1 view .LVU227
+ 732              		.loc 1 200 36 is_stmt 0 view .LVU228
+ 733 0042 93F83D10 		ldrb	r1, [r3, #61]	@ zero_extendqisi2
+ 734              		.loc 1 200 28 view .LVU229
+ 735 0046 D183     		strh	r1, [r2, #30]	@ movhi
+ 201:User/Modbus/modbus_data.c ****     modbus_holding_buf[16] = device.valve_cooler;
+ 736              		.loc 1 201 5 is_stmt 1 view .LVU230
+ 737              		.loc 1 201 36 is_stmt 0 view .LVU231
+ 738 0048 93F83B10 		ldrb	r1, [r3, #59]	@ zero_extendqisi2
+ 739              		.loc 1 201 28 view .LVU232
+ 740 004c 1184     		strh	r1, [r2, #32]	@ movhi
+ 202:User/Modbus/modbus_data.c ****     modbus_holding_buf[17] = device.valve_heater;
+ 741              		.loc 1 202 5 is_stmt 1 view .LVU233
+ 742              		.loc 1 202 36 is_stmt 0 view .LVU234
+ARM GAS  /tmp/ccO6LuPD.s 			page 20
+
+
+ 743 004e 93F83C10 		ldrb	r1, [r3, #60]	@ zero_extendqisi2
+ 744              		.loc 1 202 28 view .LVU235
+ 745 0052 5184     		strh	r1, [r2, #34]	@ movhi
+ 203:User/Modbus/modbus_data.c **** 
+ 204:User/Modbus/modbus_data.c ****     // fc 04
+ 205:User/Modbus/modbus_data.c ****     modbus_input_buf[55] = device.sensor_door;
+ 746              		.loc 1 205 5 is_stmt 1 view .LVU236
+ 747              		.loc 1 205 34 is_stmt 0 view .LVU237
+ 748 0054 93F83F20 		ldrb	r2, [r3, #63]	@ zero_extendqisi2
+ 749              		.loc 1 205 26 view .LVU238
+ 750 0058 034B     		ldr	r3, .L41+8
+ 751 005a A3F86E20 		strh	r2, [r3, #110]	@ movhi
+ 206:User/Modbus/modbus_data.c **** 
+ 207:User/Modbus/modbus_data.c **** }
+ 752              		.loc 1 207 1 view .LVU239
+ 753 005e 7047     		bx	lr
+ 754              	.L42:
+ 755              		.align	2
+ 756              	.L41:
+ 757 0060 00000000 		.word	device
+ 758 0064 00000000 		.word	.LANCHOR0
+ 759 0068 00000000 		.word	.LANCHOR1
+ 760              		.cfi_endproc
+ 761              	.LFE201:
+ 763              		.global	modbus_input_buf
+ 764              		.global	modbus_holding_buf
+ 765              		.section	.bss.modbus_holding_buf,"aw",%nobits
+ 766              		.align	2
+ 767              		.set	.LANCHOR0,. + 0
+ 770              	modbus_holding_buf:
+ 771 0000 00000000 		.space	400
+ 771      00000000 
+ 771      00000000 
+ 771      00000000 
+ 771      00000000 
+ 772              		.section	.bss.modbus_input_buf,"aw",%nobits
+ 773              		.align	2
+ 774              		.set	.LANCHOR1,. + 0
+ 777              	modbus_input_buf:
+ 778 0000 00000000 		.space	400
+ 778      00000000 
+ 778      00000000 
+ 778      00000000 
+ 778      00000000 
+ 779              		.text
+ 780              	.Letext0:
+ 781              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 782              		.file 3 "User/Modbus/modbus_data.h"
+ 783              		.file 4 "User/Modbus/usart.h"
+ 784              		.file 5 "User/System/config.h"
+ 785              		.file 6 "User/System/control_system.h"
+ 786              		.file 7 "User/Modbus/modbus_crc.h"
+ 787              		.file 8 "User/Peripherals/sht_sensor.h"
+ 788              		.file 9 "Inc/stm32f1xx_hal.h"
+ARM GAS  /tmp/ccO6LuPD.s 			page 21
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 modbus_data.c
+     /tmp/ccO6LuPD.s:16     .text.Modbus_Uart2_Process:0000000000000000 $t
+     /tmp/ccO6LuPD.s:24     .text.Modbus_Uart2_Process:0000000000000000 Modbus_Uart2_Process
+     /tmp/ccO6LuPD.s:128    .text.Modbus_Uart2_Process:0000000000000078 $d
+     /tmp/ccO6LuPD.s:134    .text.Modbus_Uart2_Write_Single_Reg:0000000000000000 $t
+     /tmp/ccO6LuPD.s:141    .text.Modbus_Uart2_Write_Single_Reg:0000000000000000 Modbus_Uart2_Write_Single_Reg
+     /tmp/ccO6LuPD.s:204    .text.Modbus_Uart2_Read_Regs:0000000000000000 $t
+     /tmp/ccO6LuPD.s:211    .text.Modbus_Uart2_Read_Regs:0000000000000000 Modbus_Uart2_Read_Regs
+     /tmp/ccO6LuPD.s:277    .text.Modbus_Uart1_Data_Process:0000000000000000 $t
+     /tmp/ccO6LuPD.s:284    .text.Modbus_Uart1_Data_Process:0000000000000000 Modbus_Uart1_Data_Process
+     /tmp/ccO6LuPD.s:650    .text.Modbus_Uart1_Data_Process:00000000000001a4 $d
+     /tmp/ccO6LuPD.s:660    .text.Modbus_Refesh_Regs:0000000000000000 $t
+     /tmp/ccO6LuPD.s:667    .text.Modbus_Refesh_Regs:0000000000000000 Modbus_Refesh_Regs
+     /tmp/ccO6LuPD.s:757    .text.Modbus_Refesh_Regs:0000000000000060 $d
+     /tmp/ccO6LuPD.s:777    .bss.modbus_input_buf:0000000000000000 modbus_input_buf
+     /tmp/ccO6LuPD.s:770    .bss.modbus_holding_buf:0000000000000000 modbus_holding_buf
+     /tmp/ccO6LuPD.s:766    .bss.modbus_holding_buf:0000000000000000 $d
+     /tmp/ccO6LuPD.s:773    .bss.modbus_input_buf:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+Modbus_Check_Crc16
+SHT_Get_Value
+dma_uart2_rx
+device
+Modbus_Create_Crc16
+Uart2_Send_Data
+HAL_Delay
+__aeabi_i2d
+__aeabi_ddiv
+__aeabi_d2f
+Uart1_Send_Data
+CFG_Save
+SHT_Get_Calib_Value
+sys_cfg

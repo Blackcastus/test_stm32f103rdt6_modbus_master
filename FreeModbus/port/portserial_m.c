@@ -83,4 +83,27 @@ void MBmaster_uart_tx_handhler(void)
 	pxMBMasterFrameCBTransmitterEmpty();
 }
 
+// void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+// {
+// 	if(huart->Instance == uart_m->Instance)
+// 	{
+// 		pxMBMasterFrameCBByteReceived();
+// 		printf("RX %s \r\n", singlechar_m);
+// 		HAL_UART_Receive_IT(uart_m, &singlechar_m, 1);
+// 	}
+// 	// else if(huart->Instance == uart->Instance)
+// 	// {
+// 	// 	pxMBFrameCBByteReceived();
+// 	// 	HAL_UART_Receive_IT(uart, &singlechar, 1);
+// 	// }
+// }
+
+// void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+// {
+// 	if(huart->Instance == uart_m->Instance)
+// 	{
+// 		pxMBMasterFrameCBTransmitterEmpty();
+// 	}
+// }
+
 #endif
