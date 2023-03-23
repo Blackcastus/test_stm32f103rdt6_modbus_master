@@ -1,9 +1,4 @@
-/*
-* @Author: nhantt
-* @Date:   2019-12-13
-* @Last Modified by:   nhantt
-* @Last Modified time: 2019-12-13
-*/
+
 
 #include "input.h"
 #include "relay.h"

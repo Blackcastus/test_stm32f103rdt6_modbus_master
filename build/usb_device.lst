@@ -1,27 +1,27 @@
-ARM GAS  /tmp/ccRlNm9V.s 			page 1
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s 			page 1
 
 
    1              		.cpu cortex-m3
-   2              		.eabi_attribute 20, 1
-   3              		.eabi_attribute 21, 1
-   4              		.eabi_attribute 23, 3
-   5              		.eabi_attribute 24, 1
-   6              		.eabi_attribute 25, 1
-   7              		.eabi_attribute 26, 1
-   8              		.eabi_attribute 30, 1
-   9              		.eabi_attribute 34, 1
-  10              		.eabi_attribute 18, 4
-  11              		.file	"usb_device.c"
-  12              		.text
-  13              	.Ltext0:
-  14              		.cfi_sections	.debug_frame
-  15              		.section	.text.USB_GPIO_Init,"ax",%progbits
-  16              		.align	1
-  17              		.arch armv7-m
-  18              		.syntax unified
-  19              		.thumb
-  20              		.thumb_func
-  21              		.fpu softvfp
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"usb_device.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.USB_GPIO_Init,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
   23              	USB_GPIO_Init:
   24              	.LFB198:
   25              		.file 1 "User/USB/usb_device.c"
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccRlNm9V.s 			page 1
   31:User/USB/usb_device.c ****   if (USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS) != USBD_OK)
   32:User/USB/usb_device.c ****   {
   33:User/USB/usb_device.c ****     Error_Handler();
-ARM GAS  /tmp/ccRlNm9V.s 			page 2
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s 			page 2
 
 
   34:User/USB/usb_device.c ****   }
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccRlNm9V.s 			page 1
   65 0026 4FF40041 		mov	r1, #32768
   66 002a 2846     		mov	r0, r5
   67 002c FFF7FEFF 		bl	HAL_GPIO_WritePin
-ARM GAS  /tmp/ccRlNm9V.s 			page 3
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s 			page 3
 
 
   68              	.LVL0:
@@ -168,171 +168,171 @@ ARM GAS  /tmp/ccRlNm9V.s 			page 1
  106              		.syntax unified
  107              		.thumb
  108              		.thumb_func
- 109              		.fpu softvfp
- 111              	MX_USB_DEVICE_Init:
- 112              	.LFB197:
+ 110              	MX_USB_DEVICE_Init:
+ 111              	.LFB197:
   19:User/USB/usb_device.c ****   USB_GPIO_Init();
- 113              		.loc 1 19 1 is_stmt 1 view -0
- 114              		.cfi_startproc
- 115              		@ args = 0, pretend = 0, frame = 0
- 116              		@ frame_needed = 0, uses_anonymous_args = 0
- 117 0000 08B5     		push	{r3, lr}
- 118              	.LCFI3:
-ARM GAS  /tmp/ccRlNm9V.s 			page 4
+ 112              		.loc 1 19 1 is_stmt 1 view -0
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 0
+ 115              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116 0000 08B5     		push	{r3, lr}
+ 117              	.LCFI3:
+ 118              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s 			page 4
 
 
- 119              		.cfi_def_cfa_offset 8
- 120              		.cfi_offset 3, -8
- 121              		.cfi_offset 14, -4
+ 119              		.cfi_offset 3, -8
+ 120              		.cfi_offset 14, -4
   20:User/USB/usb_device.c ****   USB_DISABLE();
- 122              		.loc 1 20 3 view .LVU21
- 123 0002 FFF7FEFF 		bl	USB_GPIO_Init
- 124              	.LVL2:
+ 121              		.loc 1 20 3 view .LVU21
+ 122 0002 FFF7FEFF 		bl	USB_GPIO_Init
+ 123              	.LVL2:
   21:User/USB/usb_device.c ****   HAL_Delay(10);
- 125              		.loc 1 21 3 view .LVU22
- 126 0006 0022     		movs	r2, #0
- 127 0008 4FF40041 		mov	r1, #32768
- 128 000c 1648     		ldr	r0, .L15
- 129 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 130              	.LVL3:
+ 124              		.loc 1 21 3 view .LVU22
+ 125 0006 0022     		movs	r2, #0
+ 126 0008 4FF40041 		mov	r1, #32768
+ 127 000c 1648     		ldr	r0, .L15
+ 128 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 129              	.LVL3:
   22:User/USB/usb_device.c ****   if (USBD_Init(&hUsbDeviceFS, &FS_Desc, DEVICE_FS) != USBD_OK)
- 131              		.loc 1 22 3 view .LVU23
- 132 0012 0A20     		movs	r0, #10
- 133 0014 FFF7FEFF 		bl	HAL_Delay
- 134              	.LVL4:
+ 130              		.loc 1 22 3 view .LVU23
+ 131 0012 0A20     		movs	r0, #10
+ 132 0014 FFF7FEFF 		bl	HAL_Delay
+ 133              	.LVL4:
   23:User/USB/usb_device.c ****   {
- 135              		.loc 1 23 3 view .LVU24
+ 134              		.loc 1 23 3 view .LVU24
   23:User/USB/usb_device.c ****   {
- 136              		.loc 1 23 7 is_stmt 0 view .LVU25
- 137 0018 0022     		movs	r2, #0
- 138 001a 1449     		ldr	r1, .L15+4
- 139 001c 1448     		ldr	r0, .L15+8
- 140 001e FFF7FEFF 		bl	USBD_Init
- 141              	.LVL5:
+ 135              		.loc 1 23 7 is_stmt 0 view .LVU25
+ 136 0018 0022     		movs	r2, #0
+ 137 001a 1449     		ldr	r1, .L15+4
+ 138 001c 1448     		ldr	r0, .L15+8
+ 139 001e FFF7FEFF 		bl	USBD_Init
+ 140              	.LVL5:
   23:User/USB/usb_device.c ****   {
- 142              		.loc 1 23 6 view .LVU26
- 143 0022 A0B9     		cbnz	r0, .L11
- 144              	.L6:
+ 141              		.loc 1 23 6 view .LVU26
+ 142 0022 A0B9     		cbnz	r0, .L11
+ 143              	.L6:
   27:User/USB/usb_device.c ****   {
- 145              		.loc 1 27 3 is_stmt 1 view .LVU27
+ 144              		.loc 1 27 3 is_stmt 1 view .LVU27
   27:User/USB/usb_device.c ****   {
- 146              		.loc 1 27 7 is_stmt 0 view .LVU28
- 147 0024 1349     		ldr	r1, .L15+12
- 148 0026 1248     		ldr	r0, .L15+8
- 149 0028 FFF7FEFF 		bl	USBD_RegisterClass
- 150              	.LVL6:
+ 145              		.loc 1 27 7 is_stmt 0 view .LVU28
+ 146 0024 1349     		ldr	r1, .L15+12
+ 147 0026 1248     		ldr	r0, .L15+8
+ 148 0028 FFF7FEFF 		bl	USBD_RegisterClass
+ 149              	.LVL6:
   27:User/USB/usb_device.c ****   {
- 151              		.loc 1 27 6 view .LVU29
- 152 002c 90B9     		cbnz	r0, .L12
- 153              	.L7:
+ 150              		.loc 1 27 6 view .LVU29
+ 151 002c 90B9     		cbnz	r0, .L12
+ 152              	.L7:
   31:User/USB/usb_device.c ****   {
- 154              		.loc 1 31 3 is_stmt 1 view .LVU30
+ 153              		.loc 1 31 3 is_stmt 1 view .LVU30
   31:User/USB/usb_device.c ****   {
- 155              		.loc 1 31 7 is_stmt 0 view .LVU31
- 156 002e 1249     		ldr	r1, .L15+16
- 157 0030 0F48     		ldr	r0, .L15+8
- 158 0032 FFF7FEFF 		bl	USBD_CDC_RegisterInterface
- 159              	.LVL7:
+ 154              		.loc 1 31 7 is_stmt 0 view .LVU31
+ 155 002e 1249     		ldr	r1, .L15+16
+ 156 0030 0F48     		ldr	r0, .L15+8
+ 157 0032 FFF7FEFF 		bl	USBD_CDC_RegisterInterface
+ 158              	.LVL7:
   31:User/USB/usb_device.c ****   {
- 160              		.loc 1 31 6 view .LVU32
- 161 0036 80B9     		cbnz	r0, .L13
- 162              	.L8:
+ 159              		.loc 1 31 6 view .LVU32
+ 160 0036 80B9     		cbnz	r0, .L13
+ 161              	.L8:
   35:User/USB/usb_device.c ****   {
-ARM GAS  /tmp/ccRlNm9V.s 			page 5
+ 162              		.loc 1 35 3 is_stmt 1 view .LVU33
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s 			page 5
 
 
- 163              		.loc 1 35 3 is_stmt 1 view .LVU33
   35:User/USB/usb_device.c ****   {
- 164              		.loc 1 35 7 is_stmt 0 view .LVU34
- 165 0038 0D48     		ldr	r0, .L15+8
- 166 003a FFF7FEFF 		bl	USBD_Start
- 167              	.LVL8:
+ 163              		.loc 1 35 7 is_stmt 0 view .LVU34
+ 164 0038 0D48     		ldr	r0, .L15+8
+ 165 003a FFF7FEFF 		bl	USBD_Start
+ 166              	.LVL8:
   35:User/USB/usb_device.c ****   {
- 168              		.loc 1 35 6 view .LVU35
- 169 003e 78B9     		cbnz	r0, .L14
- 170              	.L9:
+ 167              		.loc 1 35 6 view .LVU35
+ 168 003e 78B9     		cbnz	r0, .L14
+ 169              	.L9:
   39:User/USB/usb_device.c **** }
- 171              		.loc 1 39 3 is_stmt 1 view .LVU36
- 172 0040 0122     		movs	r2, #1
- 173 0042 4FF40041 		mov	r1, #32768
- 174 0046 0848     		ldr	r0, .L15
- 175 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 176              	.LVL9:
+ 170              		.loc 1 39 3 is_stmt 1 view .LVU36
+ 171 0040 0122     		movs	r2, #1
+ 172 0042 4FF40041 		mov	r1, #32768
+ 173 0046 0848     		ldr	r0, .L15
+ 174 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 175              	.LVL9:
   40:User/USB/usb_device.c **** 
- 177              		.loc 1 40 1 is_stmt 0 view .LVU37
- 178 004c 08BD     		pop	{r3, pc}
- 179              	.L11:
+ 176              		.loc 1 40 1 is_stmt 0 view .LVU37
+ 177 004c 08BD     		pop	{r3, pc}
+ 178              	.L11:
   25:User/USB/usb_device.c ****   }
- 180              		.loc 1 25 5 is_stmt 1 view .LVU38
- 181 004e FFF7FEFF 		bl	Error_Handler
- 182              	.LVL10:
- 183 0052 E7E7     		b	.L6
- 184              	.L12:
+ 179              		.loc 1 25 5 is_stmt 1 view .LVU38
+ 180 004e FFF7FEFF 		bl	Error_Handler
+ 181              	.LVL10:
+ 182 0052 E7E7     		b	.L6
+ 183              	.L12:
   29:User/USB/usb_device.c ****   }
- 185              		.loc 1 29 5 view .LVU39
- 186 0054 FFF7FEFF 		bl	Error_Handler
- 187              	.LVL11:
- 188 0058 E9E7     		b	.L7
- 189              	.L13:
+ 184              		.loc 1 29 5 view .LVU39
+ 185 0054 FFF7FEFF 		bl	Error_Handler
+ 186              	.LVL11:
+ 187 0058 E9E7     		b	.L7
+ 188              	.L13:
   33:User/USB/usb_device.c ****   }
- 190              		.loc 1 33 5 view .LVU40
- 191 005a FFF7FEFF 		bl	Error_Handler
- 192              	.LVL12:
- 193 005e EBE7     		b	.L8
- 194              	.L14:
+ 189              		.loc 1 33 5 view .LVU40
+ 190 005a FFF7FEFF 		bl	Error_Handler
+ 191              	.LVL12:
+ 192 005e EBE7     		b	.L8
+ 193              	.L14:
   37:User/USB/usb_device.c ****   }
- 195              		.loc 1 37 5 view .LVU41
- 196 0060 FFF7FEFF 		bl	Error_Handler
- 197              	.LVL13:
- 198 0064 ECE7     		b	.L9
- 199              	.L16:
- 200 0066 00BF     		.align	2
- 201              	.L15:
- 202 0068 00080140 		.word	1073809408
- 203 006c 00000000 		.word	FS_Desc
- 204 0070 00000000 		.word	.LANCHOR0
- 205 0074 00000000 		.word	USBD_CDC
- 206 0078 00000000 		.word	USBD_Interface_fops_FS
- 207              		.cfi_endproc
- 208              	.LFE197:
- 210              		.global	hUsbDeviceFS
- 211              		.section	.bss.hUsbDeviceFS,"aw",%nobits
- 212              		.align	2
-ARM GAS  /tmp/ccRlNm9V.s 			page 6
+ 194              		.loc 1 37 5 view .LVU41
+ 195 0060 FFF7FEFF 		bl	Error_Handler
+ 196              	.LVL13:
+ 197 0064 ECE7     		b	.L9
+ 198              	.L16:
+ 199 0066 00BF     		.align	2
+ 200              	.L15:
+ 201 0068 00080140 		.word	1073809408
+ 202 006c 00000000 		.word	FS_Desc
+ 203 0070 00000000 		.word	.LANCHOR0
+ 204 0074 00000000 		.word	USBD_CDC
+ 205 0078 00000000 		.word	USBD_Interface_fops_FS
+ 206              		.cfi_endproc
+ 207              	.LFE197:
+ 209              		.global	hUsbDeviceFS
+ 210              		.section	.bss.hUsbDeviceFS,"aw",%nobits
+ 211              		.align	2
+ 212              		.set	.LANCHOR0,. + 0
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s 			page 6
 
 
- 213              		.set	.LANCHOR0,. + 0
- 216              	hUsbDeviceFS:
- 217 0000 00000000 		.space	708
- 217      00000000 
- 217      00000000 
- 217      00000000 
- 217      00000000 
- 218              		.text
- 219              	.Letext0:
- 220              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
- 221              		.file 3 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/CMSIS/Device/ST/STM32F
- 222              		.file 4 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
- 223              		.file 5 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Middlewares/ST/STM32_USB_Devic
- 224              		.file 6 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Middlewares/ST/STM32_USB_Devic
- 225              		.file 7 "User/USB/usbd_desc.h"
- 226              		.file 8 "User/USB/usbd_cdc_if.h"
- 227              		.file 9 "Inc/stm32f1xx_hal.h"
- 228              		.file 10 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Middlewares/ST/STM32_USB_Devi
- 229              		.file 11 "Inc/main.h"
-ARM GAS  /tmp/ccRlNm9V.s 			page 7
+ 215              	hUsbDeviceFS:
+ 216 0000 00000000 		.space	708
+ 216      00000000 
+ 216      00000000 
+ 216      00000000 
+ 216      00000000 
+ 217              		.text
+ 218              	.Letext0:
+ 219              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 220              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 221              		.file 4 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/CMSIS/Device/ST/S
+ 222              		.file 5 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Dri
+ 223              		.file 6 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Middlewares/ST/STM32_USB_
+ 224              		.file 7 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Middlewares/ST/STM32_USB_
+ 225              		.file 8 "User/USB/usbd_desc.h"
+ 226              		.file 9 "User/USB/usbd_cdc_if.h"
+ 227              		.file 10 "Inc/stm32f1xx_hal.h"
+ 228              		.file 11 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Middlewares/ST/STM32_USB
+ 229              		.file 12 "Inc/main.h"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s 			page 7
 
 
 DEFINED SYMBOLS
-                            *ABS*:0000000000000000 usb_device.c
-     /tmp/ccRlNm9V.s:16     .text.USB_GPIO_Init:0000000000000000 $t
-     /tmp/ccRlNm9V.s:23     .text.USB_GPIO_Init:0000000000000000 USB_GPIO_Init
-     /tmp/ccRlNm9V.s:98     .text.USB_GPIO_Init:000000000000004c $d
-     /tmp/ccRlNm9V.s:104    .text.MX_USB_DEVICE_Init:0000000000000000 $t
-     /tmp/ccRlNm9V.s:111    .text.MX_USB_DEVICE_Init:0000000000000000 MX_USB_DEVICE_Init
-     /tmp/ccRlNm9V.s:202    .text.MX_USB_DEVICE_Init:0000000000000068 $d
-     /tmp/ccRlNm9V.s:216    .bss.hUsbDeviceFS:0000000000000000 hUsbDeviceFS
-     /tmp/ccRlNm9V.s:212    .bss.hUsbDeviceFS:0000000000000000 $d
+                            *ABS*:00000000 usb_device.c
+C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s:18     .text.USB_GPIO_Init:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s:23     .text.USB_GPIO_Init:00000000 USB_GPIO_Init
+C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s:98     .text.USB_GPIO_Init:0000004c $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s:104    .text.MX_USB_DEVICE_Init:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s:110    .text.MX_USB_DEVICE_Init:00000000 MX_USB_DEVICE_Init
+C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s:201    .text.MX_USB_DEVICE_Init:00000068 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s:215    .bss.hUsbDeviceFS:00000000 hUsbDeviceFS
+C:\Users\BLACK_~1\AppData\Local\Temp\ccwEM3dV.s:211    .bss.hUsbDeviceFS:00000000 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_WritePin

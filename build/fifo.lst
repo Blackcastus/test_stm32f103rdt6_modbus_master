@@ -1,27 +1,27 @@
-ARM GAS  /tmp/ccqJhKIV.s 			page 1
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s 			page 1
 
 
    1              		.cpu cortex-m3
-   2              		.eabi_attribute 20, 1
-   3              		.eabi_attribute 21, 1
-   4              		.eabi_attribute 23, 3
-   5              		.eabi_attribute 24, 1
-   6              		.eabi_attribute 25, 1
-   7              		.eabi_attribute 26, 1
-   8              		.eabi_attribute 30, 1
-   9              		.eabi_attribute 34, 1
-  10              		.eabi_attribute 18, 4
-  11              		.file	"fifo.c"
-  12              		.text
-  13              	.Ltext0:
-  14              		.cfi_sections	.debug_frame
-  15              		.section	.text.FifoNext,"ax",%progbits
-  16              		.align	1
-  17              		.arch armv7-m
-  18              		.syntax unified
-  19              		.thumb
-  20              		.thumb_func
-  21              		.fpu softvfp
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"fifo.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.FifoNext,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
   23              	FifoNext:
   24              	.LVL0:
   25              	.LFB0:
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccqJhKIV.s 			page 1
   37 0002 0089     		ldrh	r0, [r0, #8]
   38              	.LVL2:
   39              		.loc 1 19 26 view .LVU4
-ARM GAS  /tmp/ccqJhKIV.s 			page 2
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s 			page 2
 
 
   40 0004 91FBF0F3 		sdiv	r3, r1, r0
@@ -75,283 +75,278 @@ ARM GAS  /tmp/ccqJhKIV.s 			page 1
   51              		.syntax unified
   52              		.thumb
   53              		.thumb_func
-  54              		.fpu softvfp
-  56              	FifoInit:
-  57              	.LVL3:
-  58              	.LFB1:
+  55              	FifoInit:
+  56              	.LVL3:
+  57              	.LFB1:
   21:User/Modbus/fifo.c **** 
   22:User/Modbus/fifo.c **** void FifoInit( Fifo_t *fifo, uint8_t *buffer, uint16_t size )
   23:User/Modbus/fifo.c **** {
-  59              		.loc 1 23 1 is_stmt 1 view -0
-  60              		.cfi_startproc
-  61              		@ args = 0, pretend = 0, frame = 0
-  62              		@ frame_needed = 0, uses_anonymous_args = 0
-  63              		@ link register save eliminated.
+  58              		.loc 1 23 1 is_stmt 1 view -0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  62              		@ link register save eliminated.
   24:User/Modbus/fifo.c ****     fifo->Begin = 0;
-  64              		.loc 1 24 5 view .LVU7
-  65              		.loc 1 24 17 is_stmt 0 view .LVU8
-  66 0000 0023     		movs	r3, #0
-  67 0002 0380     		strh	r3, [r0]	@ movhi
+  63              		.loc 1 24 5 view .LVU7
+  64              		.loc 1 24 17 is_stmt 0 view .LVU8
+  65 0000 0023     		movs	r3, #0
+  66 0002 0380     		strh	r3, [r0]	@ movhi
   25:User/Modbus/fifo.c ****     fifo->End = 0;
-  68              		.loc 1 25 5 is_stmt 1 view .LVU9
-  69              		.loc 1 25 15 is_stmt 0 view .LVU10
-  70 0004 4380     		strh	r3, [r0, #2]	@ movhi
+  67              		.loc 1 25 5 is_stmt 1 view .LVU9
+  68              		.loc 1 25 15 is_stmt 0 view .LVU10
+  69 0004 4380     		strh	r3, [r0, #2]	@ movhi
   26:User/Modbus/fifo.c ****     fifo->Data = buffer;
-  71              		.loc 1 26 5 is_stmt 1 view .LVU11
-  72              		.loc 1 26 16 is_stmt 0 view .LVU12
-  73 0006 4160     		str	r1, [r0, #4]
+  70              		.loc 1 26 5 is_stmt 1 view .LVU11
+  71              		.loc 1 26 16 is_stmt 0 view .LVU12
+  72 0006 4160     		str	r1, [r0, #4]
   27:User/Modbus/fifo.c ****     fifo->Size = size;
-  74              		.loc 1 27 5 is_stmt 1 view .LVU13
-  75              		.loc 1 27 16 is_stmt 0 view .LVU14
-  76 0008 0281     		strh	r2, [r0, #8]	@ movhi
+  73              		.loc 1 27 5 is_stmt 1 view .LVU13
+  74              		.loc 1 27 16 is_stmt 0 view .LVU14
+  75 0008 0281     		strh	r2, [r0, #8]	@ movhi
   28:User/Modbus/fifo.c **** }
-  77              		.loc 1 28 1 view .LVU15
-  78 000a 7047     		bx	lr
-  79              		.cfi_endproc
-  80              	.LFE1:
-  82              		.section	.text.FifoPush,"ax",%progbits
-  83              		.align	1
-  84              		.global	FifoPush
-  85              		.syntax unified
-  86              		.thumb
-  87              		.thumb_func
-  88              		.fpu softvfp
-  90              	FifoPush:
-  91              	.LVL4:
-ARM GAS  /tmp/ccqJhKIV.s 			page 3
-
-
-  92              	.LFB2:
+  76              		.loc 1 28 1 view .LVU15
+  77 000a 7047     		bx	lr
+  78              		.cfi_endproc
+  79              	.LFE1:
+  81              		.section	.text.FifoPush,"ax",%progbits
+  82              		.align	1
+  83              		.global	FifoPush
+  84              		.syntax unified
+  85              		.thumb
+  86              		.thumb_func
+  88              	FifoPush:
+  89              	.LVL4:
+  90              	.LFB2:
   29:User/Modbus/fifo.c **** 
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s 			page 3
+
+
   30:User/Modbus/fifo.c **** void FifoPush( Fifo_t *fifo, uint8_t data )
   31:User/Modbus/fifo.c **** {
-  93              		.loc 1 31 1 is_stmt 1 view -0
-  94              		.cfi_startproc
-  95              		@ args = 0, pretend = 0, frame = 0
-  96              		@ frame_needed = 0, uses_anonymous_args = 0
-  97              		.loc 1 31 1 is_stmt 0 view .LVU17
-  98 0000 38B5     		push	{r3, r4, r5, lr}
-  99              	.LCFI0:
- 100              		.cfi_def_cfa_offset 16
- 101              		.cfi_offset 3, -16
- 102              		.cfi_offset 4, -12
- 103              		.cfi_offset 5, -8
- 104              		.cfi_offset 14, -4
- 105 0002 0446     		mov	r4, r0
- 106 0004 0D46     		mov	r5, r1
+  91              		.loc 1 31 1 is_stmt 1 view -0
+  92              		.cfi_startproc
+  93              		@ args = 0, pretend = 0, frame = 0
+  94              		@ frame_needed = 0, uses_anonymous_args = 0
+  95              		.loc 1 31 1 is_stmt 0 view .LVU17
+  96 0000 38B5     		push	{r3, r4, r5, lr}
+  97              	.LCFI0:
+  98              		.cfi_def_cfa_offset 16
+  99              		.cfi_offset 3, -16
+ 100              		.cfi_offset 4, -12
+ 101              		.cfi_offset 5, -8
+ 102              		.cfi_offset 14, -4
+ 103 0002 0446     		mov	r4, r0
+ 104 0004 0D46     		mov	r5, r1
   32:User/Modbus/fifo.c ****     fifo->End = FifoNext( fifo, fifo->End );
- 107              		.loc 1 32 5 is_stmt 1 view .LVU18
- 108              		.loc 1 32 17 is_stmt 0 view .LVU19
- 109 0006 4188     		ldrh	r1, [r0, #2]
- 110              	.LVL5:
- 111              		.loc 1 32 17 view .LVU20
- 112 0008 FFF7FEFF 		bl	FifoNext
- 113              	.LVL6:
- 114              		.loc 1 32 15 view .LVU21
- 115 000c 6080     		strh	r0, [r4, #2]	@ movhi
+ 105              		.loc 1 32 5 is_stmt 1 view .LVU18
+ 106              		.loc 1 32 17 is_stmt 0 view .LVU19
+ 107 0006 4188     		ldrh	r1, [r0, #2]
+ 108              	.LVL5:
+ 109              		.loc 1 32 17 view .LVU20
+ 110 0008 FFF7FEFF 		bl	FifoNext
+ 111              	.LVL6:
+ 112              		.loc 1 32 15 view .LVU21
+ 113 000c 6080     		strh	r0, [r4, #2]	@ movhi
   33:User/Modbus/fifo.c ****     fifo->Data[fifo->End] = data;
- 116              		.loc 1 33 5 is_stmt 1 view .LVU22
- 117              		.loc 1 33 9 is_stmt 0 view .LVU23
- 118 000e 6368     		ldr	r3, [r4, #4]
- 119              		.loc 1 33 27 view .LVU24
- 120 0010 1D54     		strb	r5, [r3, r0]
+ 114              		.loc 1 33 5 is_stmt 1 view .LVU22
+ 115              		.loc 1 33 9 is_stmt 0 view .LVU23
+ 116 000e 6368     		ldr	r3, [r4, #4]
+ 117              		.loc 1 33 27 view .LVU24
+ 118 0010 1D54     		strb	r5, [r3, r0]
   34:User/Modbus/fifo.c **** }
- 121              		.loc 1 34 1 view .LVU25
- 122 0012 38BD     		pop	{r3, r4, r5, pc}
- 123              		.loc 1 34 1 view .LVU26
- 124              		.cfi_endproc
- 125              	.LFE2:
- 127              		.section	.text.FifoPop,"ax",%progbits
- 128              		.align	1
- 129              		.global	FifoPop
- 130              		.syntax unified
- 131              		.thumb
- 132              		.thumb_func
- 133              		.fpu softvfp
- 135              	FifoPop:
- 136              	.LVL7:
- 137              	.LFB3:
+ 119              		.loc 1 34 1 view .LVU25
+ 120 0012 38BD     		pop	{r3, r4, r5, pc}
+ 121              		.loc 1 34 1 view .LVU26
+ 122              		.cfi_endproc
+ 123              	.LFE2:
+ 125              		.section	.text.FifoPop,"ax",%progbits
+ 126              		.align	1
+ 127              		.global	FifoPop
+ 128              		.syntax unified
+ 129              		.thumb
+ 130              		.thumb_func
+ 132              	FifoPop:
+ 133              	.LVL7:
+ 134              	.LFB3:
   35:User/Modbus/fifo.c **** 
   36:User/Modbus/fifo.c **** uint8_t FifoPop( Fifo_t *fifo )
   37:User/Modbus/fifo.c **** {
- 138              		.loc 1 37 1 is_stmt 1 view -0
- 139              		.cfi_startproc
- 140              		@ args = 0, pretend = 0, frame = 0
- 141              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccqJhKIV.s 			page 4
+ 135              		.loc 1 37 1 is_stmt 1 view -0
+ 136              		.cfi_startproc
+ 137              		@ args = 0, pretend = 0, frame = 0
+ 138              		@ frame_needed = 0, uses_anonymous_args = 0
+ 139              		.loc 1 37 1 is_stmt 0 view .LVU28
+ 140 0000 38B5     		push	{r3, r4, r5, lr}
+ 141              	.LCFI1:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s 			page 4
 
 
- 142              		.loc 1 37 1 is_stmt 0 view .LVU28
- 143 0000 38B5     		push	{r3, r4, r5, lr}
- 144              	.LCFI1:
- 145              		.cfi_def_cfa_offset 16
- 146              		.cfi_offset 3, -16
- 147              		.cfi_offset 4, -12
- 148              		.cfi_offset 5, -8
- 149              		.cfi_offset 14, -4
- 150 0002 0446     		mov	r4, r0
+ 142              		.cfi_def_cfa_offset 16
+ 143              		.cfi_offset 3, -16
+ 144              		.cfi_offset 4, -12
+ 145              		.cfi_offset 5, -8
+ 146              		.cfi_offset 14, -4
+ 147 0002 0446     		mov	r4, r0
   38:User/Modbus/fifo.c ****     uint8_t data = fifo->Data[FifoNext( fifo, fifo->Begin )];
- 151              		.loc 1 38 5 is_stmt 1 view .LVU29
- 152              		.loc 1 38 24 is_stmt 0 view .LVU30
- 153 0004 4568     		ldr	r5, [r0, #4]
- 154              		.loc 1 38 31 view .LVU31
- 155 0006 0188     		ldrh	r1, [r0]
- 156 0008 FFF7FEFF 		bl	FifoNext
- 157              	.LVL8:
- 158              		.loc 1 38 31 view .LVU32
- 159 000c 0346     		mov	r3, r0
- 160              		.loc 1 38 13 view .LVU33
- 161 000e 285C     		ldrb	r0, [r5, r0]	@ zero_extendqisi2
- 162              	.LVL9:
+ 148              		.loc 1 38 5 is_stmt 1 view .LVU29
+ 149              		.loc 1 38 24 is_stmt 0 view .LVU30
+ 150 0004 4568     		ldr	r5, [r0, #4]
+ 151              		.loc 1 38 31 view .LVU31
+ 152 0006 0188     		ldrh	r1, [r0]
+ 153 0008 FFF7FEFF 		bl	FifoNext
+ 154              	.LVL8:
+ 155              		.loc 1 38 31 view .LVU32
+ 156 000c 0346     		mov	r3, r0
+ 157              		.loc 1 38 13 view .LVU33
+ 158 000e 285C     		ldrb	r0, [r5, r0]	@ zero_extendqisi2
+ 159              	.LVL9:
   39:User/Modbus/fifo.c **** 
   40:User/Modbus/fifo.c ****     fifo->Begin = FifoNext( fifo, fifo->Begin );
- 163              		.loc 1 40 5 is_stmt 1 view .LVU34
- 164              		.loc 1 40 17 is_stmt 0 view .LVU35
- 165 0010 2380     		strh	r3, [r4]	@ movhi
+ 160              		.loc 1 40 5 is_stmt 1 view .LVU34
+ 161              		.loc 1 40 17 is_stmt 0 view .LVU35
+ 162 0010 2380     		strh	r3, [r4]	@ movhi
   41:User/Modbus/fifo.c ****     return data;
- 166              		.loc 1 41 5 is_stmt 1 view .LVU36
+ 163              		.loc 1 41 5 is_stmt 1 view .LVU36
   42:User/Modbus/fifo.c **** }
- 167              		.loc 1 42 1 is_stmt 0 view .LVU37
- 168 0012 38BD     		pop	{r3, r4, r5, pc}
- 169              		.loc 1 42 1 view .LVU38
- 170              		.cfi_endproc
- 171              	.LFE3:
- 173              		.section	.text.FifoFlush,"ax",%progbits
- 174              		.align	1
- 175              		.global	FifoFlush
- 176              		.syntax unified
- 177              		.thumb
- 178              		.thumb_func
- 179              		.fpu softvfp
- 181              	FifoFlush:
- 182              	.LVL10:
- 183              	.LFB4:
+ 164              		.loc 1 42 1 is_stmt 0 view .LVU37
+ 165 0012 38BD     		pop	{r3, r4, r5, pc}
+ 166              		.loc 1 42 1 view .LVU38
+ 167              		.cfi_endproc
+ 168              	.LFE3:
+ 170              		.section	.text.FifoFlush,"ax",%progbits
+ 171              		.align	1
+ 172              		.global	FifoFlush
+ 173              		.syntax unified
+ 174              		.thumb
+ 175              		.thumb_func
+ 177              	FifoFlush:
+ 178              	.LVL10:
+ 179              	.LFB4:
   43:User/Modbus/fifo.c **** 
   44:User/Modbus/fifo.c **** void FifoFlush( Fifo_t *fifo )
   45:User/Modbus/fifo.c **** {
- 184              		.loc 1 45 1 is_stmt 1 view -0
- 185              		.cfi_startproc
- 186              		@ args = 0, pretend = 0, frame = 0
- 187              		@ frame_needed = 0, uses_anonymous_args = 0
- 188              		@ link register save eliminated.
+ 180              		.loc 1 45 1 is_stmt 1 view -0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 0
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184              		@ link register save eliminated.
   46:User/Modbus/fifo.c ****     fifo->Begin = 0;
- 189              		.loc 1 46 5 view .LVU40
- 190              		.loc 1 46 17 is_stmt 0 view .LVU41
- 191 0000 0023     		movs	r3, #0
-ARM GAS  /tmp/ccqJhKIV.s 			page 5
-
-
- 192 0002 0380     		strh	r3, [r0]	@ movhi
+ 185              		.loc 1 46 5 view .LVU40
+ 186              		.loc 1 46 17 is_stmt 0 view .LVU41
+ 187 0000 0023     		movs	r3, #0
+ 188 0002 0380     		strh	r3, [r0]	@ movhi
   47:User/Modbus/fifo.c ****     fifo->End = 0;
- 193              		.loc 1 47 5 is_stmt 1 view .LVU42
- 194              		.loc 1 47 15 is_stmt 0 view .LVU43
- 195 0004 4380     		strh	r3, [r0, #2]	@ movhi
+ 189              		.loc 1 47 5 is_stmt 1 view .LVU42
+ 190              		.loc 1 47 15 is_stmt 0 view .LVU43
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s 			page 5
+
+
+ 191 0004 4380     		strh	r3, [r0, #2]	@ movhi
   48:User/Modbus/fifo.c **** }
- 196              		.loc 1 48 1 view .LVU44
- 197 0006 7047     		bx	lr
- 198              		.cfi_endproc
- 199              	.LFE4:
- 201              		.section	.text.IsFifoEmpty,"ax",%progbits
- 202              		.align	1
- 203              		.global	IsFifoEmpty
- 204              		.syntax unified
- 205              		.thumb
- 206              		.thumb_func
- 207              		.fpu softvfp
- 209              	IsFifoEmpty:
- 210              	.LVL11:
- 211              	.LFB5:
+ 192              		.loc 1 48 1 view .LVU44
+ 193 0006 7047     		bx	lr
+ 194              		.cfi_endproc
+ 195              	.LFE4:
+ 197              		.section	.text.IsFifoEmpty,"ax",%progbits
+ 198              		.align	1
+ 199              		.global	IsFifoEmpty
+ 200              		.syntax unified
+ 201              		.thumb
+ 202              		.thumb_func
+ 204              	IsFifoEmpty:
+ 205              	.LVL11:
+ 206              	.LFB5:
   49:User/Modbus/fifo.c **** 
   50:User/Modbus/fifo.c **** bool IsFifoEmpty( Fifo_t *fifo )
   51:User/Modbus/fifo.c **** {
- 212              		.loc 1 51 1 is_stmt 1 view -0
- 213              		.cfi_startproc
- 214              		@ args = 0, pretend = 0, frame = 0
- 215              		@ frame_needed = 0, uses_anonymous_args = 0
- 216              		@ link register save eliminated.
+ 207              		.loc 1 51 1 is_stmt 1 view -0
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 0
+ 210              		@ frame_needed = 0, uses_anonymous_args = 0
+ 211              		@ link register save eliminated.
   52:User/Modbus/fifo.c ****     return ( fifo->Begin == fifo->End );
- 217              		.loc 1 52 5 view .LVU46
- 218              		.loc 1 52 18 is_stmt 0 view .LVU47
- 219 0000 0288     		ldrh	r2, [r0]
- 220              		.loc 1 52 33 view .LVU48
- 221 0002 4088     		ldrh	r0, [r0, #2]
- 222              	.LVL12:
+ 212              		.loc 1 52 5 view .LVU46
+ 213              		.loc 1 52 18 is_stmt 0 view .LVU47
+ 214 0000 0288     		ldrh	r2, [r0]
+ 215              		.loc 1 52 33 view .LVU48
+ 216 0002 4088     		ldrh	r0, [r0, #2]
+ 217              	.LVL12:
   53:User/Modbus/fifo.c **** }
- 223              		.loc 1 53 1 view .LVU49
- 224 0004 8242     		cmp	r2, r0
- 225 0006 14BF     		ite	ne
- 226 0008 0020     		movne	r0, #0
- 227 000a 0120     		moveq	r0, #1
- 228 000c 7047     		bx	lr
- 229              		.cfi_endproc
- 230              	.LFE5:
- 232              		.section	.text.IsFifoFull,"ax",%progbits
- 233              		.align	1
- 234              		.global	IsFifoFull
- 235              		.syntax unified
- 236              		.thumb
- 237              		.thumb_func
- 238              		.fpu softvfp
- 240              	IsFifoFull:
- 241              	.LVL13:
- 242              	.LFB6:
+ 218              		.loc 1 53 1 view .LVU49
+ 219 0004 8242     		cmp	r2, r0
+ 220 0006 14BF     		ite	ne
+ 221 0008 0020     		movne	r0, #0
+ 222 000a 0120     		moveq	r0, #1
+ 223 000c 7047     		bx	lr
+ 224              		.cfi_endproc
+ 225              	.LFE5:
+ 227              		.section	.text.IsFifoFull,"ax",%progbits
+ 228              		.align	1
+ 229              		.global	IsFifoFull
+ 230              		.syntax unified
+ 231              		.thumb
+ 232              		.thumb_func
+ 234              	IsFifoFull:
+ 235              	.LVL13:
+ 236              	.LFB6:
   54:User/Modbus/fifo.c **** 
   55:User/Modbus/fifo.c **** bool IsFifoFull( Fifo_t *fifo )
   56:User/Modbus/fifo.c **** {
-ARM GAS  /tmp/ccqJhKIV.s 			page 6
+ 237              		.loc 1 56 1 is_stmt 1 view -0
+ 238              		.cfi_startproc
+ 239              		@ args = 0, pretend = 0, frame = 0
+ 240              		@ frame_needed = 0, uses_anonymous_args = 0
+ 241              		.loc 1 56 1 is_stmt 0 view .LVU51
+ 242 0000 10B5     		push	{r4, lr}
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s 			page 6
 
 
- 243              		.loc 1 56 1 is_stmt 1 view -0
- 244              		.cfi_startproc
- 245              		@ args = 0, pretend = 0, frame = 0
- 246              		@ frame_needed = 0, uses_anonymous_args = 0
- 247              		.loc 1 56 1 is_stmt 0 view .LVU51
- 248 0000 10B5     		push	{r4, lr}
- 249              	.LCFI2:
- 250              		.cfi_def_cfa_offset 8
- 251              		.cfi_offset 4, -8
- 252              		.cfi_offset 14, -4
- 253 0002 0446     		mov	r4, r0
+ 243              	.LCFI2:
+ 244              		.cfi_def_cfa_offset 8
+ 245              		.cfi_offset 4, -8
+ 246              		.cfi_offset 14, -4
+ 247 0002 0446     		mov	r4, r0
   57:User/Modbus/fifo.c ****     return ( FifoNext( fifo, fifo->End ) == fifo->Begin );
- 254              		.loc 1 57 5 is_stmt 1 view .LVU52
- 255              		.loc 1 57 14 is_stmt 0 view .LVU53
- 256 0004 4188     		ldrh	r1, [r0, #2]
- 257 0006 FFF7FEFF 		bl	FifoNext
- 258              	.LVL14:
- 259              		.loc 1 57 49 view .LVU54
- 260 000a 2388     		ldrh	r3, [r4]
+ 248              		.loc 1 57 5 is_stmt 1 view .LVU52
+ 249              		.loc 1 57 14 is_stmt 0 view .LVU53
+ 250 0004 4188     		ldrh	r1, [r0, #2]
+ 251 0006 FFF7FEFF 		bl	FifoNext
+ 252              	.LVL14:
+ 253              		.loc 1 57 49 view .LVU54
+ 254 000a 2388     		ldrh	r3, [r4]
   58:User/Modbus/fifo.c **** }
- 261              		.loc 1 58 1 view .LVU55
- 262 000c 9842     		cmp	r0, r3
- 263 000e 14BF     		ite	ne
- 264 0010 0020     		movne	r0, #0
- 265 0012 0120     		moveq	r0, #1
- 266 0014 10BD     		pop	{r4, pc}
- 267              		.loc 1 58 1 view .LVU56
- 268              		.cfi_endproc
- 269              	.LFE6:
- 271              		.text
- 272              	.Letext0:
- 273              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
- 274              		.file 3 "User/Modbus/fifo.h"
-ARM GAS  /tmp/ccqJhKIV.s 			page 7
+ 255              		.loc 1 58 1 view .LVU55
+ 256 000c 9842     		cmp	r0, r3
+ 257 000e 14BF     		ite	ne
+ 258 0010 0020     		movne	r0, #0
+ 259 0012 0120     		moveq	r0, #1
+ 260 0014 10BD     		pop	{r4, pc}
+ 261              		.loc 1 58 1 view .LVU56
+ 262              		.cfi_endproc
+ 263              	.LFE6:
+ 265              		.text
+ 266              	.Letext0:
+ 267              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 268              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 269              		.file 4 "User/Modbus/fifo.h"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s 			page 7
 
 
 DEFINED SYMBOLS
-                            *ABS*:0000000000000000 fifo.c
-     /tmp/ccqJhKIV.s:16     .text.FifoNext:0000000000000000 $t
-     /tmp/ccqJhKIV.s:23     .text.FifoNext:0000000000000000 FifoNext
-     /tmp/ccqJhKIV.s:49     .text.FifoInit:0000000000000000 $t
-     /tmp/ccqJhKIV.s:56     .text.FifoInit:0000000000000000 FifoInit
-     /tmp/ccqJhKIV.s:83     .text.FifoPush:0000000000000000 $t
-     /tmp/ccqJhKIV.s:90     .text.FifoPush:0000000000000000 FifoPush
-     /tmp/ccqJhKIV.s:128    .text.FifoPop:0000000000000000 $t
-     /tmp/ccqJhKIV.s:135    .text.FifoPop:0000000000000000 FifoPop
-     /tmp/ccqJhKIV.s:174    .text.FifoFlush:0000000000000000 $t
-     /tmp/ccqJhKIV.s:181    .text.FifoFlush:0000000000000000 FifoFlush
-     /tmp/ccqJhKIV.s:202    .text.IsFifoEmpty:0000000000000000 $t
-     /tmp/ccqJhKIV.s:209    .text.IsFifoEmpty:0000000000000000 IsFifoEmpty
-     /tmp/ccqJhKIV.s:233    .text.IsFifoFull:0000000000000000 $t
-     /tmp/ccqJhKIV.s:240    .text.IsFifoFull:0000000000000000 IsFifoFull
+                            *ABS*:00000000 fifo.c
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:18     .text.FifoNext:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:23     .text.FifoNext:00000000 FifoNext
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:49     .text.FifoInit:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:55     .text.FifoInit:00000000 FifoInit
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:82     .text.FifoPush:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:88     .text.FifoPush:00000000 FifoPush
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:126    .text.FifoPop:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:132    .text.FifoPop:00000000 FifoPop
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:171    .text.FifoFlush:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:177    .text.FifoFlush:00000000 FifoFlush
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:198    .text.IsFifoEmpty:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:204    .text.IsFifoEmpty:00000000 IsFifoEmpty
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:228    .text.IsFifoFull:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\cce6FS19.s:234    .text.IsFifoFull:00000000 IsFifoFull
 
 NO UNDEFINED SYMBOLS

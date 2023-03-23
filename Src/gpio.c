@@ -1,9 +1,4 @@
-/*
-* @Author: nhantt
-* @Date:   2020-07-01
-* @Last Modified by:   nhantt
-* @Last Modified time: 2020-07-01
-*/
+
 
 #include "gpio.h"
 

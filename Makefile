@@ -17,8 +17,8 @@ TARGET = ph_environmental_cabinet_controller_io_fw
 # /c/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4
 
 ifeq ($(OS),Windows_NT)
-	OPENOCD_DIR ?= /d/tools/OpenOCD-20211118-0.11.00
-	LIB_DIR ?= /c/Users/smart/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4
+	OPENOCD_DIR ?= /d/2_Tool/OpenOCD-20211118-0.11.0
+	LIB_DIR ?= /c/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4
 	CC_PATH ?= "/tools/stm32/gcc/bin"
 else
 	UNAME_S := $(shell uname -s)
@@ -250,7 +250,7 @@ flash:
 # 		        -c "verify_image $(BUILD_DIR)/$(TARGET).hex" \
 # 		        -c "reset run" -c shutdown
 
-#######################################0
+#######################################
 # clean up
 #######################################
 clean:

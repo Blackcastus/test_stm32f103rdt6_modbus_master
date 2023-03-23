@@ -1,3 +1,10 @@
+/*
+* @Author: duchien 
+* @Date:   2023-03-23
+* @Last Modified by:   duchien
+* @Last Modified time: 2023-03-23
+*/
+
 #include "usart.h"
 #include "fifo.h"
 #include "modbus_crc.h"

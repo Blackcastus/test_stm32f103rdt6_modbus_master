@@ -1,3 +1,10 @@
+/*
+* @Author: duchien 
+* @Date:   2023-03-23
+* @Last Modified by:   duchien
+* @Last Modified time: 2023-03-23
+*/
+
 #include "modbus_data.h"
 #include "modbus_crc.h"
 #include "usart.h"
@@ -34,9 +41,9 @@ MB_Error_Code_t Modbus_Master_DMA_Process(void)
                     id_slaver = dma_uart2_rx.data[0];
 					total_reg = dma_uart2_rx.data[2]/2;
 
-                    if(id_slaver > MB_MASTER_SLAVE_NUM || total_reg > NoB_HOLDING_REGISTER)
+                    if(id_slaver > MB_MASTER_SLAVE_NUM || slave.reg_hold_start + total_reg > NoB_HOLDING_REGISTER)
                         return;
-                    for(int i = slave.reg_hold_start, j = 3; i < total_reg; i++ ,j += 2)
+                    for(int i = slave.reg_hold_start, j = 3; i < slave.reg_hold_start + total_reg; i++ ,j += 2)
                     {
                         modbus_master_hold_buf[id_slaver-1][i] = dma_uart2_rx.data[j] << 8 | dma_uart2_rx.data[j + 1];
                     }

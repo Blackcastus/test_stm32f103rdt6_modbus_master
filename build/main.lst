@@ -1,36 +1,36 @@
-ARM GAS  /tmp/cc6XhbxS.s 			page 1
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 1
 
 
    1              		.cpu cortex-m3
-   2              		.eabi_attribute 20, 1
-   3              		.eabi_attribute 21, 1
-   4              		.eabi_attribute 23, 3
-   5              		.eabi_attribute 24, 1
-   6              		.eabi_attribute 25, 1
-   7              		.eabi_attribute 26, 1
-   8              		.eabi_attribute 30, 1
-   9              		.eabi_attribute 34, 1
-  10              		.eabi_attribute 18, 4
-  11              		.file	"main.c"
-  12              		.text
-  13              	.Ltext0:
-  14              		.cfi_sections	.debug_frame
-  15              		.section	.text.SystemClock_Config,"ax",%progbits
-  16              		.align	1
-  17              		.global	SystemClock_Config
-  18              		.arch armv7-m
-  19              		.syntax unified
-  20              		.thumb
-  21              		.thumb_func
-  22              		.fpu softvfp
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.SystemClock_Config,"ax",%progbits
+  18              		.align	1
+  19              		.global	SystemClock_Config
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
   24              	SystemClock_Config:
   25              	.LFB198:
   26              		.file 1 "Src/main.c"
    1:Src/main.c    **** /*
-   2:Src/main.c    **** * @Author: nhantt 
-   3:Src/main.c    **** * @Date:   2020-07-01
-   4:Src/main.c    **** * @Last Modified by:   nhantt
-   5:Src/main.c    **** * @Last Modified time: 2020-07-01
+   2:Src/main.c    **** * @Author: duchien 
+   3:Src/main.c    **** * @Date:   2023-03-23
+   4:Src/main.c    **** * @Last Modified by:   duchien
+   5:Src/main.c    **** * @Last Modified time: 2023-03-23
    6:Src/main.c    **** */
    7:Src/main.c    **** 
    8:Src/main.c    **** #include "main.h"
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc6XhbxS.s 			page 1
   30:Src/main.c    **** 
   31:Src/main.c    ****   /* init modbus master */
   32:Src/main.c    ****   Modbus_Master_DMA_Init(&huart2, 9600);
-ARM GAS  /tmp/cc6XhbxS.s 			page 2
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 2
 
 
   33:Src/main.c    **** 
@@ -118,7 +118,7 @@ ARM GAS  /tmp/cc6XhbxS.s 			page 1
   53 0016 0A94     		str	r4, [sp, #40]
   54 0018 0B94     		str	r4, [sp, #44]
   61:Src/main.c    ****   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-ARM GAS  /tmp/cc6XhbxS.s 			page 3
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 3
 
 
   55              		.loc 1 61 3 is_stmt 1 view .LVU5
@@ -178,7 +178,7 @@ ARM GAS  /tmp/cc6XhbxS.s 			page 1
   95 0044 0CA8     		add	r0, sp, #48
   96 0046 FFF7FEFF 		bl	HAL_RCC_OscConfig
   97              	.LVL1:
-ARM GAS  /tmp/cc6XhbxS.s 			page 4
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 4
 
 
   76:Src/main.c    ****   {
@@ -238,7 +238,7 @@ ARM GAS  /tmp/cc6XhbxS.s 			page 1
  132 0070 0393     		str	r3, [sp, #12]
   96:Src/main.c    ****   PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
  133              		.loc 1 96 3 is_stmt 1 view .LVU44
-ARM GAS  /tmp/cc6XhbxS.s 			page 5
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 5
 
 
  134              		.loc 1 96 35 is_stmt 0 view .LVU45
@@ -282,176 +282,174 @@ ARM GAS  /tmp/cc6XhbxS.s 			page 1
  160              		.syntax unified
  161              		.thumb
  162              		.thumb_func
- 163              		.fpu softvfp
- 165              	main:
- 166              	.LFB197:
+ 164              	main:
+ 165              	.LFB197:
   24:Src/main.c    ****   HAL_Init();
- 167              		.loc 1 24 1 is_stmt 1 view -0
- 168              		.cfi_startproc
- 169              		@ Volatile: function does not return.
- 170              		@ args = 0, pretend = 0, frame = 0
- 171              		@ frame_needed = 0, uses_anonymous_args = 0
- 172 0000 08B5     		push	{r3, lr}
- 173              	.LCFI3:
- 174              		.cfi_def_cfa_offset 8
- 175              		.cfi_offset 3, -8
- 176              		.cfi_offset 14, -4
+ 166              		.loc 1 24 1 is_stmt 1 view -0
+ 167              		.cfi_startproc
+ 168              		@ Volatile: function does not return.
+ 169              		@ args = 0, pretend = 0, frame = 0
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+ 171 0000 08B5     		push	{r3, lr}
+ 172              	.LCFI3:
+ 173              		.cfi_def_cfa_offset 8
+ 174              		.cfi_offset 3, -8
+ 175              		.cfi_offset 14, -4
   25:Src/main.c    ****   SystemClock_Config();
- 177              		.loc 1 25 3 view .LVU50
-ARM GAS  /tmp/cc6XhbxS.s 			page 6
+ 176              		.loc 1 25 3 view .LVU50
+ 177 0002 FFF7FEFF 		bl	HAL_Init
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 6
 
 
- 178 0002 FFF7FEFF 		bl	HAL_Init
- 179              	.LVL4:
+ 178              	.LVL4:
   26:Src/main.c    ****   MX_GPIO_Init();
- 180              		.loc 1 26 3 view .LVU51
- 181 0006 FFF7FEFF 		bl	SystemClock_Config
- 182              	.LVL5:
+ 179              		.loc 1 26 3 view .LVU51
+ 180 0006 FFF7FEFF 		bl	SystemClock_Config
+ 181              	.LVL5:
   27:Src/main.c    ****   MX_USB_DEVICE_Init();
- 183              		.loc 1 27 3 view .LVU52
- 184 000a FFF7FEFF 		bl	MX_GPIO_Init
- 185              	.LVL6:
+ 182              		.loc 1 27 3 view .LVU52
+ 183 000a FFF7FEFF 		bl	MX_GPIO_Init
+ 184              	.LVL6:
   28:Src/main.c    ****   HAL_Delay(4000);
- 186              		.loc 1 28 3 view .LVU53
- 187 000e FFF7FEFF 		bl	MX_USB_DEVICE_Init
- 188              	.LVL7:
+ 185              		.loc 1 28 3 view .LVU53
+ 186 000e FFF7FEFF 		bl	MX_USB_DEVICE_Init
+ 187              	.LVL7:
   29:Src/main.c    **** 
- 189              		.loc 1 29 3 view .LVU54
- 190 0012 4FF47A60 		mov	r0, #4000
- 191 0016 FFF7FEFF 		bl	HAL_Delay
- 192              	.LVL8:
+ 188              		.loc 1 29 3 view .LVU54
+ 189 0012 4FF47A60 		mov	r0, #4000
+ 190 0016 FFF7FEFF 		bl	HAL_Delay
+ 191              	.LVL8:
   32:Src/main.c    **** 
- 193              		.loc 1 32 3 view .LVU55
- 194 001a 4FF41651 		mov	r1, #9600
- 195 001e 1948     		ldr	r0, .L11
- 196 0020 FFF7FEFF 		bl	Modbus_Master_DMA_Init
- 197              	.LVL9:
- 198 0024 07E0     		b	.L5
- 199              	.L4:
+ 192              		.loc 1 32 3 view .LVU55
+ 193 001a 4FF41651 		mov	r1, #9600
+ 194 001e 1948     		ldr	r0, .L11
+ 195 0020 FFF7FEFF 		bl	Modbus_Master_DMA_Init
+ 196              	.LVL9:
+ 197 0024 07E0     		b	.L5
+ 198              	.L4:
   44:Src/main.c    ****     {
- 200              		.loc 1 44 5 view .LVU56
+ 199              		.loc 1 44 5 view .LVU56
   44:Src/main.c    ****     {
- 201              		.loc 1 44 8 is_stmt 0 view .LVU57
- 202 0026 FFF7FEFF 		bl	HAL_GetTick
- 203              	.LVL10:
+ 200              		.loc 1 44 8 is_stmt 0 view .LVU57
+ 201 0026 FFF7FEFF 		bl	HAL_GetTick
+ 202              	.LVL10:
   44:Src/main.c    ****     {
- 204              		.loc 1 44 22 view .LVU58
- 205 002a 174B     		ldr	r3, .L11+4
- 206 002c 1B68     		ldr	r3, [r3]
- 207 002e C01A     		subs	r0, r0, r3
+ 203              		.loc 1 44 22 view .LVU58
+ 204 002a 174B     		ldr	r3, .L11+4
+ 205 002c 1B68     		ldr	r3, [r3]
+ 206 002e C01A     		subs	r0, r0, r3
   44:Src/main.c    ****     {
- 208              		.loc 1 44 7 view .LVU59
- 209 0030 B0F57A7F 		cmp	r0, #1000
- 210 0034 14D8     		bhi	.L10
- 211              	.L5:
+ 207              		.loc 1 44 7 view .LVU59
+ 208 0030 B0F57A7F 		cmp	r0, #1000
+ 209 0034 14D8     		bhi	.L10
+ 210              	.L5:
   34:Src/main.c    ****   {
- 212              		.loc 1 34 3 is_stmt 1 view .LVU60
+ 211              		.loc 1 34 3 is_stmt 1 view .LVU60
   38:Src/main.c    ****     if(HAL_GetTick() - time_reqest_slave > REQUEST_SLAVE)
- 213              		.loc 1 38 5 view .LVU61
- 214 0036 FFF7FEFF 		bl	Modbus_Master_DMA_Process
- 215              	.LVL11:
+ 212              		.loc 1 38 5 view .LVU61
+ 213 0036 FFF7FEFF 		bl	Modbus_Master_DMA_Process
+ 214              	.LVL11:
   39:Src/main.c    ****     {
- 216              		.loc 1 39 5 view .LVU62
+ 215              		.loc 1 39 5 view .LVU62
   39:Src/main.c    ****     {
- 217              		.loc 1 39 8 is_stmt 0 view .LVU63
- 218 003a FFF7FEFF 		bl	HAL_GetTick
- 219              	.LVL12:
+ 216              		.loc 1 39 8 is_stmt 0 view .LVU63
+ 217 003a FFF7FEFF 		bl	HAL_GetTick
+ 218              	.LVL12:
   39:Src/main.c    ****     {
- 220              		.loc 1 39 22 view .LVU64
-ARM GAS  /tmp/cc6XhbxS.s 			page 7
+ 219              		.loc 1 39 22 view .LVU64
+ 220 003e 134B     		ldr	r3, .L11+8
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 7
 
 
- 221 003e 134B     		ldr	r3, .L11+8
- 222 0040 1B68     		ldr	r3, [r3]
- 223 0042 C01A     		subs	r0, r0, r3
+ 221 0040 1B68     		ldr	r3, [r3]
+ 222 0042 C01A     		subs	r0, r0, r3
   39:Src/main.c    ****     {
- 224              		.loc 1 39 7 view .LVU65
- 225 0044 B0F57A7F 		cmp	r0, #1000
- 226 0048 EDD9     		bls	.L4
+ 223              		.loc 1 39 7 view .LVU65
+ 224 0044 B0F57A7F 		cmp	r0, #1000
+ 225 0048 EDD9     		bls	.L4
   41:Src/main.c    ****       time_reqest_slave = HAL_GetTick();
- 227              		.loc 1 41 7 is_stmt 1 view .LVU66
- 228 004a 6423     		movs	r3, #100
- 229 004c 0222     		movs	r2, #2
- 230 004e 0021     		movs	r1, #0
- 231 0050 0120     		movs	r0, #1
- 232 0052 FFF7FEFF 		bl	Modbus_Master_Read_HoldRegs
- 233              	.LVL13:
+ 226              		.loc 1 41 7 is_stmt 1 view .LVU66
+ 227 004a 6423     		movs	r3, #100
+ 228 004c 0222     		movs	r2, #2
+ 229 004e 0021     		movs	r1, #0
+ 230 0050 0120     		movs	r0, #1
+ 231 0052 FFF7FEFF 		bl	Modbus_Master_Read_HoldRegs
+ 232              	.LVL13:
   42:Src/main.c    ****     }
- 234              		.loc 1 42 7 view .LVU67
+ 233              		.loc 1 42 7 view .LVU67
   42:Src/main.c    ****     }
- 235              		.loc 1 42 27 is_stmt 0 view .LVU68
- 236 0056 FFF7FEFF 		bl	HAL_GetTick
- 237              	.LVL14:
+ 234              		.loc 1 42 27 is_stmt 0 view .LVU68
+ 235 0056 FFF7FEFF 		bl	HAL_GetTick
+ 236              	.LVL14:
   42:Src/main.c    ****     }
- 238              		.loc 1 42 25 view .LVU69
- 239 005a 0C4B     		ldr	r3, .L11+8
- 240 005c 1860     		str	r0, [r3]
- 241 005e E2E7     		b	.L4
- 242              	.L10:
+ 237              		.loc 1 42 25 view .LVU69
+ 238 005a 0C4B     		ldr	r3, .L11+8
+ 239 005c 1860     		str	r0, [r3]
+ 240 005e E2E7     		b	.L4
+ 241              	.L10:
   46:Src/main.c    ****       {
- 243              		.loc 1 46 7 is_stmt 1 view .LVU70
+ 242              		.loc 1 46 7 is_stmt 1 view .LVU70
   46:Src/main.c    ****       {
- 244              		.loc 1 46 15 is_stmt 0 view .LVU71
- 245 0060 0B4B     		ldr	r3, .L11+12
- 246 0062 1989     		ldrh	r1, [r3, #8]
+ 243              		.loc 1 46 15 is_stmt 0 view .LVU71
+ 244 0060 0B4B     		ldr	r3, .L11+12
+ 245 0062 1989     		ldrh	r1, [r3, #8]
   46:Src/main.c    ****       {
- 247              		.loc 1 46 9 view .LVU72
- 248 0064 51B9     		cbnz	r1, .L6
+ 246              		.loc 1 46 9 view .LVU72
+ 247 0064 51B9     		cbnz	r1, .L6
   48:Src/main.c    ****       }
- 249              		.loc 1 48 9 is_stmt 1 view .LVU73
+ 248              		.loc 1 48 9 is_stmt 1 view .LVU73
   48:Src/main.c    ****       }
- 250              		.loc 1 48 66 is_stmt 0 view .LVU74
- 251 0066 0B4B     		ldr	r3, .L11+16
+ 249              		.loc 1 48 66 is_stmt 0 view .LVU74
+ 250 0066 0B4B     		ldr	r3, .L11+16
   48:Src/main.c    ****       }
- 252              		.loc 1 48 9 view .LVU75
- 253 0068 5A88     		ldrh	r2, [r3, #2]
- 254 006a 1988     		ldrh	r1, [r3]
- 255 006c 0A48     		ldr	r0, .L11+20
- 256 006e FFF7FEFF 		bl	printf
- 257              	.LVL15:
- 258              	.L7:
+ 251              		.loc 1 48 9 view .LVU75
+ 252 0068 5A88     		ldrh	r2, [r3, #2]
+ 253 006a 1988     		ldrh	r1, [r3]
+ 254 006c 0A48     		ldr	r0, .L11+20
+ 255 006e FFF7FEFF 		bl	printf
+ 256              	.LVL15:
+ 257              	.L7:
   52:Src/main.c    ****     }
- 259              		.loc 1 52 7 is_stmt 1 view .LVU76
+ 258              		.loc 1 52 7 is_stmt 1 view .LVU76
   52:Src/main.c    ****     }
- 260              		.loc 1 52 15 is_stmt 0 view .LVU77
- 261 0072 FFF7FEFF 		bl	HAL_GetTick
- 262              	.LVL16:
+ 259              		.loc 1 52 15 is_stmt 0 view .LVU77
+ 260 0072 FFF7FEFF 		bl	HAL_GetTick
+ 261              	.LVL16:
   52:Src/main.c    ****     }
- 263              		.loc 1 52 13 view .LVU78
-ARM GAS  /tmp/cc6XhbxS.s 			page 8
+ 262              		.loc 1 52 13 view .LVU78
+ 263 0076 044B     		ldr	r3, .L11+4
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 8
 
 
- 264 0076 044B     		ldr	r3, .L11+4
- 265 0078 1860     		str	r0, [r3]
- 266 007a DCE7     		b	.L5
- 267              	.L6:
+ 264 0078 1860     		str	r0, [r3]
+ 265 007a DCE7     		b	.L5
+ 266              	.L6:
   51:Src/main.c    ****       tick_ = HAL_GetTick();
- 268              		.loc 1 51 9 is_stmt 1 view .LVU79
- 269 007c 0748     		ldr	r0, .L11+24
- 270 007e FFF7FEFF 		bl	printf
- 271              	.LVL17:
- 272 0082 F6E7     		b	.L7
- 273              	.L12:
- 274              		.align	2
- 275              	.L11:
- 276 0084 00000000 		.word	huart2
- 277 0088 00000000 		.word	.LANCHOR1
- 278 008c 00000000 		.word	.LANCHOR0
- 279 0090 00000000 		.word	slave
- 280 0094 00000000 		.word	modbus_master_hold_buf
- 281 0098 00000000 		.word	.LC0
- 282 009c 18000000 		.word	.LC1
- 283              		.cfi_endproc
- 284              	.LFE197:
- 286              		.section	.text.Error_Handler,"ax",%progbits
- 287              		.align	1
- 288              		.global	Error_Handler
- 289              		.syntax unified
- 290              		.thumb
- 291              		.thumb_func
- 292              		.fpu softvfp
- 294              	Error_Handler:
- 295              	.LFB199:
+ 267              		.loc 1 51 9 is_stmt 1 view .LVU79
+ 268 007c 0748     		ldr	r0, .L11+24
+ 269 007e FFF7FEFF 		bl	printf
+ 270              	.LVL17:
+ 271 0082 F6E7     		b	.L7
+ 272              	.L12:
+ 273              		.align	2
+ 274              	.L11:
+ 275 0084 00000000 		.word	huart2
+ 276 0088 00000000 		.word	.LANCHOR1
+ 277 008c 00000000 		.word	.LANCHOR0
+ 278 0090 00000000 		.word	slave
+ 279 0094 00000000 		.word	modbus_master_hold_buf
+ 280 0098 00000000 		.word	.LC0
+ 281 009c 18000000 		.word	.LC1
+ 282              		.cfi_endproc
+ 283              	.LFE197:
+ 285              		.section	.text.Error_Handler,"ax",%progbits
+ 286              		.align	1
+ 287              		.global	Error_Handler
+ 288              		.syntax unified
+ 289              		.thumb
+ 290              		.thumb_func
+ 292              	Error_Handler:
+ 293              	.LFB199:
  102:Src/main.c    **** 
  103:Src/main.c    **** /* USER CODE BEGIN 4 */
  104:Src/main.c    **** 
@@ -459,33 +457,32 @@ ARM GAS  /tmp/cc6XhbxS.s 			page 1
  106:Src/main.c    **** 
  107:Src/main.c    **** void Error_Handler(void)
  108:Src/main.c    **** {
- 296              		.loc 1 108 1 view -0
- 297              		.cfi_startproc
- 298              		@ args = 0, pretend = 0, frame = 0
- 299              		@ frame_needed = 0, uses_anonymous_args = 0
- 300              		@ link register save eliminated.
+ 294              		.loc 1 108 1 view -0
+ 295              		.cfi_startproc
+ 296              		@ args = 0, pretend = 0, frame = 0
+ 297              		@ frame_needed = 0, uses_anonymous_args = 0
+ 298              		@ link register save eliminated.
  109:Src/main.c    ****   /* USER CODE BEGIN Error_Handler_Debug */
  110:Src/main.c    ****   /* User can add his own implementation to report the HAL error return state */
  111:Src/main.c    **** 
  112:Src/main.c    ****   /* USER CODE END Error_Handler_Debug */
  113:Src/main.c    **** }
- 301              		.loc 1 113 1 view .LVU81
- 302 0000 7047     		bx	lr
- 303              		.cfi_endproc
- 304              	.LFE199:
- 306              		.section	.text._write,"ax",%progbits
- 307              		.align	1
- 308              		.global	_write
- 309              		.syntax unified
- 310              		.thumb
-ARM GAS  /tmp/cc6XhbxS.s 			page 9
+ 299              		.loc 1 113 1 view .LVU81
+ 300 0000 7047     		bx	lr
+ 301              		.cfi_endproc
+ 302              	.LFE199:
+ 304              		.section	.text._write,"ax",%progbits
+ 305              		.align	1
+ 306              		.global	_write
+ 307              		.syntax unified
+ 308              		.thumb
+ 309              		.thumb_func
+ 311              	_write:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 9
 
 
- 311              		.thumb_func
- 312              		.fpu softvfp
- 314              	_write:
- 315              	.LVL18:
- 316              	.LFB200:
+ 312              	.LVL18:
+ 313              	.LFB200:
  114:Src/main.c    **** 
  115:Src/main.c    **** #ifdef  USE_FULL_ASSERT
  116:Src/main.c    **** /**
@@ -506,114 +503,115 @@ ARM GAS  /tmp/cc6XhbxS.s 			page 1
  131:Src/main.c    **** 
  132:Src/main.c    **** int _write(int file, char *data, int len)
  133:Src/main.c    **** {
- 317              		.loc 1 133 1 view -0
- 318              		.cfi_startproc
- 319              		@ args = 0, pretend = 0, frame = 0
- 320              		@ frame_needed = 0, uses_anonymous_args = 0
- 321              		.loc 1 133 1 is_stmt 0 view .LVU83
- 322 0000 08B5     		push	{r3, lr}
- 323              	.LCFI4:
- 324              		.cfi_def_cfa_offset 8
- 325              		.cfi_offset 3, -8
- 326              		.cfi_offset 14, -4
+ 314              		.loc 1 133 1 view -0
+ 315              		.cfi_startproc
+ 316              		@ args = 0, pretend = 0, frame = 0
+ 317              		@ frame_needed = 0, uses_anonymous_args = 0
+ 318              		.loc 1 133 1 is_stmt 0 view .LVU83
+ 319 0000 08B5     		push	{r3, lr}
+ 320              	.LCFI4:
+ 321              		.cfi_def_cfa_offset 8
+ 322              		.cfi_offset 3, -8
+ 323              		.cfi_offset 14, -4
  134:Src/main.c    ****   if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
- 327              		.loc 1 134 3 is_stmt 1 view .LVU84
- 328              		.loc 1 134 31 is_stmt 0 view .LVU85
- 329 0002 431E     		subs	r3, r0, #1
- 330              		.loc 1 134 6 view .LVU86
- 331 0004 012B     		cmp	r3, #1
- 332 0006 05D8     		bhi	.L18
- 333 0008 0846     		mov	r0, r1
- 334              	.LVL19:
- 335              		.loc 1 134 6 view .LVU87
- 336 000a 1146     		mov	r1, r2
- 337              	.LVL20:
+ 324              		.loc 1 134 3 is_stmt 1 view .LVU84
+ 325              		.loc 1 134 31 is_stmt 0 view .LVU85
+ 326 0002 431E     		subs	r3, r0, #1
+ 327              		.loc 1 134 6 view .LVU86
+ 328 0004 012B     		cmp	r3, #1
+ 329 0006 05D8     		bhi	.L18
+ 330 0008 0846     		mov	r0, r1
+ 331              	.LVL19:
+ 332              		.loc 1 134 6 view .LVU87
+ 333 000a 1146     		mov	r1, r2
+ 334              	.LVL20:
  135:Src/main.c    ****   {
  136:Src/main.c    ****     errno = EBADF;
  137:Src/main.c    ****     return -1;
  138:Src/main.c    ****   }
  139:Src/main.c    ****   uint8_t status = CDC_Transmit_FS((uint8_t *)data, len);
- 338              		.loc 1 139 3 is_stmt 1 view .LVU88
- 339              		.loc 1 139 20 is_stmt 0 view .LVU89
- 340 000c FFF7FEFF 		bl	CDC_Transmit_FS
- 341              	.LVL21:
+ 335              		.loc 1 139 3 is_stmt 1 view .LVU88
+ 336              		.loc 1 139 20 is_stmt 0 view .LVU89
+ 337 000c FFF7FEFF 		bl	CDC_Transmit_FS
+ 338              	.LVL21:
  140:Src/main.c    ****   return status;
-ARM GAS  /tmp/cc6XhbxS.s 			page 10
+ 339              		.loc 1 140 3 is_stmt 1 view .LVU90
+ 340 0010 C0B2     		uxtb	r0, r0
+ 341              	.LVL22:
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 10
 
 
- 342              		.loc 1 140 3 is_stmt 1 view .LVU90
- 343 0010 C0B2     		uxtb	r0, r0
- 344              	.LVL22:
- 345              	.L14:
+ 342              	.L14:
  141:Src/main.c    **** }
- 346              		.loc 1 141 1 is_stmt 0 view .LVU91
- 347 0012 08BD     		pop	{r3, pc}
- 348              	.LVL23:
- 349              	.L18:
+ 343              		.loc 1 141 1 is_stmt 0 view .LVU91
+ 344 0012 08BD     		pop	{r3, pc}
+ 345              	.LVL23:
+ 346              	.L18:
  136:Src/main.c    ****     return -1;
- 350              		.loc 1 136 5 is_stmt 1 view .LVU92
- 351 0014 FFF7FEFF 		bl	__errno
- 352              	.LVL24:
+ 347              		.loc 1 136 5 is_stmt 1 view .LVU92
+ 348 0014 FFF7FEFF 		bl	__errno
+ 349              	.LVL24:
  136:Src/main.c    ****     return -1;
- 353              		.loc 1 136 11 is_stmt 0 view .LVU93
- 354 0018 0923     		movs	r3, #9
- 355 001a 0360     		str	r3, [r0]
+ 350              		.loc 1 136 11 is_stmt 0 view .LVU93
+ 351 0018 0923     		movs	r3, #9
+ 352 001a 0360     		str	r3, [r0]
  137:Src/main.c    ****   }
- 356              		.loc 1 137 5 is_stmt 1 view .LVU94
+ 353              		.loc 1 137 5 is_stmt 1 view .LVU94
  137:Src/main.c    ****   }
- 357              		.loc 1 137 12 is_stmt 0 view .LVU95
- 358 001c 4FF0FF30 		mov	r0, #-1
- 359 0020 F7E7     		b	.L14
- 360              		.cfi_endproc
- 361              	.LFE200:
- 363              		.global	time_reqest_slave
- 364              		.global	tick_
- 365              		.section	.bss.tick_,"aw",%nobits
- 366              		.align	2
- 367              		.set	.LANCHOR1,. + 0
- 370              	tick_:
- 371 0000 00000000 		.space	4
- 372              		.section	.bss.time_reqest_slave,"aw",%nobits
- 373              		.align	2
- 374              		.set	.LANCHOR0,. + 0
- 377              	time_reqest_slave:
- 378 0000 00000000 		.space	4
- 379              		.text
- 380              	.Letext0:
- 381              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
- 382              		.file 3 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/CMSIS/Device/ST/STM32F
- 383              		.file 4 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
- 384              		.file 5 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
- 385              		.file 6 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
- 386              		.file 7 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
- 387              		.file 8 "/home/smartth/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4//Drivers/STM32F1xx_HAL_Driver/I
- 388              		.file 9 "User/Modbus/modbus_data.h"
- 389              		.file 10 "User/Modbus/usart.h"
- 390              		.file 11 "/usr/include/newlib/sys/errno.h"
- 391              		.file 12 "Inc/stm32f1xx_hal.h"
- 392              		.file 13 "Inc/gpio.h"
- 393              		.file 14 "User/USB/usb_device.h"
- 394              		.file 15 "/usr/include/newlib/stdio.h"
- 395              		.file 16 "<built-in>"
-ARM GAS  /tmp/cc6XhbxS.s 			page 11
+ 354              		.loc 1 137 12 is_stmt 0 view .LVU95
+ 355 001c 4FF0FF30 		mov	r0, #-1
+ 356 0020 F7E7     		b	.L14
+ 357              		.cfi_endproc
+ 358              	.LFE200:
+ 360              		.global	time_reqest_slave
+ 361              		.global	tick_
+ 362              		.section	.bss.tick_,"aw",%nobits
+ 363              		.align	2
+ 364              		.set	.LANCHOR1,. + 0
+ 367              	tick_:
+ 368 0000 00000000 		.space	4
+ 369              		.section	.bss.time_reqest_slave,"aw",%nobits
+ 370              		.align	2
+ 371              		.set	.LANCHOR0,. + 0
+ 374              	time_reqest_slave:
+ 375 0000 00000000 		.space	4
+ 376              		.text
+ 377              	.Letext0:
+ 378              		.file 2 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\machine\\_default_typ
+ 379              		.file 3 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 380              		.file 4 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/CMSIS/Device/ST/S
+ 381              		.file 5 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Dri
+ 382              		.file 6 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Dri
+ 383              		.file 7 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Dri
+ 384              		.file 8 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Dri
+ 385              		.file 9 "c:/Users/Black_Life/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Dri
+ 386              		.file 10 "User/Modbus/modbus_data.h"
+ 387              		.file 11 "User/Modbus/usart.h"
+ 388              		.file 12 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\sys\\errno.h"
+ 389              		.file 13 "Inc/stm32f1xx_hal.h"
+ 390              		.file 14 "Inc/gpio.h"
+ 391              		.file 15 "User/USB/usb_device.h"
+ 392              		.file 16 "e:\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\stdio.h"
+ 393              		.file 17 "<built-in>"
+ARM GAS  C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s 			page 11
 
 
 DEFINED SYMBOLS
-                            *ABS*:0000000000000000 main.c
-     /tmp/cc6XhbxS.s:16     .text.SystemClock_Config:0000000000000000 $t
-     /tmp/cc6XhbxS.s:24     .text.SystemClock_Config:0000000000000000 SystemClock_Config
-     /tmp/cc6XhbxS.s:151    .rodata.main.str1.4:0000000000000000 $d
-     /tmp/cc6XhbxS.s:158    .text.main:0000000000000000 $t
-     /tmp/cc6XhbxS.s:165    .text.main:0000000000000000 main
-     /tmp/cc6XhbxS.s:276    .text.main:0000000000000084 $d
-     /tmp/cc6XhbxS.s:287    .text.Error_Handler:0000000000000000 $t
-     /tmp/cc6XhbxS.s:294    .text.Error_Handler:0000000000000000 Error_Handler
-     /tmp/cc6XhbxS.s:307    .text._write:0000000000000000 $t
-     /tmp/cc6XhbxS.s:314    .text._write:0000000000000000 _write
-     /tmp/cc6XhbxS.s:377    .bss.time_reqest_slave:0000000000000000 time_reqest_slave
-     /tmp/cc6XhbxS.s:370    .bss.tick_:0000000000000000 tick_
-     /tmp/cc6XhbxS.s:366    .bss.tick_:0000000000000000 $d
-     /tmp/cc6XhbxS.s:373    .bss.time_reqest_slave:0000000000000000 $d
+                            *ABS*:00000000 main.c
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:18     .text.SystemClock_Config:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:24     .text.SystemClock_Config:00000000 SystemClock_Config
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:151    .rodata.main.str1.4:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:158    .text.main:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:164    .text.main:00000000 main
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:275    .text.main:00000084 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:286    .text.Error_Handler:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:292    .text.Error_Handler:00000000 Error_Handler
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:305    .text._write:00000000 $t
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:311    .text._write:00000000 _write
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:374    .bss.time_reqest_slave:00000000 time_reqest_slave
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:367    .bss.tick_:00000000 tick_
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:363    .bss.tick_:00000000 $d
+C:\Users\BLACK_~1\AppData\Local\Temp\ccatlfCg.s:370    .bss.time_reqest_slave:00000000 $d
 
 UNDEFINED SYMBOLS
 memset
