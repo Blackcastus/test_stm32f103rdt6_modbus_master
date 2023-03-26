@@ -27,7 +27,6 @@
 #define W_MULTI_COIL 	(15)
 #define W_MULTI_REGS 	(16)
 
-
 typedef enum
 {
 	NOWAIT = 0,			/*!< no waitting or recive ok */
@@ -35,11 +34,22 @@ typedef enum
 	WATTING_OK
 }Check_t;
 
+typedef struct
+{
+	uint16_t 	reg_hold_start;			/*!< addrest register start */
+	uint16_t 	reg_hold_total;			/*!< total addrest register slave */
+}Reg_Hold_t;
+
+typedef struct
+{
+	uint16_t 	reg_hold_start;			/*!< addrest register start */
+	uint16_t 	reg_hold_total;			/*!< total addrest register slave */
+}Reg_Holt_t;
+
 typedef struct 
 {
 	uint8_t 	id;						/*!< id slave */		
-	uint16_t 	reg_hold_start;			/*!< addrest register start */
-	uint16_t 	reg_hold_total;			/*!< total addrest register slave */
+	Reg_Hold_t 	read;
 	uint16_t 	time_out;				/*!< time out */
 	uint16_t	status;
 	Check_t 	wait;					/*!< waiting slave respont */
@@ -77,7 +87,7 @@ extern Modbus_State_t slave;
 void Modbus_Master_DMA_Init(void *dHUART, uint32_t ulBaudRate);
 MB_Error_Code_t Modbus_Master_DMA_Process(void);
 MB_Error_Code_t Modbus_Master_Read_HoldRegs(uint8_t id, uint16_t start_reg, uint16_t total_num, uint32_t timeout);
-
+MB_Error_Code_t Modbus_Master_Write_Single_Reg(uint8_t id, uint16_t addr_reg, uint16_t val_reg, uint32_t time_timeout);
 // void Modbus_Uart2_Read_Regs(uint8_t id, uint16_t reg, uint16_t number);
 
 #endif

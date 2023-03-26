@@ -11,10 +11,10 @@
 
 // Modbus Register
 Modbus_State_t slave;
+
 uint16_t modbus_holding_buf[NoB_HOLDING_REGISTER] = {0},
 		modbus_input_buf[NoB_INPUT_REGISTER] = {0};
 uint16_t modbus_master_hold_buf[MB_MASTER_SLAVE_NUM][NoB_HOLDING_REGISTER];
-uint32_t modbus_tick_timeout;
 
 void Modbus_Master_DMA_Init(void *dHUART, uint32_t ulBaudRate)
 {
@@ -26,7 +26,6 @@ void Modbus_Master_DMA_Init(void *dHUART, uint32_t ulBaudRate)
 MB_Error_Code_t Modbus_Master_DMA_Process(void)
 {
     // id | fc | reg_addH | reg_addL | reg_dataH | reg_dataL | crcH | crcL
-
     if (dma_uart2_rx.state) // da nhan xong frame modbus => xu ly
     {
         if (dma_uart2_rx.data[0] == slave.id && Modbus_Check_Crc16(dma_uart2_rx.data, dma_uart2_rx.length)) // check crc is OK
@@ -67,7 +66,6 @@ MB_Error_Code_t Modbus_Master_DMA_Process(void)
         dma_uart2_rx.state = 0;
         dma_uart2_rx.length = 0;
     }
-    
 }
 
 // Doc gia tri thanh ghi
@@ -100,8 +98,7 @@ MB_Error_Code_t Modbus_Master_Read_HoldRegs(uint8_t id, uint16_t start_reg, uint
                     return mbStatus;
             }
             break;
-        case WATTING_OK:
-            // respont data ok
+        case WATTING_OK: // respont data ok
             slave.index = NOWAIT;
             slave.status = MB_ENOERR;
             return 0;
@@ -110,13 +107,12 @@ MB_Error_Code_t Modbus_Master_Read_HoldRegs(uint8_t id, uint16_t start_reg, uint
     }
 }
 
-// // Ghi gia tri toi 1 thanh ghi
-// void Modbus_Uart2_Write_Single_Reg(uint8_t id, uint16_t reg, uint16_t value)
-// {
-//     uint8_t payload[8] = {id, W_SINGLE_REG, reg<<8, reg, value<<8, value};
-//     uint16_t i = Modbus_Create_Crc16(payload, 6);
-//     payload[6] = (uint8_t)i;
-//     payload[7] = (uint8_t)(i>>8);
-//     Uart2_Send_Data(payload, 8);
-//     HAL_Delay(100);
-// }
+MB_Error_Code_t Modbus_Master_Write_Single_Reg(uint8_t id, uint16_t addr_reg, uint16_t val_reg, uint32_t time_timeout)
+{
+
+    uint8_t payload[8] = {id, W_SINGLE_REG, addr_reg << 8, addr_reg, val_reg << 8, val_reg};
+    uint16_t i = Modbus_Create_Crc16(payload, 6);
+    payload[6] = (uint8_t)i;
+    payload[7] = (uint8_t)(i>>8);
+    Uart2_Send_Data(payload, 8);
+}
